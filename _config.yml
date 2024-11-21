@@ -1,4 +1,4 @@
-title: prism
+title: Prism
 description : "A platform that evolves around your connections and creativity."
 owner_name: Yash Parikh
 github_username: illuminati1618
@@ -16,9 +16,4 @@ minima:
 plugins:
   - jekyll-remote-theme
 header_pages:
-  - navigation/ai.md
-  - navigation/shared_interests/home.md
-  - navigation/create_and_compete/home.md
-  - navigation/voteforthegoat/home.md
-  - navigation/share_and_care/home.md
-  - navigation/rate_and_relate/home.md
+  - navigation/worlds/home.md
