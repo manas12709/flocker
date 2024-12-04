@@ -141,4 +141,28 @@ permalink: /prism/topicchatroom
             chatBox.scrollTop = chatBox.scrollHeight;
         }
     }
+    async function sendToGeminiAPI(interest1, interest2) {
+        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyBOUekV-txUye0_jpkGlfRe3PMk7Q9GHic";
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{ text: `Create a random question to get two people talking based on their interests. For example, if one interest was F1 Cars, and another interest was Engineering, a possible question you could make is "What are your opinions on the Engines of F1 Cars?". The two interests are ${interest1} and ${interest2}`}]
+                    }]
+                })
+            });
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+            const data = await response.json();
+            return data.candidates[0].content.parts[0].text;
+        } catch (error) {
+            console.error('Error communicating with Gemini API:', error);
+            return "An error occurred while communicating with the AI.";
+        }
+    }
 </script>
