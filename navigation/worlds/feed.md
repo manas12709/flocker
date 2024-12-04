@@ -24,7 +24,7 @@ permalink: /prism/feed
 
         <section>
             <h2>Today's Daily Quiz</h2>
-            <button onclick="alert('Quiz Popup')">Take the Quiz</button>
+            <button>Take the Quiz</button>
         </section>
 
         <section>
