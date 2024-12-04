@@ -133,5 +133,43 @@ permalink: /prism/profile
             <p>Following: 75</p>
             <p>Posts: 34</p>
         </div>
+        <div class="card">
+            <h3>Bio/About Me</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec felis vel metus.</p>
+        </div>
+    </section>
 
+    <section class="grid grid-cols-2">
+        <div class="card">
+            <h4>Interest 1</h4>
+            <img src="https://placehold.co/100x100" alt="Interest 1 Visual">
+        </div>
+        <div class="card">
+            <h4>Interest 2</h4>
+            <img src="https://placehold.co/100x100" alt="Interest 2 Visual">
+        </div>
+        <div class="card">
+            <h4>Interest 3</h4>
+            <img src="https://placehold.co/100x100" alt="Interest 3 Visual">
+        </div>
+        <div class="card">
+            <h4>Interest 4</h4>
+            <img src="https://placehold.co/100x100" alt="Interest 4 Visual">
+        </div>
+    </section>
+
+    <section class="card">
+        <h3>Latest Post</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec felis vel metus.</p>
+    </section>
+    <br>
+    <section class="card">
+        <h3>Activity Feed</h3>
+        <ul>
+            <li>User1 liked your post</li>
+            <li>User2 commented on your photo</li>
+            <li>User3 started following you</li>
+        </ul>
+    </section>
+    <br>
 </main>
