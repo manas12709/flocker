@@ -126,4 +126,12 @@ permalink: /prism/profile
         </div>
     </section>
 
+    <section class="grid grid-cols-2">
+        <div class="card">
+            <h3>User Stats</h3>
+            <p>Followers: 120</p>
+            <p>Following: 75</p>
+            <p>Posts: 34</p>
+        </div>
+
 </main>
