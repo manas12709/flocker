@@ -116,3 +116,14 @@ permalink: /prism/profile
     <h1>Prism</h1>
     <p>Connect with the Future</p>
 </header>
+
+<main class="container">
+    <section class="profile">
+        <img src="https://placehold.co/150x150" alt="Profile Picture">
+        <div>
+            <h2>User Name</h2>
+            <p>User Bio or Status</p>
+        </div>
+    </section>
+
+</main>
