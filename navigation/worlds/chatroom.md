@@ -119,8 +119,9 @@ permalink: /prism/topicchatroom
     <div class="chat-container">
         <h2>
             <span class="ai-text">AI Generated Prompt</span><br> 
-            What are your opinions on the Engines of F1 Cars?
+            <span id="aiQuestion">What are your opinions on the Engines of F1 Cars?</span>
         </h2>
+        <button onclick="updateAIQuestion('F1', 'Engineering')">Generate New Question</button>
         <div id="chatBox"></div>
         <div class="message-input">
             <input type="text" id="messageInput" placeholder="Send a Message">
@@ -164,5 +165,11 @@ permalink: /prism/topicchatroom
             console.error('Error communicating with Gemini API:', error);
             return "An error occurred while communicating with the AI.";
         }
+    }
+    async function updateAIQuestion(interest1, interest2) {
+        const aiQuestionElement = document.getElementById('aiQuestion');
+        aiQuestionElement.textContent = "Generating question...";
+        const newQuestion = await sendToGeminiAPI(interest1, interest2);
+        aiQuestionElement.textContent = newQuestion;
     }
 </script>
