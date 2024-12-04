@@ -5,6 +5,138 @@ show_reading_time: false
 permalink: /prism/feed
 ---
 
+<style>
+    body {
+        background-color: #1a1a1a;
+        color: #ffffff;
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .heading {
+        background-color: #b30000;
+        padding: 40px 20px;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .heading h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin: 0;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .heading p {
+        font-size: 1.2rem;
+        margin: 10px 0 0;
+        color: #ffcccc;
+    }
+
+    main {
+        padding: 20px;
+    }
+
+    section {
+        margin-bottom: 40px;
+        padding: 20px;
+        background-color: #2e2e2e;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    section h2 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        color: #ff6666;
+        border-bottom: 2px solid #b30000;
+        padding-bottom: 5px;
+        display: inline-block;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    ul li {
+        background-color: #b30000;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+        color: #ffffff;
+        font-weight: bold;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    ul li:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    button {
+        background-color: #ff4d4d;
+        color: #ffffff;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 25px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    button:hover {
+        background-color: #e60000;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .green-button {
+        background-color: #28a745;
+    }
+
+    .green-button:hover {
+        background-color: #218838;
+    }
+
+    .purple-button {
+        background-color: #ff3333;
+        color: #ffffff;
+    }
+
+    .purple-button:hover {
+        background-color: #b30000;
+    }
+
+    .poll {
+        background-color: #292929;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        color: #ffcccc;
+    }
+
+    .poll input[type="radio"] {
+        margin-right: 10px;
+        accent-color: #ff4d4d;
+    }
+
+    .copyright {
+        background-color: #b30000;
+        text-align: center;
+        padding: 20px;
+        font-size: 0.9rem;
+        color: #ffcccc;
+    }
+
+    .copyright p {
+        margin: 0;
+    }
+</style>
+
 
 <body>
     <header class="heading">
