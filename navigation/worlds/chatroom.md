@@ -143,7 +143,7 @@ permalink: /prism/topicchatroom
         }
     }
     async function sendToGeminiAPI(interest1, interest2) {
-        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyBOUekV-txUye0_jpkGlfRe3PMk7Q9GHic";
+        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=CREATE_YOUR_OWN_KEY_AND_REPLACE_DONT_USE_MINE";
         try {
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -152,7 +152,7 @@ permalink: /prism/topicchatroom
                 },
                 body: JSON.stringify({
                     contents: [{
-                        parts: [{ text: `Create a random question to get two people talking based on their interests. For example, if one interest was F1 Cars, and another interest was Engineering, a possible question you could make is "What are your opinions on the Engines of F1 Cars?". The two interests are ${interest1} and ${interest2}`}]
+                        parts: [{ text: `Create a random question to get two people talking based on their interests. For example, if one interest was F1 Cars, and another interest was Engineering, a possible question you could make is "What are your opinions on the Engines of F1 Cars?". The two interests are ${interest1} and ${interest2}. Just include the question, NOTHING else.` }]
                     }]
                 })
             });
