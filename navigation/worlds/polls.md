@@ -90,13 +90,34 @@ permalink: /prism/polls
 <div class="main">
     <p class="poll-question">What is your favorite genre of music?</p>
     <div class="poll-options">
-        <button class="poll-option">Jazz</button>
-        <button class="poll-option">R&amp;B</button>
-        <button class="poll-option">Classical</button>
-        <button class="poll-option">Rap</button>
+        <button class="poll-option" onclick="handlePollSelection('Jazz')">Jazz</button>
+        <button class="poll-option" onclick="handlePollSelection('R&B')">R&amp;B</button>
+        <button class="poll-option" onclick="handlePollSelection('Classical')">Classical</button>
+        <button class="poll-option" onclick="handlePollSelection('Rap')">Rap</button>
     </div>
 </div>
 
 <footer>
     &copy; 2024 Prism. All rights reserved.
 </footer>
+
+<script>
+    function handlePollSelection(option) {
+        alert('You selected: ' + option);
+        fetch('/api/polls', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ choice: option })
+        }).then(response => {
+            if (response.ok) {
+                console.log('Poll response recorded successfully.');
+            } else {
+                console.error('Failed to record poll response.');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
