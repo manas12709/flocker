@@ -97,10 +97,6 @@ permalink: /prism/polls
     </div>
 </div>
 
-<footer>
-    &copy; 2024 Prism. All rights reserved.
-</footer>
-
 <script>
     function handlePollSelection(option) {
         alert('You selected: ' + option);
