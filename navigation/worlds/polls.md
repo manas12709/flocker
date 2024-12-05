@@ -1,83 +1,102 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quick Polls</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Arial Black', Gadget, sans-serif;
-            background-color: #000;
-            color: #fff;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .header {
-            width: 100%;
-            background-color: #ff0000;
-            text-align: center;
-            padding: 20px;
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 2.5em;
-        }
-        .header p {
-            margin: 0;
-            font-size: 1.2em;
-        }
-        .poll-container {
-            background-color: #111;
-            padding: 40px;
-            border-radius: 10px;
-            width: 50%;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
-            margin: 20px 0;
-        }
-        .poll-container h2 {
-            text-align: center;
-            color: #ff0000;
-            font-size: 2em;
-        }
-        .option {
-            background-color: #222;
-            color: #ff0000;
-            padding: 15px;
-            margin: 15px 0;
-            border: none;
-            text-align: left;
-            width: 100%;
-            font-size: 1.2em;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .option:hover {
-            background-color: #333;
-        }
-        .footer {
-            margin-top: 20px;
-            color: #666;
-            font-size: 1em;
-        }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h1>Quick Polls</h1>
-        <p>Your voice, your community</p>
+---
+layout: post 
+title: Worlds
+show_reading_time: false
+search_exclude: true
+permalink: /prism/polls
+---
+
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: black;
+        color: white;
+    }
+
+    .main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 30px;
+    }
+
+    .poll-header {
+        background-color: red;
+        text-align: center;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 15px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .poll-subtitle {
+        font-size: 16px;
+        color: #ddd;
+        margin-top: -10px;
+        text-align: center;
+    }
+
+    .poll-question {
+        color: red;
+        font-size: 24px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .poll-options {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 60%;
+    }
+
+    .poll-option {
+        background-color: #666 !important;
+        color: white;
+        padding: 15px;
+        margin: 10px 0;
+        border: none;
+        text-align: center;
+        width: 100%;
+        font-size: 18px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .poll-option:hover {
+        background-color: #555 !important;
+    }
+
+    .poll-option:active {
+        background-color: #333 !important;
+    }
+
+    footer {
+        margin-top: 20px;
+        font-size: 12px;
+        color: #aaa;
+    }
+</style>
+
+<header class="poll-header">
+    Quick Polls
+</header>
+<p class="poll-subtitle">Your voice, your community</p>
+
+<div class="main">
+    <p class="poll-question">What is your favorite genre of music?</p>
+    <div class="poll-options">
+        <button class="poll-option">Jazz</button>
+        <button class="poll-option">R&amp;B</button>
+        <button class="poll-option">Classical</button>
+        <button class="poll-option">Rap</button>
     </div>
-    <div class="poll-container">
-        <h2>What is your favorite genre of music?</h2>
-        <button class="option">Jazz</button>
-        <button class="option">R&amp;B</button>
-        <button class="option">Classical</button>
-        <button class="option">Rap</button>
-    </div>
-    <div class="footer">
-        &copy; 2024 Prism. All rights reserved.
-    </div>
-</body>
-</html>
+</div>
+
+<footer>
+    &copy; 2024 Prism. All rights reserved.
+</footer>
