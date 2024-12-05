@@ -87,7 +87,13 @@ permalink: /prism/profile
     .card img {
         width: 100%;
         border-radius: 8px;
+        transition: transform 0.3s ease-in-out; /* Smooth animation */
     }
+
+    .card img:hover {
+        transform: scale(1.05); /* Slightly increase size on hover */
+    }
+
 
     .card p {
         margin-top: 8px;
