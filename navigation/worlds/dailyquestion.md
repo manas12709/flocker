@@ -7,7 +7,7 @@ permalink: /prism/dailyquestion
 
 <!-- Link to Custom CSS and Script -->
 <link rel="stylesheet" href="{{site.baseurl}}/navigation/worlds/style.css">
-<script src="{{site.baseurl}}/navigation/worlds/script.js"></script>
+<script src="{{site.baseurl}}/navigation/worlds/script.js" defer></script>
 
 <header class="heading">
     <h1>Daily Question</h1>
@@ -15,16 +15,14 @@ permalink: /prism/dailyquestion
 </header>
 
 <div class="container">
-    <h2 id="dynamic-question">What are your thoughts on the impact of technology in education?</h2>
+    <!-- Dynamic Question Header -->
+    <h2 id="dynamic-question">Choose a topic to begin.</h2>
 
-    <div>
-        <textarea placeholder="Share your thoughts..."></textarea>
-        <div style="display: flex; justify-content: space-between;">
-            <button class="send">Send</button>
-            <button class="quiz-now">Quiz Now</button>
-        </div>
-    </div>
+    <!-- Quiz and Free Response Containers -->
+    <div id="quiz-container" style="display: none;"></div>
+    <div id="free-response-container" style="display: none;"></div>
 
+    <!-- Dropdown Menu for Topics -->
     <div class="dropdown">
         <button>Pick a Topic</button>
         <div class="dropdown-content">
