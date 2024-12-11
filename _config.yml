@@ -17,3 +17,4 @@ plugins:
   - jekyll-remote-theme
 header_pages:
   - navigation/worlds/home.md
+  - navigation/aboutus.md
