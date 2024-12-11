@@ -5,9 +5,9 @@ show_reading_time: false
 permalink: /prism/ourteam
 ---
 
-## Our Team
+# Our Team
 
-<div id="team-table"></div>
+<div id="team-cards" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;"></div>
 
 <script>
 async function fetchTeamInfo() {
@@ -22,55 +22,77 @@ async function fetchTeamInfo() {
 }
 
 function displayTeamInfo(teamData) {
-    const table = document.createElement('table');
-    const headerRow = document.createElement('tr');
-    
-    // Define the headers
-    const headers = ['FirstName', 'LastName', 'DOB', 'Email', 'Residence', 'Owns_Cars'];
-    headers.forEach(header => {
-        const th = document.createElement('th');
-        th.textContent = header;
-        headerRow.appendChild(th);
-    });
-    table.appendChild(headerRow);
+    const container = document.getElementById('team-cards');
 
     teamData.forEach(member => {
-        const row = document.createElement('tr');
-        headers.forEach(header => {
-            const td = document.createElement('td');
-            if (Array.isArray(member[header])) {
-                td.textContent = member[header].join(', ');
-            } else {
-                td.textContent = member[header];
-            }
-            row.appendChild(td);
-        });
-        table.appendChild(row);
-    });
+        const card = document.createElement('div');
+        card.className = 'team-card';
 
-    document.getElementById('team-table').appendChild(table);
+        const name = document.createElement('h3');
+        name.textContent = `${member.FirstName} ${member.LastName}`;
+        card.appendChild(name);
+
+        const dob = document.createElement('p');
+        dob.textContent = `Date of Birth: ${member.DOB}`;
+        card.appendChild(dob);
+
+        const email = document.createElement('p');
+        email.innerHTML = `Email: <a href="mailto:${member.Email}">${member.Email}</a>`;
+        card.appendChild(email);
+
+        const residence = document.createElement('p');
+        residence.textContent = `Residence: ${member.Residence}`;
+        card.appendChild(residence);
+
+        const cars = document.createElement('p');
+        cars.textContent = `Cars Owned: ${member.Owns_Cars.join(', ')}`;
+        card.appendChild(cars);
+
+        container.appendChild(card);
+    });
 }
 
 fetchTeamInfo();
 </script>
 
 <style>
-#team-table table {
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    margin-top: 20px;
+#team-cards {
+    font-family: 'Arial', sans-serif;
+    margin: 20px auto;
 }
 
-#team-table th {
-    font-weight: bold;
-    color: #333;
+.team-card {
+    background: linear-gradient(145deg, #1e1e2f, #252535);
+    border-radius: 10px;
+    color: #fff;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: transform 0.3s;
 }
 
-#team-table tr:nth-child(even) {
-    background-color: #f9f9f9;
+.team-card:hover {
+    transform: scale(1.05);
 }
 
-#team-table tr:hover {
-    background-color: #f1f1f1;
+.team-card h3 {
+    margin-bottom: 10px;
+    font-size: 1.5em;
+    color: #00d4ff;
+}
+
+.team-card p {
+    margin: 5px 0;
+    font-size: 1em;
+}
+
+.team-card a {
+    color: #00d4ff;
+    text-decoration: none;
+}
+
+.team-card a:hover {
+    text-decoration: underline;
 }
 </style>
