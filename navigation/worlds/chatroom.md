@@ -117,20 +117,20 @@ permalink: /prism/topicchatroom
         <div>Interest 2: Engineering</div>
     </div>
     <div class="chat-container">
-        <h2>
-            <span class="ai-text">AI Generated Prompt</span><br> 
-            <span id="aiQuestion">What are your opinions on the Engines of F1 Cars?</span>
-        </h2>
-        <button onclick="updateAIQuestion('F1', 'Engineering')">Generate New Question</button>
-        <div id="chatBox"></div>
-        <div class="message-input">
-            <input type="text" id="messageInput" placeholder="Send a Message">
-            <button onclick="sendMessage()">Send</button>
-        </div>
+    <h2>
+        <span class="ai-text">AI Generated Prompt</span><br> 
+        <span id="aiQuestion">What are your opinions on the Engines of F1 Cars?</span>
+    </h2>
+    <button onclick="updateAIQuestionAndCreateChannel('F1', 'Engineering')">Generate New Question & Create Channel</button>
+    <div id="chatBox"></div>
+    <div class="message-input">
+        <input type="text" id="messageInput" placeholder="Send a Message">
+        <button onclick="sendMessage()">Send</button>
     </div>
 </div>
+</div>
 <script>
-    function sendMessage() {
+    async function sendMessage() {
         const chatBox = document.getElementById('chatBox');
         const messageInput = document.getElementById('messageInput');
         const message = messageInput.value.trim();
@@ -166,10 +166,46 @@ permalink: /prism/topicchatroom
             return "An error occurred while communicating with the AI.";
         }
     }
-    async function updateAIQuestion(interest1, interest2) {
+    async function createChannel(channelName) {
+        const apiUrl = "http://127.0.0.1:8887/api/channel"; // Replace with the actual API endpoint
+        const groupId = 3; // Replace with the appropriate group_id
+        const attributes = {
+            description: "Channel created with AI-generated question."
+        };
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: channelName,
+                    group_id: groupId,
+                    attributes: attributes
+                })
+            });
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+            const data = await response.json();
+            console.log('Channel created successfully:', data);
+            alert(`Channel "${data.name}" created successfully!`);
+        } catch (error) {
+            console.error('Error creating channel:', error);
+            alert('An error occurred while creating the channel.');
+        }
+    }
+    async function updateAIQuestionAndCreateChannel(interest1, interest2) {
         const aiQuestionElement = document.getElementById('aiQuestion');
         aiQuestionElement.textContent = "Generating question...";
         const newQuestion = await sendToGeminiAPI(interest1, interest2);
         aiQuestionElement.textContent = newQuestion;
+        if (newQuestion && newQuestion !== "An error occurred while communicating with the AI.") {
+            await createChannel(newQuestion);
+        } else {
+            alert("Failed to generate a valid question.");
+        }
     }
 </script>
+
+
