@@ -5,8 +5,6 @@ show_reading_time: false
 permalink: /prism/ourteam
 ---
 
-# Our Team
-
 <div id="team-cards" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;"></div>
 
 <script>
