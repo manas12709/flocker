@@ -21,6 +21,10 @@ show_reading_time: false
        <label for="newPassword">Enter New Password:</label>
        <input type="text" id="newPassword" placeholder="New Password">
      </div>
+      <div>
+       <label for="newInterests">Enter New Interests:</label>
+       <input type="text" id="newInterests" placeholder="New Interests (e.g., Soccer, Reading)">
+      </div>
      <br>
      <br>
      <label for="profilePicture" class="file-icon"> Upload Profile Picture <i class="fas fa-upload"></i> <!-- Replace this with your desired icon -->
@@ -307,6 +311,30 @@ window.changeName = async function(name) {
    }
 }
 
+window.changeInterests = async function(interests) {
+   if (interests) {
+       const URL = pythonURI + "/api/user";
+       const options = {
+           URL,
+           body: { interests },
+           message: 'interests-message', // Adjust message element ID if necessary
+           callback: () => {
+               console.log('Interests updated successfully!');
+               const interestsInput = document.getElementById('newInterests');
+               interestsInput.value = interests; // Update input field with new value
+               interestsInput.placeholder = interests; // Update placeholder
+           }
+       };
+
+       try {
+           await putUpdate(options);
+       } catch (error) {
+           console.error('Error updating interests:', error.message);
+           document.getElementById('profile-message').textContent = 'Error updating interests: ' + error.message;
+       }
+   }
+};
+
 // Event listener to trigger updateUid function when UID field is changed
 document.getElementById('newUid').addEventListener('change', function() {
     const uid = this.value;
@@ -327,6 +355,12 @@ document.getElementById('newPassword').addEventListener('change', function() {
 
 });
 
+document.getElementById('newInterests').addEventListener('change', function() {
+    const interests = this.value;
+    window.changeInterests(interests);
+});
+
+
 // Function to fetch Name from backend
 window.fetchName = async function() {
     const URL = pythonURI + "/api/user"; // Adjusted endpoint
@@ -345,20 +379,44 @@ window.fetchName = async function() {
     }
 };
 
+// Function to fetch Interests from backend
+window.fetchInterests = async function() {
+    const URL = pythonURI + "/api/user"; // Adjust endpoint as needed
+
+    try {
+        const response = await fetch(URL, fetchOptions);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch interests: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.interests;
+    } catch (error) {
+        console.error('Error fetching interests:', error.message);
+        return null;
+    }
+};
+
 // Function to set placeholders for UID and Name
 window.setPlaceholders = async function() {
     const uidInput = document.getElementById('newUid');
     const nameInput = document.getElementById('newName');
+    const interestsInput = document.getElementById('newInterests'); // Add this line
+
 
     try {
         const uid = await window.fetchUid();
         const name = await window.fetchName();
+        const interests = await window.fetchInterests();
 
         if (uid !== null) {
             uidInput.placeholder = uid;
         }
         if (name !== null) {
             nameInput.placeholder = name;
+        }
+        if (interests !== null) {
+            interestsInput.placeholder = interests;
         }
     } catch (error) {
         console.error('Error setting placeholders:', error.message);
