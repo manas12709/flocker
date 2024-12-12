@@ -128,7 +128,7 @@ permalink: /prism/profile
         <img src="https://placehold.co/150x150" alt="Profile Picture">
         <div>
             <h2>User Name</h2>
-            <p>User Bio or Status</p>
+            <h2 id="username">User Name</h2>
         </div>
     </section>
 
@@ -179,3 +179,26 @@ permalink: /prism/profile
     </section>
     <br>
 </main>
+
+<div class="container">
+    <h1>User Profile</h1>
+    <p>Username: <span id="username"></span></p>
+</div>
+
+<script type="module">
+    import { pythonURI, fetchOptions } from '../assets/js/api/config.js';
+
+    document.addEventListener('DOMContentLoaded', async function() {
+        try {
+            const response = await fetch(`${pythonURI}/api/user`, fetchOptions);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            const username = data.name;
+            document.getElementById('username').textContent = username;
+        } catch (error) {
+            console.error('Error fetching username:', error);
+        }
+    });
+</script>
