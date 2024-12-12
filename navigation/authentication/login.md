@@ -90,6 +90,12 @@ show_reading_time: false
                 </label>
             </p>
             <p>
+                <label>
+                    Interests:
+                    <input type="text" name="interests" id="interests" placeholder="e.g., Soccer, Pool, Computer Science" required>
+                </label>
+            </p>
+            <p>
                 <button type="submit">Sign Up</button>
             </p>
             <p id="signupMessage" style="color: green;"></p>
@@ -132,7 +138,7 @@ show_reading_time: false
             name: document.getElementById("name").value,
             uid: document.getElementById("signupUid").value,
             password: document.getElementById("signupPassword").value,
-            kasm_server_needed: document.getElementById("kasmNeeded").checked,
+            interests: document.getElementById("interests").value, // Include interests
         }
     };
 
@@ -161,7 +167,7 @@ show_reading_time: false
         signupButton.disabled = false;
         signupButton.style.backgroundColor = ''; // Reset to default color
     });
-}
+};
 
 
     // Function to fetch and display Python data
