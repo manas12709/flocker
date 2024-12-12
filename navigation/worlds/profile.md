@@ -180,11 +180,6 @@ permalink: /prism/profile
     <br>
 </main>
 
-<div class="container">
-    <h1>User Profile</h1>
-    <p>Username: <span id="username"></span></p>
-</div>
-
 <script type="module">
     import { pythonURI, fetchOptions } from '../assets/js/api/config.js';
 
