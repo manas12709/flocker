@@ -143,7 +143,7 @@ permalink: /prism/topicchatroom
         }
     }
     async function sendToGeminiAPI(interest1, interest2) {
-        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyA8MjTrBZp9tJGoYKzUKGZoaT7US-lAz7s";
+        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyASxBlt_EO7eVWOF9JazNRGGzhi6tHBTYU";
         try {
             const response = await fetch(apiUrl, {
                 method: 'POST',
