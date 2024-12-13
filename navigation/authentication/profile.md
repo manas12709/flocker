@@ -1,437 +1,337 @@
 ---
-layout: post
-title: Profile Settings
-permalink: /profile
-menu: nav/home.html
+layout: post 
 search_exclude: true
 show_reading_time: false
+permalink: /prism/profile
 ---
-<div class="profile-container">
- <div class="card">
-   <form>
-     <div>
-       <label for="newUid">Enter New UID:</label>
-       <input type="text" id="newUid" placeholder="New UID">
-     </div>
-     <div>
-       <label for="newName">Enter New Name:</label>
-       <input type="text" id="newName" placeholder="New Name">
-     </div>
-      <div>
-       <label for="newPassword">Enter New Password:</label>
-       <input type="text" id="newPassword" placeholder="New Password">
-     </div>
-      <div>
-       <label for="newInterests">Enter New Interests:</label>
-       <input type="text" id="newInterests" placeholder="New Interests (e.g., Soccer, Reading)">
-      </div>
-     <br>
-     <br>
-     <label for="profilePicture" class="file-icon"> Upload Profile Picture <i class="fas fa-upload"></i> <!-- Replace this with your desired icon -->
-     </label>
-     <input type="file" id="profilePicture" accept="image/*" onchange="saveProfilePicture()">
-     <div class="image-container" id="profileImageBox">
-         <!-- Profile picture will be displayed here -->
-     </div>
-     <p id="profile-message" style="color: red;"></p>
-   </form>
- </div>
-</div>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        font-family: 'Roboto', sans-serif;
+        background-color: #1a1a1a;
+        color: #ffffff;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    header {
+        background-color: #e53e3e;
+        padding: 0px;
+        text-align: center;
+    }
+
+    header h1 {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    header p {
+        margin-top: 0px;
+    }
+
+    .profile {
+        display: flex;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .profile img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 4px solid #e53e3e;
+        margin-right: 16px;
+    }
+
+    .profile div h2 {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .profile div p {
+        color: #a0aec0;
+    }
+
+    .grid {
+        display: grid;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .grid-cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .card {
+        background-color: #2d3748;
+        padding: 16px;
+        border-radius: 8px;
+    }
+
+    .card h3, .card h4 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .card img {
+        width: 100%;
+        border-radius: 8px;
+        transition: transform 0.3s ease-in-out; /* Smooth animation */
+    }
+
+    .card img:hover {
+        transform: scale(1.05); /* Slightly increase size on hover */
+    }
+
+
+    .card p {
+        margin-top: 8px;
+    }
+
+    ul {
+        list-style: none;
+    }
+
+    ul li {
+        margin: 8px 0;
+    }
+
+    footer {
+        background-color: #e53e3e;
+        padding: 16px;
+        text-align: center;
+    }
+
+    footer p {
+        font-size: 0.875rem;
+    }
+</style>
+
+<header>
+    <h1>Prism</h1>
+    <p>Connect with the Future</p>
+</header>
+
+<main class="container">
+    <section class="profile">
+        <img src="https://placehold.co/150x150" alt="Profile Picture" id="profilePicture">
+        <div>
+            <h2 id="username">User Name</h2>
+        </div>
+    </section>
+
+    <section class="card">
+        <h3>Profile Settings</h3>
+        <form>
+            <div>
+                <label for="newUid">Enter New UID:</label>
+                <input type="text" id="newUid" placeholder="New UID">
+            </div>
+            <div>
+                <label for="newName">Enter New Name:</label>
+                <input type="text" id="newName" placeholder="New Name">
+            </div>
+            <div>
+                <label for="newPassword">Enter New Password:</label>
+                <input type="password" id="newPassword" placeholder="New Password">
+            </div>
+            <div>
+                <label for="newInterests">Enter New Interests:</label>
+                <input type="text" id="newInterests" placeholder="New Interests (e.g., Soccer, Reading)">
+            </div>
+            <br>
+            <label for="profilePictureUpload" class="file-icon">
+                Upload Profile Picture <i class="fas fa-upload"></i>
+            </label>
+            <input type="file" id="profilePictureUpload" accept="image/*" style="display: none;">
+            <p id="profile-message" style="color: red;"></p>
+        </form>
+    </section>
+
+    <section class="grid grid-cols-2">
+        <div class="card">
+            <h3>User Stats</h3>
+            <p>Followers: 120</p>
+            <p>Following: 75</p>
+            <p>Posts: 34</p>
+        </div>
+        <div class="card">
+            <h3>Bio/About Me</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec felis vel metus.</p>
+        </div>
+    </section>
+
+    <section class="grid grid-cols-2">
+        <div class="card">
+            <h4>Interest 1</h4>
+            <img src="https://placehold.co/100x100" alt="Interest 1 Visual">
+        </div>
+        <div class="card">
+            <h4>Interest 2</h4>
+            <img src="https://placehold.co/100x100" alt="Interest 2 Visual">
+        </div>
+        <div class="card">
+            <h4>Interest 3</h4>
+            <img src="https://placehold.co/100x100" alt="Interest 3 Visual">
+        </div>
+        <div class="card">
+            <h4>Interest 4</h4>
+            <img src="https://placehold.co/100x100" alt="Interest 4 Visual">
+        </div>
+    </section>
+
+    <section class="card">
+        <h3>Latest Post</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec felis vel metus.</p>
+    </section>
+    <br>
+    <section class="card">
+        <h3>Activity Feed</h3>
+        <ul>
+            <li>User1 liked your post</li>
+            <li>User2 commented on your photo</li>
+            <li>User3 started following you</li>
+        </ul>
+    </section>
+    <br>
+</main>
 
 <script type="module">
-// Import fetchOptions from config.js
-import {pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
-// Import functions from config.js
-import { putUpdate, postUpdate, deleteData, logoutUser } from "{{site.baseurl}}/assets/js/api/profile.js";
+import { pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
 
-// Function to update table with fetched data
-function updateTableWithData(data) {
-   const tableBody = document.getElementById('profileResult');
-   tableBody.innerHTML = '';
-
-   data.sections.forEach((section, index) => {
-       const tr = document.createElement('tr');
-       const themeCell = document.createElement('td');
-       const nameCell = document.createElement('td');
-
-       themeCell.textContent = section.theme;
-       nameCell.textContent = section.name;
-
-       const trashIcon = document.createElement('i');
-       trashIcon.className = 'fas fa-trash-alt trash-icon';
-       trashIcon.style.marginLeft = '10px';
-       themeCell.appendChild(trashIcon);
-
-       trashIcon.addEventListener('click', async function (event) {
-           event.preventDefault();
-           const URL = pythonURI + "/api/user/section";
-           // Remove the row from the table
-           tr.remove();
-
-           const options = {
-               URL,
-               body: { sections: [section.theme] },
-               message: 'profile-message',
-           };
-
-           try {
-               await deleteData(options);
-           } catch (error) {
-               console.error('Error deleting section:', error.message);
-               document.getElementById('profile-message').textContent = 'Error deleting section: ' + error.message;
-           }
-       });
-
-      yearCell.classList.add('editable'); // Make year cell editable
-      yearCell.innerHTML = `${section.year} <i class="fas fa-pencil-alt edit-icon" style="margin-left: 10px;"></i>`;
-
-       // Make the year cell editable
-       yearCell.addEventListener('click', function () {
-           const input = document.createElement('input');
-           input.type = 'text';
-           input.value = section.year;
-           input.className = 'edit-input';
-           yearCell.innerHTML = '';
-           yearCell.appendChild(input);
-
-           input.focus();
-
-           input.addEventListener('blur', async function () {
-               const newYear = input.value;
-               const URL = pythonURI + "/api/user/section";
-               const options = {
-                   URL,
-                   body: { section: { theme: section.theme, year: newYear } },
-                   message: 'profile-message',
-               };
-
-               try {
-                   await putUpdate(options);
-               } catch (error) {
-                   console.error('Error updating year:', error.message);
-                   document.getElementById('profile-message').textContent = 'Error updating year: ' + error.message;
-               }
-
-               yearCell.textContent = newYear;
-           });
-
-           input.addEventListener('keydown', function (event) {
-               if (event.key === 'Enter') {
-                   input.blur();
-               }
-           });
-       });
-       tr.appendChild(themeCell);
-       tr.appendChild(nameCell);
-
-       tableBody.appendChild(tr);
-   });
-
+async function fetchUsername() {
+    try {
+        const response = await fetch(pythonURI + "/api/user", fetchOptions);
+        if (!response.ok) {
+            throw new Error('Failed to fetch user data');
+        }
+        const data = await response.json();
+        if (data && data.name) {
+            document.getElementById('username').textContent = data.name;
+            setPlaceholders(data);
+        }
+    } catch (error) {
+        console.error('Error fetching username:', error);
+        showError('Error fetching user data');
+    }
 }
 
-// Function to fetch user profile data
-async function fetchUserProfile() {
-    const URL = pythonURI + "/api/id/pfp"; // Endpoint to fetch user profile data
-
+async function fetchProfilePicture() {
     try {
-        const response = await fetch(URL, fetchOptions);
+        const response = await fetch(pythonURI + "/api/id/pfp", fetchOptions);
         if (!response.ok) {
-            throw new Error(`Failed to fetch user profile: ${response.status}`);
+            throw new Error('Failed to fetch profile picture');
+        }
+        const data = await response.json();
+        if (data && data.pfp) {
+            document.getElementById('profilePicture').src = `data:image/jpeg;base64,${data.pfp}`;
+        }
+    } catch (error) {
+        console.error('Error fetching profile picture:', error);
+        showError('Error fetching profile picture');
+    }
+}
+
+function setPlaceholders(userData) {
+    const uidInput = document.getElementById('newUid');
+    const nameInput = document.getElementById('newName');
+    const interestsInput = document.getElementById('newInterests');
+
+    if (userData.uid) uidInput.placeholder = userData.uid;
+    if (userData.name) nameInput.placeholder = userData.name;
+    if (userData.interests) interestsInput.placeholder = userData.interests;
+}
+
+async function updateProfile(field, value) {
+    try {
+        const response = await fetch(pythonURI + "/api/user", {
+            ...fetchOptions,
+            method: 'PUT',
+            body: JSON.stringify({ [field]: value })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update profile');
         }
 
-        const profileData = await response.json();
-        displayUserProfile(profileData);
+        showError('Profile updated successfully', 'green');
+        fetchUsername();
     } catch (error) {
-        console.error('Error fetching user profile:', error.message);
-        // Handle error display or fallback mechanism
+        console.error('Error updating profile:', error);
+        showError('Error updating profile');
     }
 }
 
-// Function to display user profile data
-function displayUserProfile(profileData) {
-    const profileImageBox = document.getElementById('profileImageBox');
-    if (profileData.pfp) {
-        const img = document.createElement('img');
-        img.src = `data:image/jpeg;base64,${profileData.pfp}`;
-        img.alt = 'Profile Picture';
-        profileImageBox.innerHTML = ''; // Clear existing content
-        profileImageBox.appendChild(img); // Append new image element
-    } else {
-        profileImageBox.innerHTML = '<p>No profile picture available.</p>';
-    }
-
-    // Display other profile information as needed
-    // Example: Update HTML elements with profileData.username, profileData.email
-}
-
-// Function to save profile picture
-window.saveProfilePicture = async function () {
-
-    const fileInput = document.getElementById('profilePicture');
-    const file = fileInput.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function() {
-            const profileImageBox = document.getElementById('profileImageBox');
-            profileImageBox.innerHTML = `<img src="${reader.result}" alt="Profile Picture">`;
-        };
-        reader.readAsDataURL(file);
-    }
-
-    if (!file) return;
-
+async function uploadProfilePicture(file) {
     try {
         const base64String = await convertToBase64(file);
-        await sendProfilePicture(base64String);
-        console.log('Profile picture uploaded successfully!');
+        const response = await fetch(pythonURI + "/api/id/pfp", {
+            ...fetchOptions,
+            method: 'PUT',
+            body: JSON.stringify({ pfp: base64String })
+        });
 
+        if (!response.ok) {
+            throw new Error('Failed to upload profile picture');
+        }
+
+        showError('Profile picture updated successfully', 'green');
+        fetchProfilePicture();
     } catch (error) {
-        console.error('Error uploading profile picture:', error.message);
-        // Handle error display or fallback mechanism
+        console.error('Error uploading profile picture:', error);
+        showError('Error uploading profile picture');
     }
 }
 
-// Function to convert file to base64
-async function convertToBase64(file) {
+function convertToBase64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = () => resolve(reader.result.split(',')[1]); // Remove the prefix part of the result
+        reader.onload = () => resolve(reader.result.split(',')[1]);
         reader.onerror = error => reject(error);
         reader.readAsDataURL(file);
     });
 }
 
-// Function to send profile picture to server
-async function sendProfilePicture(base64String) {
-   const URL = pythonURI + "/api/id/pfp"; // Adjust endpoint as needed
-
-   // Create options object for PUT request
-   const options = {
-       URL,
-       body: { pfp: base64String },
-       message: 'profile-message', // Adjust the message area as needed
-       callback: () => {
-           console.log('Profile picture uploaded successfully!');
-           // Handle success response as needed
-       }
-   };
-
-   try {
-       await putUpdate(options);
-   } catch (error) {
-       console.error('Error uploading profile picture:', error.message);
-       document.getElementById('profile-message').textContent = 'Error uploading profile picture: ' + error.message;
-   }
-}
-  // Function to update UI with new UID and change placeholder
-window.updateUidField = function(newUid) {
-  const uidInput = document.getElementById('newUid');
-  uidInput.value = newUid;
-  uidInput.placeholder = newUid;
+function showError(message, color = 'red') {
+    const messageElement = document.getElementById('profile-message');
+    messageElement.style.color = color;
+    messageElement.textContent = message;
+    setTimeout(() => {
+        messageElement.textContent = '';
+    }, 3000);
 }
 
-// Function to update UI with new Name and change placeholder
-window.updateNameField = function(newName) {
-  const nameInput = document.getElementById('newName');
-  nameInput.value = newName;
-  nameInput.placeholder = newName;
-}
+document.addEventListener('DOMContentLoaded', () => {
+    fetchUsername();
+    fetchProfilePicture();
 
-// Function to change UID
-window.changeUid = async function(uid) {
-   if (uid) {
-       const URL = pythonURI + "/api/user"; // Adjusted endpoint
-
-       const options = {
-           URL,
-           body: { uid },
-           message: 'uid-message', // Adjust the message area as needed
-           callback: () => {
-               alert("You updated your Github ID, so you will automatically be logged out. Be sure to remember your new github id to log in!");
-               console.log('UID updated successfully!');
-               window.updateUidField(uid);
-               window.location.href = '/portfolio_2025/login'
-           }
-       };
-
-       try {
-           await putUpdate(options);
-       } catch (error) {
-           console.error('Error updating UID:', error.message);
-           document.getElementById('uid-message').textContent = 'Error updating UID: ' + error.message;
-       }
-   }
-}
-
-window.changePassword = async function(password) {
-   if (password) {
-       const URL = pythonURI + "/api/user"; // Adjusted endpoint
-
-       const options = {
-           URL,
-           body: { password },
-           message: 'password-message', // Adjust the message area as needed
-           callback: () => {
-               console.log('Password updated successfully!');
-               window.location.href = '/portfolio_2025/login'
-
-           }
-       };
-
-       try {
-            alert("You updated your password, so you will automatically be logged out. Be sure to remember your password!");
-           await putUpdate(options);
-           await logoutUser();
-       } catch (error) {
-           console.error('Error updating password:', error.message);
-           document.getElementById('password-message').textContent = 'Error updating password: ' + error.message;
-       }
-   }
-}
-
-// Function to change Name
-window.changeName = async function(name) {
-   if (name) {
-       const URL = pythonURI + "/api/user";
-       const options = {
-           URL,
-           body: { name },
-           message: 'name-message',
-           callback: () => {
-               console.log('Name updated successfully!');
-               window.updateNameField(name);
-           }
-       };
-       try {
-           await putUpdate(options);
-       } catch (error) {
-           console.error('Error updating Name:', error.message);
-           document.getElementById('name-message').textContent = 'Error updating Name: ' + error.message;
-       }
-   }
-}
-
-window.changeInterests = async function(interests) {
-   if (interests) {
-       const URL = pythonURI + "/api/user";
-       const options = {
-           URL,
-           body: { interests },
-           message: 'interests-message', // Adjust message element ID if necessary
-           callback: () => {
-               console.log('Interests updated successfully!');
-               const interestsInput = document.getElementById('newInterests');
-               interestsInput.value = interests; // Update input field with new value
-               interestsInput.placeholder = interests; // Update placeholder
-           }
-       };
-
-       try {
-           await putUpdate(options);
-       } catch (error) {
-           console.error('Error updating interests:', error.message);
-           document.getElementById('profile-message').textContent = 'Error updating interests: ' + error.message;
-       }
-   }
-};
-
-// Event listener to trigger updateUid function when UID field is changed
-document.getElementById('newUid').addEventListener('change', function() {
-    const uid = this.value;
-    window.changeUid(uid);
-
-});
-
-// Event listener to trigger updateName function when Name field is changed
-document.getElementById('newName').addEventListener('change', function() {
-    const name = this.value;
-    window.changeName(name);
-
-});
-
-document.getElementById('newPassword').addEventListener('change', function() {
-    const password = this.value;
-    window.changePassword(password);
-
-});
-
-document.getElementById('newInterests').addEventListener('change', function() {
-    const interests = this.value;
-    window.changeInterests(interests);
-});
-
-
-// Function to fetch Name from backend
-window.fetchName = async function() {
-    const URL = pythonURI + "/api/user"; // Adjusted endpoint
-
-    try {
-        const response = await fetch(URL, fetchOptions);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch Name: ${response.status}`);
+    const profilePictureInput = document.getElementById('profilePictureUpload');
+    profilePictureInput.addEventListener('change', (e) => {
+        if (e.target.files[0]) {
+            uploadProfilePicture(e.target.files[0]);
         }
+    });
 
-        const data = await response.json();
-        return data.name;
-    } catch (error) {
-        console.error('Error fetching Name:', error.message);
-        return null;
-    }
-};
-
-// Function to fetch Interests from backend
-window.fetchInterests = async function() {
-    const URL = pythonURI + "/api/user"; // Adjust endpoint as needed
-
-    try {
-        const response = await fetch(URL, fetchOptions);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch interests: ${response.status}`);
-        }
-
-        const data = await response.json();
-        return data.interests;
-    } catch (error) {
-        console.error('Error fetching interests:', error.message);
-        return null;
-    }
-};
-
-// Function to set placeholders for UID and Name
-window.setPlaceholders = async function() {
-    const uidInput = document.getElementById('newUid');
-    const nameInput = document.getElementById('newName');
-    const interestsInput = document.getElementById('newInterests'); // Add this line
-
-
-    try {
-        const uid = await window.fetchUid();
-        const name = await window.fetchName();
-        const interests = await window.fetchInterests();
-
-        if (uid !== null) {
-            uidInput.placeholder = uid;
-        }
-        if (name !== null) {
-            nameInput.placeholder = name;
-        }
-        if (interests !== null) {
-            interestsInput.placeholder = interests;
-        }
-    } catch (error) {
-        console.error('Error setting placeholders:', error.message);
-    }
-};
-
-// Call and initializeProfileSetup when DOM content is loaded
-document.addEventListener('DOMContentLoaded', async function () {
-    try {
-        await fetchUserProfile(); // Fetch user profile data
-        await setPlaceholders();
-    } catch (error) {
-        console.error('Initialization error:', error.message);
-        // Handle initialization error gracefully
-    }
+    const inputs = ['newUid', 'newName', 'newPassword', 'newInterests'];
+    inputs.forEach(id => {
+        const input = document.getElementById(id);
+        input.addEventListener('change', (e) => {
+            if (e.target.value) {
+                updateProfile(id.replace('new', '').toLowerCase(), e.target.value);
+                e.target.value = '';
+            }
+        });
+    });
 });
-
 </script>
