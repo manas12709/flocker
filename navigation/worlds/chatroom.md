@@ -111,25 +111,8 @@ permalink: /prism/topicchatroom
 <header class="page">
     <div class="subtitle">Chat across the world.</div>
 </header>
-<div class="main">
-    <div class="interests">
-        <div>Interest 1: F1</div>
-        <div>Interest 2: Engineering</div>
-    </div>
-    <div class="chat-container">
-    <h2>
-        <span class="ai-text">AI Generated Prompt</span><br> 
-        <span id="aiQuestion">What are your opinions on the Engines of F1 Cars?</span>
-    </h2>
-    <button onclick="updateAIQuestionAndCreateChannel('F1', 'Engineering')">Generate New Question & Create Channel</button>
-    <div id="chatBox"></div>
-    <div class="message-input">
-        <input type="text" id="messageInput" placeholder="Send a Message">
-        <button onclick="sendMessage()">Send</button>
-    </div>
-</div>
-</div>
-<script>
+<script type="module">
+    import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
     async function sendMessage() {
         const chatBox = document.getElementById('chatBox');
         const messageInput = document.getElementById('messageInput');
@@ -167,13 +150,13 @@ permalink: /prism/topicchatroom
         }
     }
     async function createChannel(channelName) {
-        const apiUrl = "http://127.0.0.1:8887/api/channel"; // Replace with the actual API endpoint
         const groupId = 3; // Replace with the appropriate group_id
         const attributes = {
             description: "Channel created with AI-generated question."
         };
         try {
-            const response = await fetch(apiUrl, {
+            const response = await fetch(`${pythonURI}/api/channel`, {
+                ...fetchOptions,
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -189,7 +172,6 @@ permalink: /prism/topicchatroom
             }
             const data = await response.json();
             console.log('Channel created successfully:', data);
-            alert(`Channel "${data.name}" created successfully!`);
         } catch (error) {
             console.error('Error creating channel:', error);
             alert('An error occurred while creating the channel.');
@@ -206,6 +188,23 @@ permalink: /prism/topicchatroom
             alert("Failed to generate a valid question.");
         }
     }
+    window.updateAIQuestionAndCreateChannel = updateAIQuestionAndCreateChannel;
 </script>
-
-
+<div class="main">
+    <div class="interests">
+        <div>Interest 1: F1</div>
+        <div>Interest 2: Engineering</div>
+    </div>
+    <div class="chat-container">
+    <h2>
+        <span class="ai-text">AI Generated Prompt</span><br> 
+        <span id="aiQuestion">What are your opinions on the Engines of F1 Cars?</span>
+    </h2>
+    <button onclick="updateAIQuestionAndCreateChannel('F1', 'Engineering')">Generate New Question & Create Channel</button>
+    <div id="chatBox"></div>
+    <div class="message-input">
+        <input type="text" id="messageInput" placeholder="Send a Message">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+</div>
