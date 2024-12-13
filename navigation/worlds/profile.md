@@ -181,19 +181,22 @@ permalink: /prism/profile
 </main>
 
 <script type="module">
-    import { pythonURI, fetchOptions } from '../assets/js/api/config.js';
+import { pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
 
-    document.addEventListener('DOMContentLoaded', async function() {
-        try {
-            const response = await fetch(`${pythonURI}/api/user`, fetchOptions);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            const username = data.name;
-            document.getElementById('username').textContent = username;
-        } catch (error) {
-            console.error('Error fetching username:', error);
+async function fetchUsername() {
+    try {
+        const response = await fetch(pythonURI + "/api/user", fetchOptions);
+        if (!response.ok) {
+            throw new Error('Failed to fetch user data');
         }
-    });
+        const data = await response.json();
+        if (data && data.name) {
+            document.getElementById('username').textContent = data.name;
+        }
+    } catch (error) {
+        console.error('Error fetching username:', error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', fetchUsername);
 </script>
