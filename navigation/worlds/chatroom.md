@@ -126,7 +126,7 @@ permalink: /prism/topicchatroom
         }
     }
     async function sendToGeminiAPI(interest1, interest2) {
-        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyASxBlt_EO7eVWOF9JazNRGGzhi6tHBTYU";
+        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyByINR_0sZrKsqkMzNSrqmf9kzbtpZ0X0M";
         try {
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -188,8 +188,32 @@ permalink: /prism/topicchatroom
             alert("Failed to generate a valid question.");
         }
     }
-    
+    async function fetchChannelIdByName(channelName) {
+        try {
+            const response = await fetch(`${pythonURI}/api/channels/filter`, {
+                ...fetchOptions,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: channelName }) // Adjust the API request to filter by channel name
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch channel: ' + response.statusText);
+            }
+            const channels = await response.json();
+            if (channels.length === 0) {
+                console.warn('No channel found with the name:', channelName);
+                return null;
+            }
+            return channels[0].id; // Return the ID of the first matching channel
+        } catch (error) {
+            console.error('Error fetching channel ID:', error);
+            return null;
+        }
+    }
     window.updateAIQuestionAndCreateChannel = updateAIQuestionAndCreateChannel;
+
 </script>
 <div class="main">
     <div class="interests">
