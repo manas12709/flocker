@@ -188,6 +188,7 @@ permalink: /prism/topicchatroom
             alert("Failed to generate a valid question.");
         }
     }
+    
     window.updateAIQuestionAndCreateChannel = updateAIQuestionAndCreateChannel;
 </script>
 <div class="main">
