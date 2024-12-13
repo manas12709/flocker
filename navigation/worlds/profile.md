@@ -125,9 +125,8 @@ permalink: /prism/profile
 
 <main class="container">
     <section class="profile">
-        <img src="https://placehold.co/150x150" alt="Profile Picture">
+        <img src="https://placehold.co/150x150" alt="Profile Picture" id="profilePicture">
         <div>
-            <h2>User Name</h2>
             <h2 id="username">User Name</h2>
         </div>
     </section>
@@ -198,5 +197,23 @@ async function fetchUsername() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', fetchUsername);
+async function fetchProfilePicture() {
+    try {
+        const response = await fetch(pythonURI + "/api/id/pfp", fetchOptions);
+        if (!response.ok) {
+            throw new Error('Failed to fetch profile picture');
+        }
+        const data = await response.json();
+        if (data && data.pfp) {
+            document.getElementById('profilePicture').src = `data:image/jpeg;base64,${data.pfp}`;
+        }
+    } catch (error) {
+        console.error('Error fetching profile picture:', error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetchUsername();
+    fetchProfilePicture();
+});
 </script>
