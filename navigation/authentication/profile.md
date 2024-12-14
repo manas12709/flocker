@@ -172,23 +172,7 @@ permalink: /profile
         </div>
     </section>
 
-    <section class="grid grid-cols-2">
-        <div class="card">
-            <h4>Interest 1</h4>
-            <img src="https://placehold.co/100x100" alt="Interest 1 Visual">
-        </div>
-        <div class="card">
-            <h4>Interest 2</h4>
-            <img src="https://placehold.co/100x100" alt="Interest 2 Visual">
-        </div>
-        <div class="card">
-            <h4>Interest 3</h4>
-            <img src="https://placehold.co/100x100" alt="Interest 3 Visual">
-        </div>
-        <div class="card">
-            <h4>Interest 4</h4>
-            <img src="https://placehold.co/100x100" alt="Interest 4 Visual">
-        </div>
+    <section class="grid grid-cols-2" id="interestsSection">
     </section>
 
     <section class="card">
@@ -210,22 +194,55 @@ permalink: /profile
 <script type="module">
 import { pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
 
-async function fetchUsername() {
+function createInterestCards(interests) {
+    const interestsSection = document.getElementById('interestsSection');
+    interestsSection.innerHTML = '';
+    
+    if (!interests || interests.length === 0) {
+        const placeholderInterests = ['Gaming', 'Reading', 'Music', 'Art'];
+        placeholderInterests.forEach((interest, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <h4>${interest}</h4>
+                <img src="https://placehold.co/300x200/2d3748/ffffff/png?text=${interest}" alt="${interest}">
+            `;
+            interestsSection.appendChild(card);
+        });
+        return;
+    }
+
+    interests.forEach(interest => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <h4>${interest}</h4>
+            <img src="https://placehold.co/300x200/2d3748/ffffff/png?text=${interest}" alt="${interest}">
+        `;
+        interestsSection.appendChild(card);
+    });
+}
+
+async function updateUserInfo() {
     try {
         const response = await fetch(pythonURI + "/api/user", fetchOptions);
-        if (!response.ok) {
-            throw new Error('Failed to fetch user data');
-        }
         const data = await response.json();
-        if (data && data.name) {
-            document.getElementById('username').textContent = data.name;
-            setPlaceholders(data);
+        
+        document.getElementById('username').textContent = data.name || 'User Name';
+        
+        if (data.pfp) {
+            document.getElementById('profilePicture').src = data.pfp;
         }
+        
+        const interests = data.interests ? data.interests.split(',').map(i => i.trim()) : [];
+        createInterestCards(interests);
+        
     } catch (error) {
-        console.error('Error fetching username:', error);
-        showError('Error fetching user data');
+        console.error('Error fetching user info:', error);
     }
 }
+
+document.addEventListener('DOMContentLoaded', updateUserInfo);
 
 async function fetchProfilePicture() {
     try {
@@ -266,7 +283,7 @@ async function updateProfile(field, value) {
         }
 
         showError('Profile updated successfully', 'green');
-        fetchUsername();
+        updateUserInfo();
     } catch (error) {
         console.error('Error updating profile:', error);
         showError('Error updating profile');
@@ -313,7 +330,6 @@ function showError(message, color = 'red') {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    fetchUsername();
     fetchProfilePicture();
 
     const profilePictureInput = document.getElementById('profilePictureUpload');
