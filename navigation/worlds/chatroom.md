@@ -1,5 +1,5 @@
 ---
-layout: post 
+layout: post
 search_exclude: true
 show_reading_time: false
 permalink: /prism/topicchatroom
@@ -12,6 +12,7 @@ permalink: /prism/topicchatroom
         color: white;
     }
 
+
     header.page {
         background-color: red;
         padding: 20px;
@@ -21,11 +22,13 @@ permalink: /prism/topicchatroom
         border-radius: 15px;
     }
 
+
     .subtitle {
         margin-top: -10px;
         font-size: 16px;
         color: #ddd;
     }
+
 
     .main {
         display: flex;
@@ -33,6 +36,7 @@ permalink: /prism/topicchatroom
         align-items: center;
         margin-top: 30px;
     }
+
 
     .interests {
         display: flex;
@@ -42,6 +46,7 @@ permalink: /prism/topicchatroom
         font-size: 18px;
     }
 
+
     .chat-container {
         background-color: #1a1a1a;
         width: 100%;
@@ -50,14 +55,16 @@ permalink: /prism/topicchatroom
         text-align: center;
     }
 
+
     .chat-container h2 {
         color: red;
         margin-bottom: 20px;
-        text-align: center; 
+        text-align: center;
     }
 
+
     #chatBox {
-        width: 100%; 
+        width: 100%;
         height: 300px;
         background-color: #000;
         color: white;
@@ -68,10 +75,12 @@ permalink: /prism/topicchatroom
         overflow-y: auto;
     }
 
+
     .message-input {
         display: flex;
         margin-top: 10px;
     }
+
 
     .message-input input {
         flex: 1;
@@ -84,6 +93,7 @@ permalink: /prism/topicchatroom
         color: white;
     }
 
+
     .message-input button {
         padding: 10px 20px;
         font-size: 16px;
@@ -94,9 +104,11 @@ permalink: /prism/topicchatroom
         cursor: pointer;
     }
 
+
     .message-input button:hover {
         background-color: darkred;
     }
+
 
     footer {
         margin-top: 20px;
@@ -104,8 +116,9 @@ permalink: /prism/topicchatroom
         color: #aaa;
     }
 
+
     .ai-text {
-        color: white; 
+        color: white;
     }
 </style>
 <header class="page">
@@ -113,6 +126,7 @@ permalink: /prism/topicchatroom
 </header>
 <script type="module">
     import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+    let selectedChannelId = null;
     async function sendMessage() {
         const chatBox = document.getElementById('chatBox');
         const messageInput = document.getElementById('messageInput');
@@ -124,7 +138,35 @@ permalink: /prism/topicchatroom
             messageInput.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
         }
+        const postData = {
+            title: "Comment on Random Discussion",
+            comment: message,
+            channel_id: selectedChannelId,
+        };
+        try {
+            // Send POST request to backend, purpose is to write to database
+            const response = await fetch(`${pythonURI}/api/post`, {
+                ...fetchOptions,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(postData)
+            });
+            if (!response.ok) {
+                throw new Error('Failed to add post: ' + response.statusText);
+            }
+            // Successful post
+            const result = await response.json();
+            alert('Post added successfully!');
+            document.getElementById('postForm').reset();
+        } catch (error) {
+            // Present alert on error from backend
+            console.error('Error adding post:', error);
+            alert('Error adding post: ' + error.message);
+        }
     }
+    window.sendMessage = sendMessage;
     async function sendToGeminiAPI(interest1, interest2) {
         const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyByINR_0sZrKsqkMzNSrqmf9kzbtpZ0X0M";
         try {
@@ -255,11 +297,12 @@ permalink: /prism/topicchatroom
         event.preventDefault();
         const groupId = document.getElementById('group_id').value;
         const channelId = document.getElementById('channel_id').value;
-        if (groupId && channelId) {
-            fetchData(channelId);
-        } else {
-            alert('Please select both group and channel.');
-        }
+        selectedChannelId = document.getElementById('channel_id').value;
+        // if (groupId && channelId) {
+        //     fetchData(channelId);
+        // } else {
+        //     alert('Please select both group and channel.');
+        // }
     });
     window.updateAIQuestionAndCreateChannel = updateAIQuestionAndCreateChannel;
     fetchGroups();
@@ -271,7 +314,7 @@ permalink: /prism/topicchatroom
     </div>
     <div class="chat-container">
     <h2>
-        <span class="ai-text">AI Generated Prompt</span><br> 
+        <span class="ai-text">AI Generated Prompt</span><br>
         <span id="aiQuestion">What are your opinions on the Engines of F1 Cars?</span>
     </h2>
     <button onclick="updateAIQuestionAndCreateChannel('F1', 'Engineering')">Generate New Question & Create Channel</button>
@@ -296,3 +339,4 @@ permalink: /prism/topicchatroom
     </div>
 </div>
 </div>
+
