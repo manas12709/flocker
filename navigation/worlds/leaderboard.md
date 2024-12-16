@@ -65,8 +65,72 @@ permalink: /prism/leaderboard
     <p>© 2024 Prism. All rights reserved.</p>
 </footer>
 
+<!-- Popup HTML -->
+<div class="popup" id="popup">
+    <div class="popup-content">
+        <h2>Sign In Required</h2>
+        <p>Please sign in to view the leaderboard.</p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+</div>
+
+<!-- Popup CSS -->
+<style>
+    .popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+    .popup-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+        width: 300px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .popup-content button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .popup-content button:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<!-- Popup JavaScript -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Function to check if the user is signed in
+        function isUserSignedIn() {
+            // Replace this with your actual sign-in check logic
+            return false; // Example: return true if the user is signed in
+        }
+
+        // Show the popup if the user is not signed in
+        if (!isUserSignedIn()) {
+            const popup = document.getElementById('popup');
+            popup.style.display = 'flex'; // Make the popup visible
+        }
+
+        // Function to close the popup
+        window.closePopup = function() {
+            const popup = document.getElementById('popup');
+            popup.style.display = 'none'; // Hide the popup
+        };
+
         fetch('/api/leaderboard')
             .then(response => response.json())
             .then(data => {
