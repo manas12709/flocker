@@ -1,8 +1,10 @@
 ---
-layout: post 
+layout: post
+title: Profile Settings
+permalink: /profile
+menu: nav/home.html
 search_exclude: true
 show_reading_time: false
-permalink: /profile
 ---
 
 <style>
@@ -22,27 +24,36 @@ permalink: /profile
         width: 90%;
         max-width: 1200px;
         margin: 0 auto;
+        padding-top: 2rem;
     }
 
-    header {
-        background-color: #e53e3e;
-        padding: 0px;
+    .page-header {
         text-align: center;
+        margin-bottom: 2rem;
+        padding: 2rem 0;
+        border-bottom: 2px solid #e53e3e;
     }
 
-    header h1 {
-        font-size: 2rem;
+    .page-header h1 {
+        font-size: 2.5rem;
         font-weight: bold;
+        color: #e53e3e;
+        margin-bottom: 0.5rem;
     }
 
-    header p {
-        margin-top: 0px;
+    .page-header p {
+        color: #a0aec0;
+        font-size: 1.1rem;
     }
 
     .profile {
         display: flex;
         align-items: center;
         margin-bottom: 24px;
+        background-color: #2d3748;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .profile img {
@@ -50,16 +61,81 @@ permalink: /profile
         height: 150px;
         border-radius: 50%;
         border: 4px solid #e53e3e;
-        margin-right: 16px;
+        margin-right: 2rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .profile div h2 {
-        font-size: 1.5rem;
+        font-size: 2rem;
         font-weight: bold;
+        color: #ffffff;
+        margin-bottom: 0.5rem;
     }
 
-    .profile div p {
+    .card {
+        background-color: #2d3748;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #e53e3e;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid #e53e3e;
+        padding-bottom: 0.5rem;
+    }
+
+    form div {
+        margin-bottom: 1rem;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
         color: #a0aec0;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 0.75rem;
+        border-radius: 4px;
+        border: 1px solid #4a5568;
+        background-color: #1a202c;
+        color: #ffffff;
+        margin-bottom: 1rem;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+        outline: none;
+        border-color: #e53e3e;
+        box-shadow: 0 0 0 2px rgba(229, 62, 62, 0.2);
+    }
+
+    .file-icon {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background-color: #e53e3e;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .file-icon:hover {
+        background-color: #c53030;
+    }
+
+    #profile-message {
+        margin-top: 1rem;
+        padding: 0.75rem;
+        border-radius: 4px;
+        font-weight: 500;
     }
 
     .grid {
@@ -72,28 +148,15 @@ permalink: /profile
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .card {
-        background-color: #2d3748;
-        padding: 16px;
-        border-radius: 8px;
-    }
-
-    .card h3, .card h4 {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin-bottom: 8px;
-    }
-
     .card img {
         width: 100%;
         border-radius: 8px;
-        transition: transform 0.3s ease-in-out; /* Smooth animation */
+        transition: transform 0.3s ease-in-out;
     }
 
     .card img:hover {
-        transform: scale(1.05); /* Slightly increase size on hover */
+        transform: scale(1.05);
     }
-
 
     .card p {
         margin-top: 8px;
@@ -106,24 +169,14 @@ permalink: /profile
     ul li {
         margin: 8px 0;
     }
-
-    footer {
-        background-color: #e53e3e;
-        padding: 16px;
-        text-align: center;
-    }
-
-    footer p {
-        font-size: 0.875rem;
-    }
 </style>
 
-<header>
+<div class="page-header">
     <h1>Prism</h1>
     <p>Connect with the Future</p>
-</header>
+</div>
 
-<main class="container">
+<div class="container">
     <section class="profile">
         <img src="https://placehold.co/150x150" alt="Profile Picture" id="profilePicture">
         <div>
@@ -189,7 +242,7 @@ permalink: /profile
         </ul>
     </section>
     <br>
-</main>
+</div>
 
 <script type="module">
 import { pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
