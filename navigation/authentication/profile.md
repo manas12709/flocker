@@ -272,10 +272,21 @@ function setPlaceholders(userData) {
 
 async function updateProfile(field, value) {
     try {
+        if (field === 'interests' && value) {
+            const response = await fetch(pythonURI + "/api/user", fetchOptions);
+            const userData = await response.json();
+            const currentInterests = userData.interests ? userData.interests.split(',').map(i => i.trim()) : [];
+            const newInterests = value.split(',').map(i => i.trim());
+            const combinedInterests = [...new Set([...currentInterests, ...newInterests])];
+            value = combinedInterests.join(',');
+        }
+
         const response = await fetch(pythonURI + "/api/user", {
             ...fetchOptions,
             method: 'PUT',
-            body: JSON.stringify({ [field]: value })
+            body: JSON.stringify({
+                [field]: value
+            })
         });
 
         if (!response.ok) {
@@ -329,8 +340,21 @@ function showError(message, color = 'red') {
     }, 3000);
 }
 
+async function displayCurrentInterests() {
+    try {
+        const response = await fetch(pythonURI + "/api/user", fetchOptions);
+        const userData = await response.json();
+        if (userData.interests) {
+            document.getElementById('newInterests').placeholder = `Current interests: ${userData.interests}`;
+        }
+    } catch (error) {
+        console.error('Error fetching current interests:', error);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     fetchProfilePicture();
+    displayCurrentInterests();
 
     const profilePictureInput = document.getElementById('profilePictureUpload');
     profilePictureInput.addEventListener('change', (e) => {
