@@ -287,7 +287,7 @@ async function updateUserInfo() {
             document.getElementById('profilePicture').src = data.pfp;
         }
         
-        const interests = data.interests ? data.interests.split(',').map(i => i.trim()) : [];
+        const interests = data.interests ? data.interests.split(',').map(i => i.trim()).filter(i => i) : [];
         createInterestCards(interests);
         
     } catch (error) {
@@ -331,7 +331,7 @@ async function updateProfile(field, value) {
             const currentInterests = userData.interests ? userData.interests.split(',').map(i => i.trim()) : [];
             const newInterests = value.split(',').map(i => i.trim());
             const combinedInterests = [...new Set([...currentInterests, ...newInterests])];
-            value = combinedInterests.join(',');
+            value = combinedInterests.join(', ');  // Add space after comma
         }
 
         const response = await fetch(pythonURI + "/api/user", {
@@ -398,7 +398,8 @@ async function displayCurrentInterests() {
         const response = await fetch(pythonURI + "/api/user", fetchOptions);
         const userData = await response.json();
         if (userData.interests) {
-            document.getElementById('newInterests').placeholder = `Current interests: ${userData.interests}`;
+            const formattedInterests = userData.interests.split(',').map(i => i.trim()).filter(i => i).join(', ');
+            document.getElementById('newInterests').placeholder = `Current interests: ${formattedInterests}`;
         }
     } catch (error) {
         console.error('Error fetching current interests:', error);
