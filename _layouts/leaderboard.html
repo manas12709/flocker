@@ -97,30 +97,13 @@
             <thead>
                 <tr>
                     <th>Rank</th>
-                    <th>Category</th>
-                    <th>Top Performer</th>
-                    <th>Statistics</th>
+                    <th>Post Title</th>
+                    <th>Username</th>
+                    <th>Net Votes</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Top Interests</td>
-                    <td>Technology</td>
-                    <td>1,500+ Users Engaged</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Messages Sent</td>
-                    <td>Anonymous #123</td>
-                    <td>5,000 Messages Sent</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Time on Site</td>
-                    <td>Anonymous #456</td>
-                    <td>Longest Session: 10 Hours</td>
-                </tr>
+            <tbody id="leaderboard-body">
+                <!-- Data will be populated here by JavaScript -->
             </tbody>
         </table>
     </div>
@@ -128,5 +111,26 @@
     <footer class="copyright">
         <p>© 2024 Prism. All rights reserved.</p>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/api/leaderboard')
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById('leaderboard-body');
+                    data.sort((a, b) => b.net_vote_count - a.net_vote_count);
+                    data.forEach((item, index) => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${index + 1}</td>
+                            <td>${item.post_title}</td>
+                            <td>${item.username}</td>
+                            <td>${item.net_vote_count}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                });
+        });
+    </script>
 </body>
 </html>
