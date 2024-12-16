@@ -298,12 +298,45 @@ permalink: /prism/topicchatroom
         const groupId = document.getElementById('group_id').value;
         const channelId = document.getElementById('channel_id').value;
         selectedChannelId = document.getElementById('channel_id').value;
-        // if (groupId && channelId) {
-        //     fetchData(channelId);
-        // } else {
-        //     alert('Please select both group and channel.');
-        // }
+        if (groupId && channelId) {
+            fetchData(channelId);
+        } else {
+            alert('Please select both group and channel.');
+        }
     });
+    async function fetchData(channelId) {
+        try {
+            const response = await fetch(`${pythonURI}/api/posts/filter`, {
+                ...fetchOptions,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ channel_id: selectedChannelId })
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch posts: ' + response.statusText);
+            }
+            // Parse the JSON data
+            const postData = await response.json();
+            // Target the chatbox
+            const chatBox = document.getElementById('chatBox');
+            chatBox.innerHTML = ''; 
+            postData.forEach(postItem => {
+                const messageElement = document.createElement('div');
+                messageElement.className = 'chat-message';
+                messageElement.innerHTML = `
+                    <p><strong>${postItem.comment}</strong></p>
+                `;
+                chatBox.appendChild(messageElement);
+            });
+            // Auto-scroll to the bottom
+            chatBox.scrollTop = chatBox.scrollHeight;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            alert('Failed to load chat messages.');
+        }
+    }
     window.updateAIQuestionAndCreateChannel = updateAIQuestionAndCreateChannel;
     fetchGroups();
 </script>
