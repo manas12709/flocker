@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Flocker Social Media Site 
+title: Prism
 search_exclude: true
-description: Login and explore our social media hub for everything DNHS 
+description: Connect with others who share your passions!
 hide: true
 menu: nav/home.html
 ---
