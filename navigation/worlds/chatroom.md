@@ -188,7 +188,32 @@ permalink: /prism/topicchatroom
             alert("Failed to generate a valid question.");
         }
     }
-    async function fetchChannelIdByName(channelName) {
+    async function fetchGroups() {
+        try {
+            const response = await fetch(`${pythonURI}/api/groups/filter`, {
+                ...fetchOptions,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ section_name: "Prism" }) // Adjust the section name as needed
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch groups: ' + response.statusText);
+            }
+            const groups = await response.json();
+            const groupSelect = document.getElementById('group_id');
+            groups.forEach(group => {
+                const option = document.createElement('option');
+                option.value = group.name; // Use group name for payload
+                option.textContent = group.name;
+                groupSelect.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error fetching groups:', error);
+        }
+    }
+    async function fetchChannels(groupName) {
         try {
             const response = await fetch(`${pythonURI}/api/channels/filter`, {
                 ...fetchOptions,
@@ -196,24 +221,48 @@ permalink: /prism/topicchatroom
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ name: channelName }) // Adjust the API request to filter by channel name
+                body: JSON.stringify({ group_name: groupName })
             });
             if (!response.ok) {
-                throw new Error('Failed to fetch channel: ' + response.statusText);
+                throw new Error('Failed to fetch channels: ' + response.statusText);
             }
             const channels = await response.json();
-            if (channels.length === 0) {
-                console.warn('No channel found with the name:', channelName);
-                return null;
-            }
-            return channels[0].id; // Return the ID of the first matching channel
+            const channelSelect = document.getElementById('channel_id');
+            channelSelect.innerHTML = '<option value="">Select a channel</option>'; // Reset channels
+            channels.forEach(channel => {
+                const option = document.createElement('option');
+                option.value = channel.id;
+                option.textContent = channel.name;
+                channelSelect.appendChild(option);
+            });
         } catch (error) {
-            console.error('Error fetching channel ID:', error);
-            return null;
+            console.error('Error fetching channels:', error);
         }
     }
+    document.getElementById('group_id').addEventListener('change', function() {
+        const groupName = this.value;
+        if (groupName) {
+            fetchChannels(groupName);
+        } else {
+            document.getElementById('channel_id').innerHTML = '<option value="">Select a channel</option>'; // Reset channels
+        }
+    });
+    /**
+     * Handle form submission for selection
+     * Select Button: Computer fetches and displays posts
+     */
+    document.getElementById('selectionForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const groupId = document.getElementById('group_id').value;
+        const channelId = document.getElementById('channel_id').value;
+        if (groupId && channelId) {
+            fetchData(channelId);
+        } else {
+            alert('Please select both group and channel.');
+        }
+    });
     window.updateAIQuestionAndCreateChannel = updateAIQuestionAndCreateChannel;
-
+    fetchGroups();
 </script>
 <div class="main">
     <div class="interests">
@@ -226,6 +275,20 @@ permalink: /prism/topicchatroom
         <span id="aiQuestion">What are your opinions on the Engines of F1 Cars?</span>
     </h2>
     <button onclick="updateAIQuestionAndCreateChannel('F1', 'Engineering')">Generate New Question & Create Channel</button>
+    <div class="form-container">
+            <h2>Select Group and Channel</h2>
+            <form id="selectionForm">
+                <label for="group_id">Group:</label>
+                <select id="group_id" name="group_id" required>
+                    <option value="">Select a group</option>
+                </select>
+                <label for="channel_id">Channel:</label>
+                <select id="channel_id" name="channel_id" required>
+                    <option value="">Select a channel</option>
+                </select>
+                <button type="submit">Select</button>
+            </form>
+        </div>
     <div id="chatBox"></div>
     <div class="message-input">
         <input type="text" id="messageInput" placeholder="Send a Message">
