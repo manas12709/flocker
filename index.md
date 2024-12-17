@@ -129,7 +129,7 @@ menu: nav/home.html
 </section>
 
 <section>
-    <button class="purple-button">Access Your Profile</button>
+    <button class="purple-button" onclick="window.location.href='{{ site.baseurl }}/profile'">Access Your Profile</button>
 </section>
 
 <footer class="copyright">
