@@ -4,90 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leaderboard</title>
-    <style>
-        /* General Styles */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #000000;
-            color: #ffffff;
-        }
-
-        .heading {
-            text-align: center;
-            padding: 20px;
-            background-color: #ea0000;
-            color: white;
-            box-shadow: 0 2px 8px rgba(255, 0, 0, 0.7);
-        }
-
-        .container {
-            width: 80%;
-            margin: 20px auto;
-            padding: 20px;
-            background: #1a1a1a;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(255, 0, 0, 0.5);
-        }
-
-        h2 {
-            color: #ffcccc;
-            text-align: center;
-        }
-
-        /* Table Styles */
-        .leaderboard-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            color: #ffffff;
-        }
-
-        .leaderboard-table thead th {
-            background-color: #ea0000;
-            color: #ffffff;
-            padding: 15px;
-            text-transform: uppercase;
-        }
-
-        .leaderboard-table tbody tr {
-            border-bottom: 1px solid #555;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .leaderboard-table tbody tr:hover {
-            background-color: #333333;
-            color: #ffcccc;
-        }
-
-        .leaderboard-table td {
-            padding: 12px;
-            text-align: center;
-        }
-
-        .leaderboard-table td:first-child {
-            font-weight: bold;
-        }
-
-        footer {
-            text-align: center;
-            padding: 15px;
-            background-color: #ea0000;
-            color: white;
-            border-radius: 0 0 8px 8px;
-            margin-top: 20px;
-        }
-
-        footer p {
-            margin: 0;
-        }
-    </style>
+    <link rel="stylesheet" href="{{site.baseurl}}/navigation/worlds/style.css">
+    <script src="{{site.baseurl}}/navigation/worlds/script.js"></script>
 </head>
 <body>
     <header class="heading">
         <h1>Leaderboard</h1>
-        <p>Explore trending topics, active users, and exciting engagement stats!</p>
+        <p>Reflecting Progress 1 Step at a Time.</p>
     </header>
 
     <div class="container">
@@ -143,44 +66,61 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            fetch('/api/leaderboard')
-                .then(response => response.json())
-                .then(data => {
-                    const postsBody = document.getElementById('leaderboard-posts');
-                    const interestsBody = document.getElementById('leaderboard-interests');
-                    const usersBody = document.getElementById('leaderboard-users');
+            async function fetchLeaderboard() {
+                try {
+                    const response = await fetch('http://localhost:4887/api/leaderboard', {
+                        headers: {
+                            'Authorization': 'your_secure_token'
+                        }
+                    });
+                    if (!response.ok) throw new Error("Failed to fetch leaderboard data");
 
-                    data.posts.forEach((item, index) => {
-                        const row = document.createElement('tr');
+                    const data = await response.json();
+                    const { posts, top_interests, user_engagement } = data;
+
+                    const postsBody = document.getElementById("leaderboard-posts");
+                    postsBody.innerHTML = "";
+                    posts.forEach((post, index) => {
+                        const row = document.createElement("tr");
                         row.innerHTML = `
                             <td>${index + 1}</td>
-                            <td>${item.post_title}</td>
-                            <td>${item.username}</td>
-                            <td>${item.net_vote_count}</td>
+                            <td>${post.post_title}</td>
+                            <td>${post.username}</td>
+                            <td>${post.net_vote_count}</td>
                         `;
                         postsBody.appendChild(row);
                     });
 
-                    data.top_interests.forEach((item, index) => {
-                        const row = document.createElement('tr');
+                    const interestsBody = document.getElementById("leaderboard-interests");
+                    interestsBody.innerHTML = "";
+                    top_interests.forEach(([interest, count], index) => {
+                        const row = document.createElement("tr");
                         row.innerHTML = `
                             <td>${index + 1}</td>
-                            <td>${item[0]}</td>
-                            <td>${item[1]}</td>
+                            <td>${interest}</td>
+                            <td>${count}</td>
                         `;
                         interestsBody.appendChild(row);
                     });
 
-                    data.user_engagement.forEach((item, index) => {
-                        const row = document.createElement('tr');
+                    const usersBody = document.getElementById("leaderboard-users");
+                    usersBody.innerHTML = "";
+                    user_engagement.forEach(([username, count], index) => {
+                        const row = document.createElement("tr");
                         row.innerHTML = `
                             <td>${index + 1}</td>
-                            <td>${item[0]}</td>
-                            <td>${item[1]}</td>
+                            <td>${username}</td>
+                            <td>${count}</td>
                         `;
                         usersBody.appendChild(row);
                     });
-                });
+                } catch (error) {
+                    console.error("Error fetching leaderboard:", error);
+                    alert('Failed to load leaderboard data.');
+                }
+            }
+
+            fetchLeaderboard();
         });
     </script>
 </body>
