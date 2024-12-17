@@ -65,109 +65,62 @@ permalink: /prism/leaderboard
     <p>© 2024 Prism. All rights reserved.</p>
 </footer>
 
-<!-- Popup HTML -->
-<div class="popup" id="popup">
-    <div class="popup-content">
-        <h2>Sign In Required</h2>
-        <p>Please sign in to view the leaderboard.</p>
-        <button onclick="closePopup()">Close</button>
-    </div>
-</div>
-
-<!-- Popup CSS -->
-<style>
-    .popup {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    }
-    .popup-content {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 5px;
-        text-align: center;
-        width: 300px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    .popup-content button {
-        margin-top: 10px;
-        padding: 10px 20px;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    .popup-content button:hover {
-        background-color: #0056b3;
-    }
-</style>
-
-<!-- Popup JavaScript -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Function to check if the user is signed in
-        function isUserSignedIn() {
-            // Replace this with your actual sign-in check logic
-            return false; // Example: return true if the user is signed in
-        }
+        async function fetchLeaderboard() {
+            try {
+                const response = await fetch('http://localhost:4887/api/leaderboard', {
+                    headers: {
+                        'Authorization': 'your_secure_token'
+                    }
+                });
+                if (!response.ok) throw new Error("Failed to fetch leaderboard data");
 
-        // Show the popup if the user is not signed in
-        if (!isUserSignedIn()) {
-            const popup = document.getElementById('popup');
-            popup.style.display = 'flex'; // Make the popup visible
-        }
+                const data = await response.json();
+                const { posts, top_interests, user_engagement } = data;
 
-        // Function to close the popup
-        window.closePopup = function() {
-            const popup = document.getElementById('popup');
-            popup.style.display = 'none'; // Hide the popup
-        };
-
-        fetch('/api/leaderboard')
-            .then(response => response.json())
-            .then(data => {
-                const postsBody = document.getElementById('leaderboard-posts');
-                const interestsBody = document.getElementById('leaderboard-interests');
-                const usersBody = document.getElementById('leaderboard-users');
-
-                data.posts.forEach((item, index) => {
-                    const row = document.createElement('tr');
+                const postsBody = document.getElementById("leaderboard-posts");
+                postsBody.innerHTML = "";
+                posts.forEach((post, index) => {
+                    const row = document.createElement("tr");
                     row.innerHTML = `
                         <td>${index + 1}</td>
-                        <td>${item.post_title}</td>
-                        <td>${item.username}</td>
-                        <td>${item.net_vote_count}</td>
+                        <td>${post.post_title}</td>
+                        <td>${post.username}</td>
+                        <td>${post.net_vote_count}</td>
                     `;
                     postsBody.appendChild(row);
                 });
 
-                data.top_interests.forEach((item, index) => {
-                    const row = document.createElement('tr');
+                const interestsBody = document.getElementById("leaderboard-interests");
+                interestsBody.innerHTML = "";
+                top_interests.forEach(([interest, count], index) => {
+                    const row = document.createElement("tr");
                     row.innerHTML = `
                         <td>${index + 1}</td>
-                        <td>${item[0]}</td>
-                        <td>${item[1]}</td>
+                        <td>${interest}</td>
+                        <td>${count}</td>
                     `;
                     interestsBody.appendChild(row);
                 });
 
-                data.user_engagement.forEach((item, index) => {
-                    const row = document.createElement('tr');
+                const usersBody = document.getElementById("leaderboard-users");
+                usersBody.innerHTML = "";
+                user_engagement.forEach(([username, count], index) => {
+                    const row = document.createElement("tr");
                     row.innerHTML = `
                         <td>${index + 1}</td>
-                        <td>${item[0]}</td>
-                        <td>${item[1]}</td>
+                        <td>${username}</td>
+                        <td>${count}</td>
                     `;
                     usersBody.appendChild(row);
                 });
-            });
+            } catch (error) {
+                console.error("Error fetching leaderboard:", error);
+                alert('Failed to load leaderboard data.');
+            }
+        }
+
+        fetchLeaderboard();
     });
 </script>

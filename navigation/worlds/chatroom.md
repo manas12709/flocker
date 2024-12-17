@@ -158,12 +158,10 @@ permalink: /prism/topicchatroom
             }
             // Successful post
             const result = await response.json();
-            alert('Post added successfully!');
             document.getElementById('postForm').reset();
         } catch (error) {
             // Present alert on error from backend
             console.error('Error adding post:', error);
-            alert('Error adding post: ' + error.message);
         }
     }
     window.sendMessage = sendMessage;

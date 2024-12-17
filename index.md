@@ -7,7 +7,39 @@ hide: true
 menu: nav/home.html
 ---
 
+<script type="module">
+    import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
+
+    async function checkAuthorization() {
+        try {
+            const response = await fetch(`${pythonURI}/api/id`, fetchOptions);
+
+            if (response.status === 401) {
+                // Redirect immediately to login if unauthorized
+                window.location.href = "{{site.baseurl}}/login";
+            } else if (response.ok) {
+                // If authorized, allow body to render
+                const contentElements = document.querySelectorAll('.content');
+                contentElements.forEach(element => {
+                    element.style.display = "block";
+                });;
+            }
+        } catch (error) {
+            console.error("Authorization check failed:", error);
+            // Redirect to login as a fallback
+            window.location.href = "{{site.baseurl}}/login";
+        }
+    }
+
+    // Run the check before rendering anything
+    checkAuthorization();
+</script>
+
 <style>
+
+    .content {
+        display: none;
+    }
 
     .heading {
         background-color: #b30000;
@@ -111,32 +143,35 @@ menu: nav/home.html
     }
 </style>
 
-<header class="heading">
-    <h1>Interest Mapping</h1>
-    <p>Connect with others who share your passions!</p>
-</header>
+<div class="content">
+    <header class="heading">
+        <h1>Interest Mapping</h1>
+        <p>Connect with others who share your passions!</p>
+    </header>
 
-<br>
+    <br>
 
-<section>
-    <h2>Suggestions for You</h2>
-    <div id="suggestions"></div>
-</section>
+    <section>
+        <h2>Suggestions for You</h2>
+        <div id="suggestions"></div>
+    </section>
 
-<section>
-    <h2>Leaderboard of Top Interests</h2>
-    <ul id="leaderboard"></ul>
-</section>
+    <section>
+        <h2>Leaderboard of Top Interests</h2>
+        <ul id="leaderboard"></ul>
+    </section>
 
-<section>
-    <button class="purple-button">Access Your Profile</button>
-</section>
+    <section>
+        <button class="purple-button" onclick="window.location.href='{{ site.baseurl }}/profile'">Access Your Profile</button>
+    </section>
 
-<footer class="copyright">
-    <p>&copy; 2024 Prism. All rights reserved.</p>
-</footer>
+    <footer class="copyright">
+        <p>&copy; 2024 Prism. All rights reserved.</p>
+    </footer>
+</div>
 
 <script type="module">
+
     import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
 
     async function fetchSuggestions() {
