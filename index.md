@@ -129,7 +129,7 @@ menu: nav/home.html
 </section>
 
 <section>
-    <button class="purple-button">Access Your Profile</button>
+    <button class="purple-button" onclick="window.location.href='{{ site.baseurl }}/profile'">Access Your Profile</button>
 </section>
 
 <footer class="copyright">
@@ -137,6 +137,33 @@ menu: nav/home.html
 </footer>
 
 <script type="module">
+        // Function to fetch user information and handle redirection
+    async function fetchUserData() {
+        try {
+            const response = await fetch(`${pythonURI}/api/id`, fetchOptions);
+
+            if (response.status === 401) {
+                // If unauthorized, redirect to login
+                window.location.href = "{{site.baseurl}}/login";
+            } else if (response.ok) {
+                // If response is valid, parse the JSON and log the user data
+                const userData = await response.json();
+                console.log("User Data:", userData);
+
+                // Optionally, render user data on the page
+                document.getElementById("user-info").textContent = JSON.stringify(userData, null, 2);
+            } else {
+                // Handle other HTTP errors
+                console.error("Unexpected error:", response.statusText);
+            }
+        } catch (error) {
+            console.error("An error occurred while fetching user data:", error);
+        }
+    }
+
+    // Call the function to fetch user data
+    fetchUserData();
+
     import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
 
     async function fetchSuggestions() {
