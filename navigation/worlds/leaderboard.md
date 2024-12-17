@@ -110,12 +110,12 @@ permalink: /prism/leaderboard
     }
 </style>
 
-<!-- Popup JavaScript -->
+<!-- Backend Connection JavaScript -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Function to check if the user is signed in
         function isUserSignedIn() {
-            // Replace this with your actual sign-in check logic
+            // Replace with your actual sign-in check logic
             return false; // Example: return true if the user is signed in
         }
 
@@ -131,13 +131,18 @@ permalink: /prism/leaderboard
             popup.style.display = 'none'; // Hide the popup
         };
 
-        fetch('/api/leaderboard')
-            .then(response => response.json())
-            .then(data => {
-                const postsBody = document.getElementById('leaderboard-posts');
-                const interestsBody = document.getElementById('leaderboard-interests');
-                const usersBody = document.getElementById('leaderboard-users');
+        // Fetch leaderboard data from the backend
+        async function fetchLeaderboard() {
+            try {
+                const response = await fetch('/api/leaderboard'); // Backend API endpoint
+                if (!response.ok) {
+                    throw new Error('Failed to fetch leaderboard data');
+                }
 
+                const data = await response.json();
+
+                // Populate Top Posts
+                const postsBody = document.getElementById('leaderboard-posts');
                 data.posts.forEach((item, index) => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
@@ -149,6 +154,8 @@ permalink: /prism/leaderboard
                     postsBody.appendChild(row);
                 });
 
+                // Populate Top Interests
+                const interestsBody = document.getElementById('leaderboard-interests');
                 data.top_interests.forEach((item, index) => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
@@ -159,6 +166,8 @@ permalink: /prism/leaderboard
                     interestsBody.appendChild(row);
                 });
 
+                // Populate Top Users
+                const usersBody = document.getElementById('leaderboard-users');
                 data.user_engagement.forEach((item, index) => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
@@ -168,6 +177,13 @@ permalink: /prism/leaderboard
                     `;
                     usersBody.appendChild(row);
                 });
-            });
+            } catch (error) {
+                console.error('Error fetching leaderboard data:', error);
+                alert('Failed to load leaderboard data.');
+            }
+        }
+
+        // Call the function to fetch and populate data
+        fetchLeaderboard();
     });
 </script>
