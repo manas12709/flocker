@@ -239,42 +239,30 @@ permalink: /prism/frqpage
 </footer>
 
 <script type="module">
-    async function sendToGeminiAPI(topic) {
-    const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyA2_3oGaNpoyq3Oti3kOvLQnWSKqhkus-E";
-
-    try {
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                instances: [
-                    {
-                        content: `Create a thought-provoking free-response question about ${topic}.`
-                    }
-                ],
-                parameters: {
-                    temperature: 0.7,
-                    maxOutputTokens: 150
-                }
-            })
-        });
-
-        const responseText = await response.text(); // Log raw response for debugging
-        console.log("API Response:", responseText);
-
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
+        async function sendToGeminiAPI(topic) {
+        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyA2_3oGaNpoyq3Oti3kOvLQnWSKqhkus-E";
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{ text: `Create a thought-proving short free response question prompt for this topic: ${topic}` }]
+                    }]
+                })
+            });
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+            const data = await response.json();
+            return data.candidates[0].content.parts[0].text;
+        } catch (error) {
+            console.error('Error communicating with Gemini API:', error);
+            return "An error occurred while communicating with the AI.";
         }
-
-        const data = JSON.parse(responseText);
-        return data.candidates[0]?.output || "No question generated.";
-    } catch (error) {
-        console.error('Error communicating with Gemini API:', error);
-        return "An error occurred while communicating with the AI.";
     }
-}
 
     async function generateQuestion() {
         const topicSelect = document.getElementById('topicSelect');
