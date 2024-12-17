@@ -16,21 +16,12 @@ permalink: /prism/dailyquestion
 
 <div class="container">
     <!-- Dynamic Question Header -->
-    <h2 id="dynamic-question">Choose a topic to begin.</h2>
+    <h2 id="dynamic-question">Pick a type of question you would like to do</h2>
 
-    <!-- Quiz and Free Response Containers -->
-    <div id="quiz-container" style="display: none;"></div>
-    <div id="free-response-container" style="display: none;"></div>
-
-    <!-- Dropdown Menu for Topics -->
-    <div class="dropdown">
-        <button>Pick a Topic</button>
-        <div class="dropdown-content">
-            <a href="#" class="topic-link">Technology</a>
-            <a href="#" class="topic-link">Health</a>
-            <a href="#" class="topic-link">Environment</a>
-            <a href="#" class="topic-link">Education</a>
-        </div>
+    <!-- Buttons to Navigate to MCQ or FRQ Pages -->
+    <div>
+        <button onclick="window.location.href='/prism_frontend/prism/mcqpage'">Multiple Choice Questions (MCQ)</button>
+        <button onclick="window.location.href='/prism_frontend/prism/frqpage'">Free Response Questions (FRQ)</button>
     </div>
 </div>
 
