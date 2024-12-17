@@ -3,37 +3,114 @@ layout: post
 search_exclude: true
 show_reading_time: false
 permalink: /prism/leaderboard
+title: Prism Leaderboard
 ---
 
-<!-- Link to Custom CSS and Script -->
-<link rel="stylesheet" href="{{site.baseurl}}/navigation/worlds/style.css">
-<script src="{{site.baseurl}}/navigation/worlds/script.js"></script>
+<style>
+    .heading {
+        background-color: #b30000;
+        padding: 40px 20px;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .heading h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin: 0;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .heading p {
+        font-size: 1.2rem;
+        margin: 10px 0 0;
+        color: #ffcccc;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #2e2e2e;
+        margin: 20px 0;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    th, td {
+        padding: 15px;
+        text-align: left;
+        color: #ffffff;
+        border-bottom: 1px solid #444;
+    }
+
+    th {
+        background-color: #b30000;
+        text-transform: uppercase;
+    }
+
+    tr:nth-child(even) {
+        background-color: #3e3e3e;
+    }
+
+    tr:hover {
+        background-color: #b30000;
+        color: #ffffff;
+        cursor: pointer;
+    }
+
+    section {
+        padding: 20px;
+    }
+
+    footer {
+        background-color: #b30000;
+        text-align: center;
+        padding: 20px;
+        color: #ffcccc;
+    }
+
+    button {
+        background-color: #ff4d4d;
+        color: #ffffff;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 25px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #e60000;
+    }
+</style>
 
 <header class="heading">
     <h1>Leaderboard</h1>
     <p>Reflecting Progress 1 Step at a Time.</p>
 </header>
 
-<div class="container">
-    <h2>Hover over the rows to see more details.</h2>
-
-    <h3>Top Posts</h3>
-    <table class="leaderboard-table">
+<section>
+    <h2>Top Posts</h2>
+    <table>
         <thead>
             <tr>
                 <th>Rank</th>
                 <th>Post Title</th>
                 <th>Username</th>
-                <th>Net Votes</th>
+                <th>Votes</th>
             </tr>
         </thead>
-        <tbody id="leaderboard-posts">
-            <!-- Data will be populated here by JavaScript -->
+        <tbody id="top-posts">
+            <!-- Dynamically loaded -->
         </tbody>
     </table>
 
-    <h3>Top Interests</h3>
-    <table class="leaderboard-table">
+    <h2>Top Interests</h2>
+    <table>
         <thead>
             <tr>
                 <th>Rank</th>
@@ -41,13 +118,13 @@ permalink: /prism/leaderboard
                 <th>Count</th>
             </tr>
         </thead>
-        <tbody id="leaderboard-interests">
-            <!-- Data will be populated here by JavaScript -->
+        <tbody id="top-interests">
+            <!-- Dynamically loaded -->
         </tbody>
     </table>
 
-    <h3>Top Users</h3>
-    <table class="leaderboard-table">
+    <h2>Top Users</h2>
+    <table>
         <thead>
             <tr>
                 <th>Rank</th>
@@ -55,135 +132,54 @@ permalink: /prism/leaderboard
                 <th>Engagement</th>
             </tr>
         </thead>
-        <tbody id="leaderboard-users">
-            <!-- Data will be populated here by JavaScript -->
+        <tbody id="top-users">
+            <!-- Dynamically loaded -->
         </tbody>
     </table>
-</div>
+</section>
 
-<footer class="copyright">
-    <p>© 2024 Prism. All rights reserved.</p>
+<footer>
+    <p>&copy; 2024 Prism. All rights reserved.</p>
 </footer>
 
-<!-- Popup HTML -->
-<div class="popup" id="popup">
-    <div class="popup-content">
-        <h2>Sign In Required</h2>
-        <p>Please sign in to view the leaderboard.</p>
-        <button onclick="closePopup()">Close</button>
-    </div>
-</div>
+<script type="module">
+    import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
 
-<!-- Popup CSS -->
-<style>
-    .popup {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    }
-    .popup-content {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 5px;
-        text-align: center;
-        width: 300px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    .popup-content button {
-        margin-top: 10px;
-        padding: 10px 20px;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    .popup-content button:hover {
-        background-color: #0056b3;
-    }
-</style>
-
-<!-- Backend Connection JavaScript -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Function to check if the user is signed in
-        function isUserSignedIn() {
-            // Replace with your actual sign-in check logic
-            return false; // Example: return true if the user is signed in
-        }
-
-        // Show the popup if the user is not signed in
-        if (!isUserSignedIn()) {
-            const popup = document.getElementById('popup');
-            popup.style.display = 'flex'; // Make the popup visible
-        }
-
-        // Function to close the popup
-        window.closePopup = function() {
-            const popup = document.getElementById('popup');
-            popup.style.display = 'none'; // Hide the popup
-        };
-
-        // Fetch leaderboard data from the backend
-        async function fetchLeaderboard() {
-            try {
-                const response = await fetch('/api/leaderboard'); // Backend API endpoint
-                if (!response.ok) {
-                    throw new Error('Failed to fetch leaderboard data');
-                }
-
-                const data = await response.json();
-
-                // Populate Top Posts
-                const postsBody = document.getElementById('leaderboard-posts');
-                data.posts.forEach((item, index) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${item.post_title}</td>
-                        <td>${item.username}</td>
-                        <td>${item.net_vote_count}</td>
-                    `;
-                    postsBody.appendChild(row);
-                });
-
-                // Populate Top Interests
-                const interestsBody = document.getElementById('leaderboard-interests');
-                data.top_interests.forEach((item, index) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${item[0]}</td>
-                        <td>${item[1]}</td>
-                    `;
-                    interestsBody.appendChild(row);
-                });
-
-                // Populate Top Users
-                const usersBody = document.getElementById('leaderboard-users');
-                data.user_engagement.forEach((item, index) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${item[0]}</td>
-                        <td>${item[1]}</td>
-                    `;
-                    usersBody.appendChild(row);
-                });
-            } catch (error) {
-                console.error('Error fetching leaderboard data:', error);
-                alert('Failed to load leaderboard data.');
+    async function fetchLeaderboardData() {
+        try {
+            const response = await fetch(`${pythonURI}/api/leaderboard`, fetchOptions);
+            if (response.status === 401) {
+                window.location.href = "{{site.baseurl}}/login";
+                return;
             }
-        }
 
-        // Call the function to fetch and populate data
-        fetchLeaderboard();
-    });
+            if (!response.ok) throw new Error("Failed to fetch leaderboard data");
+
+            const data = await response.json();
+
+            populateTable("top-posts", data.posts, ["post_title", "username", "net_vote_count"]);
+            populateTable("top-interests", data.top_interests, ["interest", "count"]);
+            populateTable("top-users", data.user_engagement, ["username", "engagement"]);
+
+        } catch (error) {
+            console.error("Error fetching leaderboard data:", error);
+        }
+    }
+
+    function populateTable(elementId, data, keys) {
+        const tableBody = document.getElementById(elementId);
+        tableBody.innerHTML = "";
+        data.forEach((item, index) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${item[keys[0]]}</td>
+                <td>${item[keys[1]]}</td>
+                ${keys[2] ? `<td>${item[keys[2]]}</td>` : ""}
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", fetchLeaderboardData);
 </script>
