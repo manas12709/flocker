@@ -7,6 +7,31 @@ hide: true
 menu: nav/home.html
 ---
 
+<script type="module">
+    import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
+
+    async function checkAuthorization() {
+        try {
+            const response = await fetch(`${pythonURI}/api/id`, fetchOptions);
+
+            if (response.status === 401) {
+                // Redirect immediately to login if unauthorized
+                window.location.href = "{{site.baseurl}}/login";
+            } else if (response.ok) {
+                // If authorized, allow body to render
+                document.body.style.display = "block";
+            }
+        } catch (error) {
+            console.error("Authorization check failed:", error);
+            // Redirect to login as a fallback
+            window.location.href = "{{site.baseurl}}/login";
+        }
+    }
+
+    // Run the check before rendering anything
+    checkAuthorization();
+</script>
+
 <style>
 
     .heading {
@@ -137,32 +162,6 @@ menu: nav/home.html
 </footer>
 
 <script type="module">
-        // Function to fetch user information and handle redirection
-    async function fetchUserData() {
-        try {
-            const response = await fetch(`${pythonURI}/api/id`, fetchOptions);
-
-            if (response.status === 401) {
-                // If unauthorized, redirect to login
-                window.location.href = "{{site.baseurl}}/login";
-            } else if (response.ok) {
-                // If response is valid, parse the JSON and log the user data
-                const userData = await response.json();
-                console.log("User Data:", userData);
-
-                // Optionally, render user data on the page
-                document.getElementById("user-info").textContent = JSON.stringify(userData, null, 2);
-            } else {
-                // Handle other HTTP errors
-                console.error("Unexpected error:", response.statusText);
-            }
-        } catch (error) {
-            console.error("An error occurred while fetching user data:", error);
-        }
-    }
-
-    // Call the function to fetch user data
-    fetchUserData();
 
     import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
 

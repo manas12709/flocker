@@ -1,5 +1,5 @@
 ---
-layout: page 
+layout: login 
 title: Login
 permalink: /login
 search_exclude: true
