@@ -65,62 +65,45 @@ permalink: /prism/leaderboard
     <p>© 2024 Prism. All rights reserved.</p>
 </footer>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        async function fetchLeaderboard() {
-            try {
-                const response = await fetch('http://localhost:4887/api/leaderboard', {
-                    headers: {
-                        'Authorization': 'your_secure_token'
-                    }
-                });
-                if (!response.ok) throw new Error("Failed to fetch leaderboard data");
+<script type="module">
+    import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
 
-                const data = await response.json();
-                const { posts, top_interests, user_engagement } = data;
+    async function fetchLeaderboard() {
+        try {
+            const response = await fetch(`${pythonURI}/api/users`, fetchOptions);
+            if (!response.ok) throw new Error("Failed to fetch all users");
 
-                const postsBody = document.getElementById("leaderboard-posts");
-                postsBody.innerHTML = "";
-                posts.forEach((post, index) => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${post.post_title}</td>
-                        <td>${post.username}</td>
-                        <td>${post.net_vote_count}</td>
-                    `;
-                    postsBody.appendChild(row);
-                });
+            const allUsers = await response.json();
+            const interestCounts = {};
 
-                const interestsBody = document.getElementById("leaderboard-interests");
-                interestsBody.innerHTML = "";
-                top_interests.forEach(([interest, count], index) => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${interest}</td>
-                        <td>${count}</td>
-                    `;
-                    interestsBody.appendChild(row);
+            allUsers.forEach(user => {
+                user.interests.split(", ").forEach(interest => {
+                    interestCounts[interest] = (interestCounts[interest] || 0) + 1;
                 });
+            });
 
-                const usersBody = document.getElementById("leaderboard-users");
-                usersBody.innerHTML = "";
-                user_engagement.forEach(([username, count], index) => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${username}</td>
-                        <td>${count}</td>
-                    `;
-                    usersBody.appendChild(row);
-                });
-            } catch (error) {
-                console.error("Error fetching leaderboard:", error);
-                alert('Failed to load leaderboard data.');
-            }
+            const sortedInterests = Object.entries(interestCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3);
+
+            const leaderboardContainer = document.getElementById("leaderboard-interests");
+            leaderboardContainer.innerHTML = "";
+
+            sortedInterests.forEach(([interest, count], index) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${interest}</td>
+                    <td>${count}</td>
+                `;
+                leaderboardContainer.appendChild(row);
+            });
+        } catch (error) {
+            console.error("Error fetching leaderboard:", error);
         }
+    }
 
+    document.addEventListener("DOMContentLoaded", () => {
         fetchLeaderboard();
     });
 </script>
