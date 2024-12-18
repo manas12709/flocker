@@ -167,7 +167,7 @@ permalink: /prism/polls
 </div>
 
 <!-- Submit Your Answer Section -->
-<div class="form-container submit-answer-container">
+<!-- <div class="form-container submit-answer-container">
     <h2>Submit Your Answer Here</h2>
     <form id="postForm">
         <label for="title">Title:</label>
@@ -177,7 +177,35 @@ permalink: /prism/polls
         <textarea id="comment" name="comment" required></textarea>
         <button type="submit">Submit Poll</button>
     </form>
+</div> -->
+
+<div class="form-container submit-answer-container">
+    <h2 style="color: white;">Submit Your Answer Here</h2>
+    <form id="postForm">
+        <label for="title" style="color: white;">Title:</label>
+        <input type="text" id="title" name="title" value="What is your favorite genre of music?" readonly>
+
+        <label for="comment" style="color: white;">Choose Your Answer:</label>
+        <div class="poll-options" style="width: 100%;">
+            <label class="poll-option" style="background-color: rgb(80, 80, 80); color: white; width: 100%; display: block; padding: 15px; text-align: center; cursor: pointer;">
+                <input type="radio" name="comment" value="Jazz" required style="display: none;"> Jazz
+            </label>
+            <label class="poll-option" style="background-color: rgb(80, 80, 80); color: white; width: 100%; display: block; padding: 15px; text-align: center; cursor: pointer;">
+                <input type="radio" name="comment" value="R&B" style="display: none;"> R&amp;B
+            </label>
+            <label class="poll-option" style="background-color: rgb(80, 80, 80); color: white; width: 100%; display: block; padding: 15px; text-align: center; cursor: pointer;">
+                <input type="radio" name="comment" value="Classical" style="display: none;"> Classical
+            </label>
+            <label class="poll-option" style="background-color: rgb(80, 80, 80); color: white; width: 100%; display: block; padding: 15px; text-align: center; cursor: pointer;">
+                <input type="radio" name="comment" value="Rap" style="display: none;"> Rap
+            </label>
+        </div>
+        <button type="submit" style="background-color: red; color: white; width: 100%; margin-top: 15px; border: none; font-size: 18px; padding: 15px;">
+            Submit Poll
+        </button>
+    </form>
 </div>
+
 
 <script type="module">
     // Import server URI and standard fetch options
