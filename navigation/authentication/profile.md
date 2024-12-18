@@ -220,6 +220,32 @@ show_reading_time: false
         margin-bottom: 0.5rem;
         display: block;
     }
+
+    .posts-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .message-bubble {
+        background-color: #2d3748;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 0;
+        border-left: 3px solid #e53e3e;
+    }
+
+    .post-title {
+        font-weight: bold;
+        color: #e53e3e;
+        margin-bottom: 0.5rem;
+    }
+
+    .post-comment {
+        color: #ffffff;
+    }
 </style>
 
 <div class="page-header">
@@ -295,10 +321,11 @@ show_reading_time: false
     </section>
 
     <section class="card">
-        <h3>Latest Post</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec felis vel metus.</p>
+        <h3>Recent Posts</h3>
+        <div id="recentPosts" class="posts-container">
+        </div>
     </section>
-    <br>
+
     <section class="card">
         <h3>Activity Feed</h3>
         <ul>
@@ -495,6 +522,57 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+window.onload = function() {
+    fetchPosts();
+};
+
+async function fetchPosts() {
+    const channelData = {
+        channel_id: 7 
+    };
+
+    try {
+        const response = await fetch(`${pythonURI}/api/posts/filter`, {
+            ...fetchOptions,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(channelData)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to get posts: ' + response.statusText);
+        }
+
+        const posts = await response.json();
+        const postsContainer = document.getElementById('recentPosts');
+        postsContainer.innerHTML = '';
+
+        posts.forEach(post => {
+            const postElement = document.createElement('div');
+            postElement.classList.add('message-bubble');
+            
+            const titleElement = document.createElement('div');
+            titleElement.classList.add('post-title');
+            titleElement.textContent = post.title;
+            
+            const commentElement = document.createElement('div');
+            commentElement.classList.add('post-comment');
+            commentElement.textContent = post.comment;
+            
+            postElement.appendChild(titleElement);
+            postElement.appendChild(commentElement);
+            postsContainer.appendChild(postElement);
+        });
+
+    } catch (error) {
+        console.error('Error fetching posts:', error);
+        const postsContainer = document.getElementById('recentPosts');
+        postsContainer.innerHTML = '<p style="color: #e53e3e;">Error loading posts. Please try again later.</p>';
+    }
+}
+
 async function createPost() {
     const title = document.getElementById('postTitle').value.trim();
     const comment = document.getElementById('postComment').value.trim();
@@ -526,7 +604,10 @@ async function createPost() {
 
         document.getElementById('newPostForm').reset();
         alert('Post created successfully!');
-                
+        
+        // Refresh posts after creating a new one
+        await fetchPosts();
+        
     } catch (error) {
         console.error('Error creating post:', error);
         alert('Failed to create post. Please try again.');
