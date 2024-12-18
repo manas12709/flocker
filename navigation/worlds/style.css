@@ -6,14 +6,13 @@ body {
     color: white;
 }
 
-/* Header */
-.heading {
-    background-color: red;
-    padding: 20px;
+/* Header Styles */
+ .heading {
+    background-color: #f5f5f5;
     text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    border-radius: 15px;
+    padding: 10px 0; /* Reduced padding for smaller height */
+    margin-bottom: 20px; /* Adjust spacing below header */
+    font-family: Arial, sans-serif;
 }
 
 .heading p {
