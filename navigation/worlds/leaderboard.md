@@ -150,6 +150,7 @@ permalink: /prism/leaderboard
 
     <section>
         <h2>Leaderboard of Top Interests</h2>
+        <p>Discover the most popular interests across the community based on collective engagement and participation.</p>
         <table class="leaderboard-table">
             <thead>
                 <tr>
@@ -166,12 +167,13 @@ permalink: /prism/leaderboard
 
     <section>
         <h2>Affinity Leaderboard</h2>
+        <p>See which users share the most interests with others, fostering meaningful connections and collaboration.</p>
         <table class="leaderboard-table">
             <thead>
                 <tr>
                     <th>Rank</th>
                     <th>Username</th>
-                    <th>Shared Intrests</th>
+                    <th>Shared Interests</th>
                 </tr>
             </thead>
             <tbody id="leaderboard-users">
