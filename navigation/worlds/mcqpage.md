@@ -207,11 +207,12 @@ const topics = {
         font-size: 24px;
     }
 
+    /* General Container Adjustments */
     .container {
-        padding: 20px;
-        max-width: 800px;
-        margin: auto;
-    }
+    margin: 0 auto;
+    max-width: 800px; /* Center content and limit width */
+    padding: 20px;
+    }   
 
     .dropdown {
         position: relative;
