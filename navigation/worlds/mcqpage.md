@@ -110,6 +110,7 @@ const topics = {
     ],
 };
 
+
     function startTimer(duration, callback) {
         let timeRemaining = duration;
         const timerDisplay = document.createElement("div");
@@ -207,16 +208,16 @@ const topics = {
         font-size: 24px;
     }
 
-    /* General Container Adjustments */
     .container {
-    margin: 0 auto;
-    max-width: 800px; /* Center content and limit width */
-    padding: 20px;
-    }   
+        padding: 20px;
+        max-width: 800px;
+        margin: auto;
+    }
 
-    /* Dropdown Menu Adjustments */
     .dropdown {
-    position: relative;
+        position: relative;
+        display: inline-block;
+        margin-bottom: 30px;
     }
 
     .dropdown-button {
@@ -231,15 +232,12 @@ const topics = {
     }
 
     .dropdown-content {
-    position: absolute;
-    top: 100%; /* Position dropdown below button */
-    left: 0;
-    z-index: 1000;
-    max-height: 200px; /* Limit dropdown height */
-    overflow-y: auto; /* Enable scroll if content overflows */
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        display: none;
+        position: absolute;
+        background-color: #34495e;
+        min-width: 160px;
+        z-index: 1;
+        border-radius: 5px;
     }
 
     .dropdown:hover .dropdown-content {
