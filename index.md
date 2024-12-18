@@ -1,10 +1,8 @@
 ---
 layout: post
-title: Prism
 search_exclude: true
-description: Connect with others who share your passions!
 hide: true
-menu: nav/home.html
+show_reading_time: false 
 ---
 
 <script type="module">
@@ -145,8 +143,8 @@ menu: nav/home.html
 
 <div class="content">
     <header class="heading">
-        <h1>Interest Mapping</h1>
-        <p>Connect with others who share your passions!</p>
+        <h1>Prism</h1>
+        <p>An AI powered social media platform around fun and creativity</p>
     </header>
 
     <br>

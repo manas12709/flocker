@@ -169,6 +169,83 @@ show_reading_time: false
     ul li {
         margin: 8px 0;
     }
+
+    .input-field {
+        width: 100%;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        border: 2px solid #e53e3e;
+        border-radius: 6px;
+        background-color: #1a1a1a;
+        color: #ffffff;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: #fc8181;
+        box-shadow: 0 0 0 2px rgba(229, 62, 62, 0.2);
+    }
+
+    textarea.input-field {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .btn-primary {
+        background-color: #e53e3e;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #c53030;
+    }
+
+    #newPostForm {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    #newPostForm label {
+        color: #a0aec0;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .posts-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .message-bubble {
+        background-color: #2d3748;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 0;
+        border-left: 3px solid #e53e3e;
+    }
+
+    .post-title {
+        font-weight: bold;
+        color: #e53e3e;
+        margin-bottom: 0.5rem;
+    }
+
+    .post-comment {
+        color: #ffffff;
+    }
 </style>
 
 <div class="page-header">
@@ -229,10 +306,26 @@ show_reading_time: false
     </section>
 
     <section class="card">
-        <h3>Latest Post</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec felis vel metus.</p>
+        <h3>Create New Post</h3>
+        <form id="newPostForm">
+            <div>
+                <label for="postTitle">Title</label>
+                <input type="text" id="postTitle" name="postTitle" class="input-field" placeholder="Enter post title">
+            </div>
+            <div>
+                <label for="postComment">Comment</label>
+                <textarea id="postComment" name="postComment" class="input-field" placeholder="Enter your comment" rows="4"></textarea>
+            </div>
+            <button type="button" onclick="createPost()" class="btn btn-primary">Create Post</button>
+        </form>
     </section>
-    <br>
+
+    <section class="card">
+        <h3>Recent Posts</h3>
+        <div id="recentPosts" class="posts-container">
+        </div>
+    </section>
+
     <section class="card">
         <h3>Activity Feed</h3>
         <ul>
@@ -428,4 +521,98 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+window.onload = function() {
+    fetchPosts();
+};
+
+async function fetchPosts() {
+    const channelData = {
+        channel_id: 7 
+    };
+
+    try {
+        const response = await fetch(`${pythonURI}/api/posts/filter`, {
+            ...fetchOptions,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(channelData)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to get posts: ' + response.statusText);
+        }
+
+        const posts = await response.json();
+        const postsContainer = document.getElementById('recentPosts');
+        postsContainer.innerHTML = '';
+
+        posts.forEach(post => {
+            const postElement = document.createElement('div');
+            postElement.classList.add('message-bubble');
+            
+            const titleElement = document.createElement('div');
+            titleElement.classList.add('post-title');
+            titleElement.textContent = post.title;
+            
+            const commentElement = document.createElement('div');
+            commentElement.classList.add('post-comment');
+            commentElement.textContent = post.comment;
+            
+            postElement.appendChild(titleElement);
+            postElement.appendChild(commentElement);
+            postsContainer.appendChild(postElement);
+        });
+
+    } catch (error) {
+        console.error('Error fetching posts:', error);
+        const postsContainer = document.getElementById('recentPosts');
+        postsContainer.innerHTML = '<p style="color: #e53e3e;">Error loading posts. Please try again later.</p>';
+    }
+}
+
+async function createPost() {
+    const title = document.getElementById('postTitle').value.trim();
+    const comment = document.getElementById('postComment').value.trim();
+    
+    if (!title || !comment) {
+        alert('Please fill in both title and comment fields');
+        return;
+    }
+
+    const postData = {
+        title: title,
+        comment: comment,
+        channel_id: 7,
+    };
+
+    try {
+        const response = await fetch(`${pythonURI}/api/post`, {
+            ...fetchOptions,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(postData)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to create post: ' + response.statusText);
+        }
+
+        document.getElementById('newPostForm').reset();
+        alert('Post created successfully!');
+        
+        // Refresh posts after creating a new one
+        await fetchPosts();
+        
+    } catch (error) {
+        console.error('Error creating post:', error);
+        alert('Failed to create post. Please try again.');
+    }
+}
+
+window.createPost = createPost;
 </script>

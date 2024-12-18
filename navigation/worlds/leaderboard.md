@@ -5,9 +5,8 @@ show_reading_time: false
 permalink: /prism/leaderboard
 ---
 
-<!-- Link to Custom CSS and Script -->
 <link rel="stylesheet" href="{{site.baseurl}}/navigation/worlds/style.css">
-<script src="{{site.baseurl}}/navigation/worlds/script.js"></script>
+<script src="{{site.baseurl}}/assets/js/api/leaderboard.js"></script>
 
 <header class="heading">
     <h1>Leaderboard</h1>
@@ -15,8 +14,6 @@ permalink: /prism/leaderboard
 </header>
 
 <div class="container">
-    <h2>Hover over the rows to see more details.</h2>
-
     <h3>Top Posts</h3>
     <table class="leaderboard-table">
         <thead>
@@ -27,9 +24,7 @@ permalink: /prism/leaderboard
                 <th>Net Votes</th>
             </tr>
         </thead>
-        <tbody id="leaderboard-posts">
-            <!-- Data will be populated here by JavaScript -->
-        </tbody>
+        <tbody id="leaderboard-posts"></tbody>
     </table>
 
     <h3>Top Interests</h3>
@@ -41,9 +36,7 @@ permalink: /prism/leaderboard
                 <th>Count</th>
             </tr>
         </thead>
-        <tbody id="leaderboard-interests">
-            <!-- Data will be populated here by JavaScript -->
-        </tbody>
+        <tbody id="leaderboard-interests"></tbody>
     </table>
 
     <h3>Top Users</h3>
@@ -52,75 +45,9 @@ permalink: /prism/leaderboard
             <tr>
                 <th>Rank</th>
                 <th>Username</th>
-                <th>Engagement</th>
+                <th>Time Spent</th>
             </tr>
         </thead>
-        <tbody id="leaderboard-users">
-            <!-- Data will be populated here by JavaScript -->
-        </tbody>
+        <tbody id="leaderboard-users"></tbody>
     </table>
 </div>
-
-<footer class="copyright">
-    <p>© 2024 Prism. All rights reserved.</p>
-</footer>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        async function fetchLeaderboard() {
-            try {
-                const response = await fetch('http://localhost:4887/api/leaderboard', {
-                    headers: {
-                        'Authorization': 'your_secure_token'
-                    }
-                });
-                if (!response.ok) throw new Error("Failed to fetch leaderboard data");
-
-                const data = await response.json();
-                const { posts, top_interests, user_engagement } = data;
-
-                const postsBody = document.getElementById("leaderboard-posts");
-                postsBody.innerHTML = "";
-                posts.forEach((post, index) => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${post.post_title}</td>
-                        <td>${post.username}</td>
-                        <td>${post.net_vote_count}</td>
-                    `;
-                    postsBody.appendChild(row);
-                });
-
-                const interestsBody = document.getElementById("leaderboard-interests");
-                interestsBody.innerHTML = "";
-                top_interests.forEach(([interest, count], index) => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${interest}</td>
-                        <td>${count}</td>
-                    `;
-                    interestsBody.appendChild(row);
-                });
-
-                const usersBody = document.getElementById("leaderboard-users");
-                usersBody.innerHTML = "";
-                user_engagement.forEach(([username, count], index) => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${username}</td>
-                        <td>${count}</td>
-                    `;
-                    usersBody.appendChild(row);
-                });
-            } catch (error) {
-                console.error("Error fetching leaderboard:", error);
-                alert('Failed to load leaderboard data.');
-            }
-        }
-
-        fetchLeaderboard();
-    });
-</script>
