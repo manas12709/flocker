@@ -214,10 +214,9 @@ const topics = {
     padding: 20px;
     }   
 
+    /* Dropdown Menu Adjustments */
     .dropdown {
-        position: relative;
-        display: inline-block;
-        margin-bottom: 30px;
+    position: relative;
     }
 
     .dropdown-button {
