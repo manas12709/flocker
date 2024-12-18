@@ -231,12 +231,15 @@ const topics = {
     }
 
     .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #34495e;
-        min-width: 160px;
-        z-index: 1;
-        border-radius: 5px;
+    position: absolute;
+    top: 100%; /* Position dropdown below button */
+    left: 0;
+    z-index: 1000;
+    max-height: 200px; /* Limit dropdown height */
+    overflow-y: auto; /* Enable scroll if content overflows */
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .dropdown:hover .dropdown-content {
