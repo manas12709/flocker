@@ -22,11 +22,7 @@ async function fetchLeaderboardData() {
     try {
         // Fetch Top Posts
         const postsResponse = await fetch(`${pythonURI}/api/leaderboard/top_posts`);
-        if (!postsResponse.ok) {
-            throw new Error(`HTTP error! Status: ${postsResponse.status}`);
-        }
-        const postsData = await postsResponse.json();
-        const { top_posts } = postsData;
+        const { top_posts } = await postsResponse.json();
         const postsContainer = document.getElementById("leaderboard-posts");
         postsContainer.innerHTML = top_posts.map((post, index) => `
             <tr>
@@ -37,11 +33,32 @@ async function fetchLeaderboardData() {
             </tr>
         `).join("");
 
-        // Fetch other leaderboard data (similar checks)
+        // Fetch Top Interests
+        const interestsResponse = await fetch(`${pythonURI}/api/leaderboard/top_interests`);
+        const { top_interests } = await interestsResponse.json();
+        const interestsContainer = document.getElementById("leaderboard-interests");
+        interestsContainer.innerHTML = top_interests.map((interest, index) => `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${interest.interest}</td>
+                <td>${interest.count}</td>
+            </tr>
+        `).join("");
+
+        // Fetch Top Users
+        const usersResponse = await fetch(`${pythonURI}/api/leaderboard/top_users`);
+        const { top_users } = await usersResponse.json();
+        const usersContainer = document.getElementById("leaderboard-users");
+        usersContainer.innerHTML = top_users.map((user, index) => `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${user.username}</td>
+                <td>${user.total_time_spent} seconds</td>
+            </tr>
+        `).join("");
     } catch (error) {
-        console.error("Error fetching leaderboard data:", error.message);
+        console.error("Error fetching leaderboard data:", error);
     }
 }
 
 document.addEventListener("DOMContentLoaded", fetchLeaderboardData);
-
