@@ -185,6 +185,7 @@ permalink: /prism/frqpage
 <header class="page">
     Free-Response Question Game
     <div class="subtitle">Select a topic to get a question!</div>
+    <div class="subtitle">When submitting your answer, use the question as the title!</div>
 </header>
 
 <div class="main">
