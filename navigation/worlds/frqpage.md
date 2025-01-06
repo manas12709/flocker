@@ -240,7 +240,7 @@ permalink: /prism/frqpage
 
 <script type="module">
         async function sendToGeminiAPI(topic) {
-        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyA2_3oGaNpoyq3Oti3kOvLQnWSKqhkus-E";
+        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyB9RKnLkNEhSywJ-KprmzB_qiwweL4FHZs";
         try {
             const response = await fetch(apiUrl, {
                 method: 'POST',
