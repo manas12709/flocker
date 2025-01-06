@@ -24,7 +24,7 @@ permalink: /prism/mcqpage
             <a href="#" class="topic-link">Technology</a>
             <a href="#" class="topic-link">Health</a>
             <a href="#" class="topic-link">Environment</a>
-            <a href="#" class="topic-link">Education</a>
+            <a href="#" class="topic-link">ComputerScience</a>
             <a href="#" class="topic-link">History</a>
             <a href="#" class="topic-link">Science</a>
             <a href="#" class="topic-link">Literature</a>
@@ -84,17 +84,17 @@ const topics = {
         { question: "What can you do to save water?", options: ["Leave taps open", "Fix leaks", "Use water freely"], correctAnswer: 1 },
         { question: "What type of energy comes from wind?", options: ["Thermal", "Nuclear", "Wind energy"], correctAnswer: 2 },
     ],
-    Education: [
-        { question: "Which branch of math deals with shapes?", options: ["Algebra", "Geometry", "Calculus"], correctAnswer: 1 },
-        { question: "Who discovered gravity?", options: ["Albert Einstein", "Isaac Newton", "Galileo Galilei"], correctAnswer: 1 },
-        { question: "Which organ controls the body?", options: ["Liver", "Brain", "Heart"], correctAnswer: 1 },
-        { question: "What is 5 x 5?", options: ["20", "25", "30"], correctAnswer: 1 },
-        { question: "Which is a basic unit of life?", options: ["Atom", "Molecule", "Cell"], correctAnswer: 2 },
-        { question: "Who invented the telephone?", options: ["Alexander Graham Bell", "Thomas Edison", "Nikola Tesla"], correctAnswer: 0 },
-        { question: "What is the boiling point of water?", options: ["50°C", "100°C", "150°C"], correctAnswer: 1 },
-        { question: "Which planet is closest to the sun?", options: ["Mercury", "Venus", "Earth"], correctAnswer: 0 },
-        { question: "Who is the father of modern physics?", options: ["Albert Einstein", "Isaac Newton", "Galileo Galilei"], correctAnswer: 0 },
-        { question: "What is the capital of France?", options: ["London", "Paris", "Rome"], correctAnswer: 1 },
+    ComputerScience: [
+        { question: "What does CPU stand for?", options: ["Central Processing Unit", "Central Programming Unit", "Control Processing Unit"], correctAnswer: 0 },
+        { question: "Which language is primarily used for web development?", options: ["Python", "JavaScript", "C++"], correctAnswer: 1 },
+        { question: "What is the primary purpose of RAM in a computer?", options: ["Storage of data permanently", "Processing instructions", "Temporary data storage"], correctAnswer: 2 },
+        { question: "Which data structure uses LIFO (Last In, First Out)?", options: ["Queue", "Stack", "Array"], correctAnswer: 1 },
+        { question: "What does HTML stand for?", options: ["HyperText Markup Language", "High Transfer Machine Language", "HyperText Machine Language"], correctAnswer: 0 },
+        { question: "Which protocol is used for transferring files over the Internet?", options: ["FTP", "HTTP", "SMTP"], correctAnswer: 0 },
+        { question: "What is an example of an input device?", options: ["Monitor", "Keyboard", "Printer"], correctAnswer: 1 },
+        { question: "Which part of a computer is considered its brain?", options: ["Hard Drive", "CPU", "RAM"], correctAnswer: 1 },
+        { question: "Which is a widely used Operating System?", options: ["Linux", "C++", "MySQL"], correctAnswer: 0 },
+        { question: "What is binary code primarily made of?", options: ["0s and 1s", "A to Z", "Numbers and Symbols"], correctAnswer: 0 },
     ],
     History: [
         { question: "Who was the first president of the United States?", options: ["Abraham Lincoln", "George Washington", "Thomas Jefferson"], correctAnswer: 1 },
