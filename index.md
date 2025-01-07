@@ -240,3 +240,88 @@ show_reading_time: false
         fetchLeaderboard();
     });
 </script>
+
+<script type="module">
+    import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
+
+    async function handleVote(sectionId, voteType) {
+        const section = document.getElementById(sectionId);
+        const voteButton = section.querySelector('.vote-button');
+
+        try {
+            const response = await fetch(`${pythonURI}/api/vote`, {
+                ...fetchOptions,
+                method: 'POST',
+                headers: {
+                    ...fetchOptions.headers,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    post_id: sectionId,
+                    vote_type: voteType,
+                }),
+            });
+
+            if (!response.ok) throw new Error('Vote submission failed');
+
+            if (voteType === 'upvote') {
+                voteButton.textContent = 'Remove Section';
+                voteButton.onclick = () => toggleSection(sectionId, false);
+            } else {
+                toggleSection(sectionId, false);
+            }
+        } catch (error) {
+            console.error('Error voting:', error);
+        }
+    }
+
+    function toggleSection(sectionId, show) {
+        const section = document.getElementById(sectionId);
+        const placeholder = document.getElementById(`${sectionId}-placeholder`);
+
+        if (show) {
+            section.style.display = 'block';
+            placeholder.style.display = 'none';
+        } else {
+            section.style.display = 'none';
+            if (!placeholder) {
+                const newPlaceholder = document.createElement('div');
+                newPlaceholder.id = `${sectionId}-placeholder`;
+                newPlaceholder.innerHTML = `<button class="green-button" onclick="toggleSection('${sectionId}', true)">Show Section</button>`;
+                section.insertAdjacentElement('afterend', newPlaceholder);
+            } else {
+                placeholder.style.display = 'block';
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('section').forEach((section, index) => {
+            const sectionId = `section-${index + 1}`; // Assigning section IDs starting at 1
+            section.id = sectionId;
+
+            const voteButton = document.createElement('button');
+            voteButton.className = 'vote-button purple-button';
+            voteButton.textContent = 'Do you enjoy this feature on your feed?';
+
+            const upvoteButton = document.createElement('button');
+            upvoteButton.className = 'vote-button purple-button';
+            upvoteButton.textContent = 'Upvote';
+            upvoteButton.style.marginRight = '10px';
+            upvoteButton.onclick = () => handleVote(sectionId, 'upvote');
+
+            const downvoteButton = document.createElement('button');
+            downvoteButton.className = 'vote-button purple-button';
+            downvoteButton.textContent = 'Downvote';
+            downvoteButton.onclick = () => handleVote(sectionId, 'downvote');
+
+            const buttonContainer = document.createElement('div');
+            buttonContainer.style.textAlign = 'right';
+            buttonContainer.appendChild(upvoteButton);
+            buttonContainer.appendChild(downvoteButton);
+
+            section.appendChild(buttonContainer);
+        });
+    });
+</script>
+
