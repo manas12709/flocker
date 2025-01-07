@@ -148,24 +148,6 @@ permalink: /prism/polls
     </div>
 </div> -->
 
-
-
-<!-- Select Group and Channel Section -->
-<div class="form-container group-channel-container">
-    <h2>Select Group and Channel</h2>
-    <form id="selectionForm">
-        <label for="group_id">Group:</label>
-        <select id="group_id" name="group_id" required>
-            <option value="">Select a group</option>
-        </select>
-        <label for="channel_id">Channel:</label>
-        <select id="channel_id" name="channel_id" required>
-            <option value="">Select a Channel</option>
-        </select>
-        <button type="submit">Select</button>
-    </form>
-</div>
-
 <!-- Submit Your Answer Section -->
 <!-- <div class="form-container submit-answer-container">
     <h2>Submit Your Answer Here</h2>
@@ -178,7 +160,7 @@ permalink: /prism/polls
         <button type="submit">Submit Poll</button>
     </form>
 </div> -->
-
+<center>
 <div class="form-container submit-answer-container">
     <h2 style="color: white;">Submit Your Answer Here</h2>
     <form id="postForm">
@@ -205,9 +187,11 @@ permalink: /prism/polls
         </button>
     </form>
 </div>
+</center>
 
 
-<script type="module">
+
+<!-- <script type="module">
     // Import server URI and standard fetch options
     import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
 
@@ -398,4 +382,4 @@ permalink: /prism/polls
 
     // Fetch groups when the page loads
     fetchGroups();
-</script>
+</script> -->
