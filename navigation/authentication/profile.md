@@ -280,6 +280,10 @@ show_reading_time: false
                 <label for="newInterests">Enter New Interests:</label>
                 <input type="text" id="newInterests" placeholder="New Interests (e.g., Soccer, Reading)">
             </div>
+            <div>
+                <label for="newFollowers">Enter New Followers:</label>
+                <input type="text" id="newFollowers" placeholder="New Followers (e.g., toby, bobby)">
+            </div>
             <br>
             <label for="profilePictureUpload" class="file-icon">
                 Upload Profile Picture <i class="fas fa-upload"></i>
@@ -305,6 +309,9 @@ show_reading_time: false
     <section class="grid grid-cols-2" id="interestsSection">
     </section>
 
+    <section class="grid grid-cols-2" id="followersSection">
+    </section>
+    
     <section class="card">
         <h3>Create New Post</h3>
         <form id="newPostForm">
@@ -351,7 +358,7 @@ function createInterestCards(interests) {
             card.className = 'card';
             card.innerHTML = `
                 <h4>${interest}</h4>
-                <img src="https://placehold.co/300x200/2d3748/ffffff/png?text=${interest}" alt="${interest}">
+                <img src="https://placehold.co/300x200/d34e3f/a3adbf/png?text=${interest}" alt="${interest}">
             `;
             interestsSection.appendChild(card);
         });
@@ -363,9 +370,38 @@ function createInterestCards(interests) {
         card.className = 'card';
         card.innerHTML = `
             <h4>${interest}</h4>
-            <img src="https://placehold.co/300x200/2d3748/ffffff/png?text=${interest}" alt="${interest}">
+            <img src="https://placehold.co/300x200/d34e3f/a3adbf/png?text=${interest}" alt="${interest}">
         `;
         interestsSection.appendChild(card);
+    });
+}
+
+function createFollowerCards(followers) {
+    const followersSection = document.getElementById('followersSection');
+    followersSection.innerHTML = '';
+    
+    if (!followers || followers.length === 0) {
+        const placeholderFollowers = ['Gaming', 'Reading', 'Music', 'Art'];
+        placeholderFollowers.forEach((follower, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <h4>${follower}</h4>
+                <img src="https://placehold.co/300x200/218f66/a3adbf/png?text=${interest}" alt="${interest}">
+            `;
+            followersSection.appendChild(card);
+        });
+        return;
+    }
+
+    followers.forEach(follower => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <h4>${follower}</h4>
+            <img src="https://placehold.co/300x200/218f66/a3adbf/png?text=${follower}" alt="${follower}">
+        `;
+        followersSection.appendChild(card);
     });
 }
 
@@ -382,7 +418,10 @@ async function updateUserInfo() {
         
         const interests = data.interests ? data.interests.split(',').map(i => i.trim()).filter(i => i) : [];
         createInterestCards(interests);
-        
+
+        const followers = data.followers ? data.followers.split(',').map(i => i.trim()).filter(i => i) : [];
+        createFollowerCards(followers);
+
     } catch (error) {
         console.error('Error fetching user info:', error);
     }
@@ -410,10 +449,11 @@ function setPlaceholders(userData) {
     const uidInput = document.getElementById('newUid');
     const nameInput = document.getElementById('newName');
     const interestsInput = document.getElementById('newInterests');
+    const followersInput = document.getElementById('newFollowers');
 
     if (userData.uid) uidInput.placeholder = userData.uid;
     if (userData.name) nameInput.placeholder = userData.name;
-    if (userData.interests) interestsInput.placeholder = userData.interests;
+    if (userData.followers) followersInput.placeholder = userData.followers;
 }
 
 async function updateProfile(field, value) {
@@ -424,7 +464,16 @@ async function updateProfile(field, value) {
             const currentInterests = userData.interests ? userData.interests.split(',').map(i => i.trim()) : [];
             const newInterests = value.split(',').map(i => i.trim());
             const combinedInterests = [...new Set([...currentInterests, ...newInterests])];
-            value = combinedInterests.join(', ');  // Add space after comma
+            value = combinedInterests.join(', ');
+        }
+
+        if (field === 'followers' && value) {
+            const response = await fetch(pythonURI + "/api/user", fetchOptions);
+            const userData = await response.json();
+            const currentFollowers = userData.followers ? userData.followers.split(',').map(i => i.trim()) : [];
+            const newFollowers = value.split(',').map(i => i.trim());
+            const combinedFollowers = [...new Set([...currentFollowers, ...newFollowers])];
+            value = combinedFollowers.join(', ');
         }
 
         const response = await fetch(pythonURI + "/api/user", {
@@ -499,9 +548,23 @@ async function displayCurrentInterests() {
     }
 }
 
+async function displayCurrentFollowers() {
+    try {
+        const response = await fetch(pythonURI + "/api/user", fetchOptions);
+        const userData = await response.json();
+        if (userData.followers) {
+            const formattedFollowers = userData.followers.split(',').map(i => i.trim()).filter(i => i).join(', ');
+            document.getElementById('newFollowers').placeholder = `Current follower: ${formattedFollowers}`;
+        }
+    } catch (error) {
+        console.error('Error fetching current followers:', error);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     fetchProfilePicture();
     displayCurrentInterests();
+    displayCurrentFollowers();
 
     const profilePictureInput = document.getElementById('profilePictureUpload');
     profilePictureInput.addEventListener('change', (e) => {
@@ -510,7 +573,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const inputs = ['newUid', 'newName', 'newPassword', 'newInterests'];
+    const inputs = ['newUid', 'newName', 'newPassword', 'newInterests', 'newFollowers'];
     inputs.forEach(id => {
         const input = document.getElementById(id);
         input.addEventListener('change', (e) => {
