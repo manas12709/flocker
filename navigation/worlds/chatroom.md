@@ -352,8 +352,8 @@ permalink: /prism/topicchatroom
 </script>
 <div class="main">
     <div class="interests">
-        <div>Interest 1: F1</div>
-        <div>Interest 2: Engineering</div>
+        <div id="interest1">Interest 1: F1</div>
+        <div id="interest2">Interest 2: Engineering</div>
     </div>
     <div class="chat-container">
     <h2>
