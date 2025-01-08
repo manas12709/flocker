@@ -2,7 +2,7 @@
 layout: post
 search_exclude: true
 show_reading_time: false
-permalink: /prism/leaderboard
+permalink: /prism/leaderboard12i3123
 ---
 
 <script type="module">
@@ -188,20 +188,36 @@ permalink: /prism/leaderboard
 
     async function fetchTopUsers() {
         try {
-            const response = await fetch(`${pythonURI}/api/leaderboard/top_users?user_id=1`, fetchOptions); // Replace 1 with the actual user ID
-            if (!response.ok) throw new Error("Failed to fetch top users");
+            const response = await fetch(`${pythonURI}/api/id`, fetchOptions);
+            if (!response.ok) throw new Error("Failed to fetch user data");
 
-            const topUsers = await response.json();
+            const currentUser = await response.json();
+            const interests = currentUser.interests.split(", ");
+
+            const allUsersResponse = await fetch(`${pythonURI}/api/users`, fetchOptions);
+            if (!allUsersResponse.ok) throw new Error("Failed to fetch all users");
+
+            const allUsers = await allUsersResponse.json();
+
+            const matchedUsers = allUsers.filter(user => {
+                const userInterests = user.interests.split(", ");
+                return userInterests.some(interest => interests.includes(interest)) && user.uid !== currentUser.uid;
+            }).map(user => {
+                const sharedInterests = user.interests.split(", ").filter(interest => interests.includes(interest));
+                return { ...user, sharedInterests };
+            });
+
+            console.log("Matched Users Data:", matchedUsers);
 
             // Populate Top Users
             const usersBody = document.getElementById("leaderboard-users");
             usersBody.innerHTML = "";
-            topUsers.top_users.forEach((user, index) => {
+            matchedUsers.forEach((user, index) => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${user.username}</td>
-                    <td>${user.shared_interests.join(", ")}</td>
+                    <td>${user.name}</td>
+                    <td>${user.sharedInterests.join(", ")}</td>
                 `;
                 usersBody.appendChild(row);
             });
@@ -212,24 +228,35 @@ permalink: /prism/leaderboard
 
     async function fetchTopInterests() {
         try {
-            const response = await fetch(`${pythonURI}/api/leaderboard/top_interests`, fetchOptions);
-            if (!response.ok) throw new Error("Failed to fetch top interests");
+            const response = await fetch(`${pythonURI}/api/users`, fetchOptions);
+            if (!response.ok) throw new Error("Failed to fetch all users");
 
-            const topInterests = await response.json();
+            const allUsers = await response.json();
+            const interestCounts = {};
+
+            allUsers.forEach(user => {
+                user.interests.split(", ").forEach(interest => {
+                    interestCounts[interest] = (interestCounts[interest] || 0) + 1;
+                });
+            });
+
+            const sortedInterests = Object.entries(interestCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3);
 
             const interestsBody = document.getElementById("leaderboard-interests");
             interestsBody.innerHTML = "";
-            topInterests.top_interests.forEach((interest, index) => {
+            sortedInterests.forEach(([interest, count], index) => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${interest.interest}</td>
-                    <td>${interest.count}</td>
+                    <td>${interest}</td>
+                    <td>${count}</td>
                 `;
                 interestsBody.appendChild(row);
             });
         } catch (error) {
-            console.error("Error fetching top interests:", error);
+            console.error("Error fetching leaderboard:", error);
         }
     }
 
