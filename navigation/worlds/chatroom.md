@@ -302,6 +302,18 @@ permalink: /prism/topicchatroom
             alert('Please select both group and channel.');
         }
     });
+    async function displayCurrentInterests() {
+    try {
+        const response = await fetch(pythonURI + "/api/user", fetchOptions);
+        const userData = await response.json();
+        if (userData.interests) {
+            const formattedInterests = userData.interests.split(',').map(i => i.trim()).filter(i => i).join(', ');
+            document.getElementById('newInterests').placeholder = `Current interests: ${formattedInterests}`;
+        }
+    } catch (error) {
+        console.error('Error fetching current interests:', error);
+    }
+}
     async function fetchData(channelId) {
         try {
             const response = await fetch(`${pythonURI}/api/posts/filter`, {
