@@ -303,17 +303,18 @@ permalink: /prism/topicchatroom
         }
     });
     async function displayCurrentInterests() {
-    try {
-        const response = await fetch(pythonURI + "/api/user", fetchOptions);
-        const userData = await response.json();
-        if (userData.interests) {
-            const formattedInterests = userData.interests.split(',').map(i => i.trim()).filter(i => i).join(', ');
-            document.getElementById('newInterests').placeholder = `Current interests: ${formattedInterests}`;
+        try {
+            const response = await fetch(pythonURI + "/api/user", fetchOptions);
+            const userData = await response.json();
+            if (userData.interests) {
+                const formattedInterests = userData.interests.split(',').map(i => i.trim()).filter(i => i).join(', ');
+                document.getElementById('interest1').innerText = `Interest 1 ${formattedInterests}`;
+                document.getElementById('interest2').innerText = `Interest 2 ${formattedInterests}`;
+            }
+        } catch (error) {
+            console.error('Error fetching current interests:', error);
         }
-    } catch (error) {
-        console.error('Error fetching current interests:', error);
     }
-}
     async function fetchData(channelId) {
         try {
             const response = await fetch(`${pythonURI}/api/posts/filter`, {
