@@ -166,7 +166,7 @@ permalink: /prism/topicchatroom
     }
     window.sendMessage = sendMessage;
     async function sendToGeminiAPI(interest1, interest2) {
-        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyByINR_0sZrKsqkMzNSrqmf9kzbtpZ0X0M";
+        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=ADDKEYHEREBEFORESHOWING";
         try {
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -308,8 +308,10 @@ permalink: /prism/topicchatroom
             const userData = await response.json();
             if (userData.interests) {
                 const formattedInterests = userData.interests.split(',').map(i => i.trim()).filter(i => i).join(', ');
-                document.getElementById('interest1').innerText = `Interest 1 ${formattedInterests}`;
-                document.getElementById('interest2').innerText = `Interest 2 ${formattedInterests}`;
+                const interestList = formattedInterests.split(", ")
+                console.log(interestList[0])
+                document.getElementById('interest1').innerText = `Interest 1: ${interestList[0]}`;
+                document.getElementById('interest2').innerText = `Interest 2: ${interestList[1]}`;
             }
         } catch (error) {
             console.error('Error fetching current interests:', error);
@@ -350,18 +352,24 @@ permalink: /prism/topicchatroom
     }
     window.updateAIQuestionAndCreateChannel = updateAIQuestionAndCreateChannel;
     fetchGroups();
+    displayCurrentInterests()
 </script>
 <div class="main">
     <div class="interests">
-        <div id="interest1">Interest 1: F1</div>
-        <div id="interest2">Interest 2: Engineering</div>
+        <div id="interest1"></div>
+        <div id="interest2"></div>
     </div>
     <div class="chat-container">
     <h2>
         <span class="ai-text">AI Generated Prompt</span><br>
         <span id="aiQuestion">What are your opinions on the Engines of F1 Cars?</span>
     </h2>
-    <button onclick="updateAIQuestionAndCreateChannel('F1', 'Engineering')">Generate New Question & Create Channel</button>
+    <button 
+    onclick="updateAIQuestionAndCreateChannel(
+        document.getElementById('interest1').textContent, 
+        document.getElementById('interest2').textContent
+    )"
+>Generate New Question & Create Channel</button>
     <div class="form-container">
             <h2>Select Group and Channel</h2>
             <form id="selectionForm">
