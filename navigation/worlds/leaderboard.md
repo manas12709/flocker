@@ -188,36 +188,20 @@ permalink: /prism/leaderboard
 
     async function fetchTopUsers() {
         try {
-            const response = await fetch(`${pythonURI}/api/id`, fetchOptions);
-            if (!response.ok) throw new Error("Failed to fetch user data");
+            const response = await fetch(`${pythonURI}/api/leaderboard/top_users?user_id=1`, fetchOptions); // Replace 1 with the actual user ID
+            if (!response.ok) throw new Error("Failed to fetch top users");
 
-            const currentUser = await response.json();
-            const interests = currentUser.interests.split(", ");
-
-            const allUsersResponse = await fetch(`${pythonURI}/api/users`, fetchOptions);
-            if (!allUsersResponse.ok) throw new Error("Failed to fetch all users");
-
-            const allUsers = await allUsersResponse.json();
-
-            const matchedUsers = allUsers.filter(user => {
-                const userInterests = user.interests.split(", ");
-                return userInterests.some(interest => interests.includes(interest)) && user.uid !== currentUser.uid;
-            }).map(user => {
-                const sharedInterests = user.interests.split(", ").filter(interest => interests.includes(interest));
-                return { ...user, sharedInterests };
-            });
-
-            console.log("Matched Users Data:", matchedUsers);
+            const topUsers = await response.json();
 
             // Populate Top Users
             const usersBody = document.getElementById("leaderboard-users");
             usersBody.innerHTML = "";
-            matchedUsers.forEach((user, index) => {
+            topUsers.top_users.forEach((user, index) => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${user.name}</td>
-                    <td>${user.sharedInterests.join(", ")}</td>
+                    <td>${user.username}</td>
+                    <td>${user.shared_interests.join(", ")}</td>
                 `;
                 usersBody.appendChild(row);
             });
@@ -228,35 +212,24 @@ permalink: /prism/leaderboard
 
     async function fetchTopInterests() {
         try {
-            const response = await fetch(`${pythonURI}/api/users`, fetchOptions);
-            if (!response.ok) throw new Error("Failed to fetch all users");
+            const response = await fetch(`${pythonURI}/api/leaderboard/top_interests`, fetchOptions);
+            if (!response.ok) throw new Error("Failed to fetch top interests");
 
-            const allUsers = await response.json();
-            const interestCounts = {};
-
-            allUsers.forEach(user => {
-                user.interests.split(", ").forEach(interest => {
-                    interestCounts[interest] = (interestCounts[interest] || 0) + 1;
-                });
-            });
-
-            const sortedInterests = Object.entries(interestCounts)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 3);
+            const topInterests = await response.json();
 
             const interestsBody = document.getElementById("leaderboard-interests");
             interestsBody.innerHTML = "";
-            sortedInterests.forEach(([interest, count], index) => {
+            topInterests.top_interests.forEach((interest, index) => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${interest}</td>
-                    <td>${count}</td>
+                    <td>${interest.interest}</td>
+                    <td>${interest.count}</td>
                 `;
                 interestsBody.appendChild(row);
             });
         } catch (error) {
-            console.error("Error fetching leaderboard:", error);
+            console.error("Error fetching top interests:", error);
         }
     }
 

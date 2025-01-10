@@ -1,8 +1,8 @@
 ---
 layout: post
 search_exclude: true
-hide: true
-show_reading_time: false 
+show_reading_time: false
+permalink: /prism/leaderboard12i3123
 ---
 
 <script type="module">
@@ -20,7 +20,7 @@ show_reading_time: false
                 const contentElements = document.querySelectorAll('.content');
                 contentElements.forEach(element => {
                     element.style.display = "block";
-                });;
+                });
             }
         } catch (error) {
             console.error("Authorization check failed:", error);
@@ -34,7 +34,6 @@ show_reading_time: false
 </script>
 
 <style>
-
     .content {
         display: none;
     }
@@ -143,36 +142,51 @@ show_reading_time: false
 
 <div class="content">
     <header class="heading">
-        <h1>Prism</h1>
-        <p>An AI powered social media platform around fun and creativity</p>
+        <h1>Leaderboard</h1>
+        <p>Reflecting Progress 1 Step at a Time</p>
     </header>
 
     <br>
 
     <section>
-        <h2>Suggestions for You</h2>
-        <div id="suggestions"></div>
-    </section>
-
-    <section>
         <h2>Leaderboard of Top Interests</h2>
-        <ul id="leaderboard"></ul>
+        <p>Discover the most popular interests across the community based on collective engagement and participation.</p>
+        <table class="leaderboard-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Interest</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboard-interests">
+                <!-- Data will be populated here by JavaScript -->
+            </tbody>
+        </table>
     </section>
 
     <section>
-        <button class="purple-button" onclick="window.location.href='{{ site.baseurl }}/profile'">Access Your Profile</button>
+        <h2>Affinity Leaderboard</h2>
+        <p>See which users share the most interests with others, fostering meaningful connections and collaboration.</p>
+        <table class="leaderboard-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Username</th>
+                    <th>Shared Interests</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboard-users">
+                <!-- Data will be populated here by JavaScript -->
+            </tbody>
+        </table>
     </section>
-
-    <footer class="copyright">
-        <p>&copy; 2024 Prism. All rights reserved.</p>
-    </footer>
 </div>
 
 <script type="module">
-
     import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
 
-    async function fetchSuggestions() {
+    async function fetchTopUsers() {
         try {
             const response = await fetch(`${pythonURI}/api/id`, fetchOptions);
             if (!response.ok) throw new Error("Failed to fetch user data");
@@ -188,23 +202,31 @@ show_reading_time: false
             const matchedUsers = allUsers.filter(user => {
                 const userInterests = user.interests.split(", ");
                 return userInterests.some(interest => interests.includes(interest)) && user.uid !== currentUser.uid;
+            }).map(user => {
+                const sharedInterests = user.interests.split(", ").filter(interest => interests.includes(interest));
+                return { ...user, sharedInterests };
             });
 
-            const suggestionsContainer = document.getElementById("suggestions");
-            suggestionsContainer.innerHTML = "";
+            console.log("Matched Users Data:", matchedUsers);
 
-            matchedUsers.forEach(user => {
-                const card = document.createElement("div");
-                card.className = "profile-card";
-                card.textContent = `${user.name} - Interests: ${user.interests}`;
-                suggestionsContainer.appendChild(card);
+            // Populate Top Users
+            const usersBody = document.getElementById("leaderboard-users");
+            usersBody.innerHTML = "";
+            matchedUsers.forEach((user, index) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${user.name}</td>
+                    <td>${user.sharedInterests.join(", ")}</td>
+                `;
+                usersBody.appendChild(row);
             });
         } catch (error) {
-            console.error("Error fetching suggestions:", error);
+            console.error("Error fetching top users:", error);
         }
     }
 
-    async function fetchLeaderboard() {
+    async function fetchTopInterests() {
         try {
             const response = await fetch(`${pythonURI}/api/users`, fetchOptions);
             if (!response.ok) throw new Error("Failed to fetch all users");
@@ -222,13 +244,16 @@ show_reading_time: false
                 .sort((a, b) => b[1] - a[1])
                 .slice(0, 3);
 
-            const leaderboardContainer = document.getElementById("leaderboard");
-            leaderboardContainer.innerHTML = "";
-
-            sortedInterests.forEach(([interest, count]) => {
-                const listItem = document.createElement("li");
-                listItem.textContent = `${interest} - ${count} Votes`;
-                leaderboardContainer.appendChild(listItem);
+            const interestsBody = document.getElementById("leaderboard-interests");
+            interestsBody.innerHTML = "";
+            sortedInterests.forEach(([interest, count], index) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${interest}</td>
+                    <td>${count}</td>
+                `;
+                interestsBody.appendChild(row);
             });
         } catch (error) {
             console.error("Error fetching leaderboard:", error);
@@ -236,92 +261,7 @@ show_reading_time: false
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-        fetchSuggestions();
-        fetchLeaderboard();
+        fetchTopUsers();
+        fetchTopInterests();
     });
 </script>
-
-<script type="module">
-    import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
-
-    async function handleVote(sectionId, voteType) {
-        const section = document.getElementById(sectionId);
-        const voteButton = section.querySelector('.vote-button');
-
-        try {
-            const response = await fetch(`${pythonURI}/api/vote`, {
-                ...fetchOptions,
-                method: 'POST',
-                headers: {
-                    ...fetchOptions.headers,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    post_id: sectionId,
-                    vote_type: voteType,
-                }),
-            });
-
-            if (!response.ok) throw new Error('Vote submission failed');
-
-            if (voteType === 'upvote') {
-                voteButton.textContent = 'Remove Section';
-                voteButton.onclick = () => toggleSection(sectionId, false);
-            } else {
-                toggleSection(sectionId, false);
-            }
-        } catch (error) {
-            console.error('Error voting:', error);
-        }
-    }
-
-    function toggleSection(sectionId, show) {
-        const section = document.getElementById(sectionId);
-        const placeholder = document.getElementById(`${sectionId}-placeholder`);
-
-        if (show) {
-            section.style.display = 'block';
-            placeholder.style.display = 'none';
-        } else {
-            section.style.display = 'none';
-            if (!placeholder) {
-                const newPlaceholder = document.createElement('div');
-                newPlaceholder.id = `${sectionId}-placeholder`;
-                newPlaceholder.innerHTML = `<button class="green-button" onclick="toggleSection('${sectionId}', true)">Show Section</button>`;
-                section.insertAdjacentElement('afterend', newPlaceholder);
-            } else {
-                placeholder.style.display = 'block';
-            }
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('section').forEach((section, index) => {
-            const sectionId = `section-${index + 1}`; // Assigning section IDs starting at 1
-            section.id = sectionId;
-
-            const voteButton = document.createElement('button');
-            voteButton.className = 'vote-button purple-button';
-            voteButton.textContent = 'Do you enjoy this feature on your feed?';
-
-            const upvoteButton = document.createElement('button');
-            upvoteButton.className = 'vote-button purple-button';
-            upvoteButton.textContent = 'Upvote';
-            upvoteButton.style.marginRight = '10px';
-            upvoteButton.onclick = () => handleVote(sectionId, 'upvote');
-
-            const downvoteButton = document.createElement('button');
-            downvoteButton.className = 'vote-button purple-button';
-            downvoteButton.textContent = 'Downvote';
-            downvoteButton.onclick = () => handleVote(sectionId, 'downvote');
-
-            const buttonContainer = document.createElement('div');
-            buttonContainer.style.textAlign = 'right';
-            buttonContainer.appendChild(upvoteButton);
-            buttonContainer.appendChild(downvoteButton);
-
-            section.appendChild(buttonContainer);
-        });
-    });
-</script>
-
