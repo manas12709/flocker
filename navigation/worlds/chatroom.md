@@ -163,10 +163,32 @@ permalink: /prism/topicchatroom
             // Present alert on error from backend
             console.error('Error adding post:', error);
         }
+        // const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyBToTtoXGC_ZoVHOLo2-SsvfFSgCCzIi-E";
+        // try {
+        //     const response = await fetch(apiUrl, {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify({
+        //             contents: [{
+        //                 parts: [{ text: `You are a chatbot that is talking to a human in a conversation about ${interest1} and ${interest2}. Provide a response to the humans message, which is ${message}. Just include the response, NOTHING else.` }]
+        //             }]
+        //         })
+        //     });
+        //     if (!response.ok) {
+        //         throw new Error(`Error: ${response.status}`);
+        //     }
+        //     const data = await response.json();
+        //     return data.candidates[0].content.parts[0].text;
+        // } catch (error) {
+        //     console.error('Error communicating with Gemini API:', error);
+        //     return "An error occurred while communicating with the AI.";
+        // }
     }
     window.sendMessage = sendMessage;
     async function sendToGeminiAPI(interest1, interest2) {
-        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyByINR_0sZrKsqkMzNSrqmf9kzbtpZ0X0M";
+        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyBToTtoXGC_ZoVHOLo2-SsvfFSgCCzIi-E";
         try {
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -302,6 +324,22 @@ permalink: /prism/topicchatroom
             alert('Please select both group and channel.');
         }
     });
+    async function displayCurrentInterests() {
+        try {
+            const response = await fetch(pythonURI + "/api/user", fetchOptions);
+            const userData = await response.json();
+            console.log(userData)
+            if (userData.interests) {
+                const formattedInterests = userData.interests.split(',').map(i => i.trim()).filter(i => i).join(', ');
+                const interestList = formattedInterests.split(", ")
+                console.log(interestList[0])
+                document.getElementById('interest1').innerText = `Interest 1: ${interestList[0]}`;
+                document.getElementById('interest2').innerText = `Interest 2: ${interestList[1]}`;
+            }
+        } catch (error) {
+            console.error('Error fetching current interests:', error);
+        }
+    }
     async function fetchData(channelId) {
         try {
             const response = await fetch(`${pythonURI}/api/posts/filter`, {
@@ -337,18 +375,24 @@ permalink: /prism/topicchatroom
     }
     window.updateAIQuestionAndCreateChannel = updateAIQuestionAndCreateChannel;
     fetchGroups();
+    displayCurrentInterests()
 </script>
 <div class="main">
     <div class="interests">
-        <div>Interest 1: F1</div>
-        <div>Interest 2: Engineering</div>
+        <div id="interest1"></div>
+        <div id="interest2"></div>
     </div>
     <div class="chat-container">
     <h2>
         <span class="ai-text">AI Generated Prompt</span><br>
         <span id="aiQuestion">What are your opinions on the Engines of F1 Cars?</span>
     </h2>
-    <button onclick="updateAIQuestionAndCreateChannel('F1', 'Engineering')">Generate New Question & Create Channel</button>
+    <button 
+    onclick="updateAIQuestionAndCreateChannel(
+        document.getElementById('interest1').textContent, 
+        document.getElementById('interest2').textContent
+    )"
+>Generate New Question & Create Channel</button>
     <div class="form-container">
             <h2>Select Group and Channel</h2>
             <form id="selectionForm">
