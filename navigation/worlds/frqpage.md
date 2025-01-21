@@ -196,7 +196,6 @@ permalink: /prism/frqpage
             <option value="Science">Science</option>
             <option value="Technology">Technology</option>
             <option value="Literature">Literature</option>
-            <option value="Computer Science">Computer Science</option>
         </select>
     </div>
 
@@ -230,9 +229,9 @@ permalink: /prism/frqpage
     <form id="postForm">
         <label for="title">Title:</label>
         <input type="text" id="title" name="title" required>
-        <label for="comment">Answer:</label>
+        <label for="comment">Comment:</label>
         <textarea id="comment" name="comment" required></textarea>
-        <button type="submit">Answer Question</button>
+        <button type="submit">Send Pitch</button>
     </form>
 </div>
 
@@ -242,7 +241,7 @@ permalink: /prism/frqpage
 
 <script type="module">
         async function sendToGeminiAPI(topic) {
-        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyCBkwL-G2fwl565vTTzSdmc6R5ltAbMe-8";
+        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyDm78X3FhSPSqA7jTDr5qeaDpaSyDFmyms";
         try {
             const response = await fetch(apiUrl, {
                 method: 'POST',
