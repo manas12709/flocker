@@ -30,7 +30,7 @@ permalink: /prism/pollresults
 </style>
 
 <header class="poll-header">
-    User Interests
+    Poll Results
 </header>
 <p class="poll-subtitle">Your voice, your community</p>
 
@@ -39,7 +39,7 @@ permalink: /prism/pollresults
     <thead>
         <tr>
             <th>Name</th>
-            <th>Interests</th>
+            <th>Result</th>
         </tr>
     </thead>
     <tbody id="poll-data">

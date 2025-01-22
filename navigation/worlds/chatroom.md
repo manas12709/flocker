@@ -120,53 +120,173 @@ permalink: /prism/topicchatroom
     .ai-text {
         color: white;
     }
+    .chat-message {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 10px;
+        border: 1px solid #444;
+        border-radius: 5px;
+        background-color: #222;
+    }
+
+    .message-content p {
+        margin: 0;
+    }
+
+    .edit-button, .delete-button {
+        margin-left: 10px;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        color: white;
+    }
+
+    .edit-button {
+        background-color: #007bff;
+    }
+
+    .delete-button {
+        background-color: #dc3545;
+    }
+
+    .edit-button:hover {
+        background-color: #0056b3;
+    }
+
+    .delete-button:hover {
+        background-color: #c82333;
+    }
+
 </style>
 <header class="page">
     <div class="subtitle">Chat across the world.</div>
 </header>
 <script type="module">
     import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+    window.editMessage = async function (postId) {
+        const newComment = prompt("Edit your message:");
+        if (newComment !== null && newComment.trim() !== "") {
+            const postData = {
+                id: postId,
+                comment: newComment, // Only include the updated comment field
+            };
+            try {
+                const response = await fetch(`${pythonURI}/api/post`, {
+                    ...fetchOptions,
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(postData),
+                });
+                if (!response.ok) {
+                    throw new Error("Failed to update post: " + response.statusText);
+                }
+                // Backend returns the updated post data
+                const result = await response.json();
+                console.log("Post updated successfully:", result);
+                // Update the message content in the DOM
+                const messageElement = document.querySelector(`#post-${postId} .message-content p strong`);
+                if (messageElement) {
+                    messageElement.textContent = newComment;
+                }
+            } catch (error) {
+                console.error("Error updating post:", error);
+                alert("Failed to edit the post.");
+            }
+        }
+    };
+    window.deleteMessage = async function (postId) {
+        const confirmDelete = confirm("Are you sure you want to delete this message?");
+        if (confirmDelete) {
+            const postData = {
+                id: postId,
+            };
+            try {
+                const response = await fetch(`${pythonURI}/api/post`, {
+                    ...fetchOptions,
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(postData),
+                });
+                if (!response.ok) {
+                    throw new Error("Failed to delete post: " + response.statusText);
+                }
+                console.log("Post deleted successfully");
+                // Remove the message element from the DOM
+                const messageElement = document.getElementById(`post-${postId}`);
+                if (messageElement) {
+                    messageElement.remove();
+                }
+            } catch (error) {
+                console.error("Error deleting post:", error);
+                alert("Failed to delete the post.");
+            }
+        }
+    };
     let selectedChannelId = null;
     async function sendMessage() {
         const chatBox = document.getElementById('chatBox');
         const messageInput = document.getElementById('messageInput');
         const message = messageInput.value.trim();
         if (message) {
+            // Temporary placeholder element until the backend confirms the post ID
+            const tempId = `temp-${Date.now()}`;
             const messageElement = document.createElement('div');
-            messageElement.textContent = message;
+            messageElement.className = 'chat-message';
+            messageElement.id = tempId;
+            messageElement.innerHTML = `
+                <div class="message-content">
+                    <p><strong>${message}</strong></p>
+                    <button class="edit-button" onclick="editMessage('${tempId}')">Edit</button>
+                    <button class="delete-button" onclick="deleteMessage('${tempId}')">Delete</button>
+                </div>
+            `;
             chatBox.appendChild(messageElement);
             messageInput.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
-        }
-        const postData = {
-            title: "Comment on Random Discussion",
-            comment: message,
-            channel_id: selectedChannelId,
-        };
-        try {
-            // Send POST request to backend, purpose is to write to database
-            const response = await fetch(`${pythonURI}/api/post`, {
-                ...fetchOptions,
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(postData)
-            });
-            if (!response.ok) {
-                throw new Error('Failed to add post: ' + response.statusText);
+            // Send data to the backend
+            const postData = {
+                title: "Comment on Random Discussion",
+                comment: message,
+                channel_id: selectedChannelId,
+            };
+            try {
+                const response = await fetch(`${pythonURI}/api/post`, {
+                    ...fetchOptions,
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(postData)
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to add post: ' + response.statusText);
+                }
+                // Backend returns the post data with the generated ID
+                const result = await response.json();
+                const postId = result.id; // Assuming `result.id` contains the new post ID
+                // Update the temporary message element with the correct post ID
+                const tempElement = document.getElementById(tempId);
+                tempElement.id = `post-${postId}`;
+                tempElement.querySelector('.edit-button').setAttribute('onclick', `editMessage(${postId})`);
+                tempElement.querySelector('.delete-button').setAttribute('onclick', `deleteMessage(${postId})`);
+                console.log('Message posted successfully:', result);
+            } catch (error) {
+                console.error('Error adding post:', error);
+                // Remove the temporary message element if the request fails
+                document.getElementById(tempId).remove();
             }
-            // Successful post
-            const result = await response.json();
-            document.getElementById('postForm').reset();
-        } catch (error) {
-            // Present alert on error from backend
-            console.error('Error adding post:', error);
         }
     }
     window.sendMessage = sendMessage;
     async function sendToGeminiAPI(interest1, interest2) {
-        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=ADDKEYHEREBEFORESHOWING";
+        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=ADDKEYFORDEMO";
         try {
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -306,6 +426,7 @@ permalink: /prism/topicchatroom
         try {
             const response = await fetch(pythonURI + "/api/user", fetchOptions);
             const userData = await response.json();
+            console.log(userData)
             if (userData.interests) {
                 const formattedInterests = userData.interests.split(',').map(i => i.trim()).filter(i => i).join(', ');
                 const interestList = formattedInterests.split(", ")
@@ -330,20 +451,22 @@ permalink: /prism/topicchatroom
             if (!response.ok) {
                 throw new Error('Failed to fetch posts: ' + response.statusText);
             }
-            // Parse the JSON data
             const postData = await response.json();
-            // Target the chatbox
             const chatBox = document.getElementById('chatBox');
-            chatBox.innerHTML = ''; 
+            chatBox.innerHTML = '';
             postData.forEach(postItem => {
                 const messageElement = document.createElement('div');
                 messageElement.className = 'chat-message';
+                messageElement.id = `post-${postItem.id}`;
                 messageElement.innerHTML = `
-                    <p><strong>${postItem.comment}</strong></p>
+                    <div class="message-content">
+                        <p><strong>${postItem.comment}</strong></p>
+                        <button class="edit-button" onclick="editMessage(${postItem.id})">Edit</button>
+                        <button class="delete-button" onclick="deleteMessage(${postItem.id})">Delete</button>
+                    </div>
                 `;
                 chatBox.appendChild(messageElement);
             });
-            // Auto-scroll to the bottom
             chatBox.scrollTop = chatBox.scrollHeight;
         } catch (error) {
             console.error('Error fetching data:', error);
