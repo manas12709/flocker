@@ -251,7 +251,7 @@ show_reading_time: false
     async function fetchVoteData() {
         try {
             const voteData = { upvotes: [], downvotes: [] }; // Initialize data structure
-            const postIds = [1, 2, 3, 4, 5]; // Replace with your actual post IDs
+            const postIds = [1, 2, 3]; // Replace with your actual post IDs
 
             for (const postId of postIds) {
                 const response = await fetch(`${pythonURI}/api/vote/post?post_id=${postId}`, {
@@ -392,7 +392,7 @@ show_reading_time: false
         const voteData = await fetchVoteData();
 
         document.querySelectorAll("section").forEach((section, index) => {
-            const sectionId = `${index + 1}`; // Section IDs are 1-based
+            const sectionId = `${index + 1}`;
             section.id = sectionId;
 
             const isUpvoted = voteData.upvotes.includes(parseInt(sectionId, 10)); // Check if section is upvoted
