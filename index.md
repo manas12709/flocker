@@ -250,15 +250,34 @@ show_reading_time: false
 
     async function fetchVoteData() {
         try {
-            const response = await fetch(`${pythonURI}/api/vote/post`, fetchOptions);
-            if (!response.ok) throw new Error("Failed to fetch vote data");
+            const voteData = { upvotes: [], downvotes: [] }; // Initialize data structure
+            const postIds = [1, 2, 3, 4, 5]; // Replace with your actual post IDs
 
-            return await response.json();
+            for (const postId of postIds) {
+                const response = await fetch(`${pythonURI}/api/vote/post?post_id=${postId}`, {
+                    ...fetchOptions,
+                    method: "GET", // Use GET method
+                    headers: {
+                        ...fetchOptions.headers,
+                    },
+                });
+
+                if (!response.ok) throw new Error(`Failed to fetch votes for post ID ${postId}`);
+
+                const data = await response.json();
+
+                // Collect post IDs for upvotes and downvotes
+                data.upvotes.forEach(vote => voteData.upvotes.push(parseInt(vote.post_id, 10)));
+                data.downvotes.forEach(vote => voteData.downvotes.push(parseInt(vote.post_id, 10)));
+            }
+
+            return voteData;
         } catch (error) {
             console.error("Error fetching vote data:", error);
             return { upvotes: [], downvotes: [] };
         }
     }
+
 
     async function sendVote(sectionId, voteType, method) {
         try {
@@ -373,21 +392,24 @@ show_reading_time: false
         const voteData = await fetchVoteData();
 
         document.querySelectorAll("section").forEach((section, index) => {
-            const sectionId = `${index + 1}`;
+            const sectionId = `${index + 1}`; // Section IDs are 1-based
             section.id = sectionId;
 
-            const isUpvoted = voteData.upvotes.some(vote => vote.post_id === sectionId);
-            const isDownvoted = voteData.downvotes.some(vote => vote.post_id === sectionId);
+            const isUpvoted = voteData.upvotes.includes(parseInt(sectionId, 10)); // Check if section is upvoted
+            const isDownvoted = voteData.downvotes.includes(parseInt(sectionId, 10)); // Check if section is downvoted
 
+            // Create a button container
             const buttonContainer = document.createElement("div");
             buttonContainer.style.textAlign = "right";
 
+            // Upvote button
             const upvoteButton = document.createElement("button");
             upvoteButton.className = "vote-button purple-button upvote-button";
             upvoteButton.textContent = isUpvoted ? "Suggestion Upvoted" : "Upvote";
             upvoteButton.disabled = isUpvoted;
             upvoteButton.onclick = () => handleUpvote(sectionId);
 
+            // Downvote button
             const downvoteButton = document.createElement("button");
             downvoteButton.className = "vote-button purple-button downvote-button";
             downvoteButton.textContent = "Downvote";
@@ -401,22 +423,28 @@ show_reading_time: false
 
             buttonContainer.appendChild(upvoteButton);
             buttonContainer.appendChild(downvoteButton);
-
             section.appendChild(buttonContainer);
 
+            // Set visibility based on vote status
             if (isDownvoted) {
                 toggleSectionVisibility(sectionId, false);
+            } else {
+                toggleSectionVisibility(sectionId, true);
             }
         });
 
-        // Add Reset All Suggestions Button
-        const resetButton = document.createElement("button");
-        resetButton.className = "green-button";
-        resetButton.textContent = "Reset all Suggestions";
-        resetButton.onclick = handleResetAllSuggestions;
+        // Add Reset All Suggestions Button if not already present
+        if (!document.querySelector("#reset-all-button")) {
+            const resetButton = document.createElement("button");
+            resetButton.id = "reset-all-button";
+            resetButton.className = "green-button";
+            resetButton.textContent = "Reset all Suggestions";
+            resetButton.onclick = handleResetAllSuggestions;
 
-        document.body.appendChild(resetButton);
+            document.body.appendChild(resetButton);
+        }
     }
+
 
     document.addEventListener("DOMContentLoaded", initializeSections);
 </script>
