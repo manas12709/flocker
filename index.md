@@ -168,6 +168,7 @@ show_reading_time: false
     </footer>
 </div>
 
+
 <script type="module">
 
     import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
@@ -241,17 +242,48 @@ show_reading_time: false
     });
 </script>
 
+
+
+
 <script type="module">
     import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
 
-    async function handleVote(sectionId, voteType) {
-        const section = document.getElementById(sectionId);
-        const voteButton = section.querySelector('.vote-button');
+    async function fetchVoteData() {
+        try {
+            const voteData = { upvotes: [], downvotes: [] }; // Initialize data structure
+            const postIds = [1, 2, 3]; // Replace with your actual post IDs
 
+            for (const postId of postIds) {
+                const response = await fetch(`${pythonURI}/api/vote/post?post_id=${postId}`, {
+                    ...fetchOptions,
+                    method: "GET", // Use GET method
+                    headers: {
+                        ...fetchOptions.headers,
+                    },
+                });
+
+                if (!response.ok) throw new Error(`Failed to fetch votes for post ID ${postId}`);
+
+                const data = await response.json();
+
+                // Collect post IDs for upvotes and downvotes
+                data.upvotes.forEach(vote => voteData.upvotes.push(parseInt(vote.post_id, 10)));
+                data.downvotes.forEach(vote => voteData.downvotes.push(parseInt(vote.post_id, 10)));
+            }
+
+            return voteData;
+        } catch (error) {
+            console.error("Error fetching vote data:", error);
+            return { upvotes: [], downvotes: [] };
+        }
+    }
+
+
+    async function sendVote(sectionId, voteType, method) {
         try {
             const response = await fetch(`${pythonURI}/api/vote`, {
                 ...fetchOptions,
-                method: 'POST',
+                method: method,
                 headers: {
                     ...fetchOptions.headers,
                     'Content-Type': 'application/json',
@@ -262,66 +294,157 @@ show_reading_time: false
                 }),
             });
 
-            if (!response.ok) throw new Error('Vote submission failed');
-
-            if (voteType === 'upvote') {
-                voteButton.textContent = 'Remove Section';
-                voteButton.onclick = () => toggleSection(sectionId, false);
-            } else {
-                toggleSection(sectionId, false);
-            }
+            if (!response.ok) throw new Error("Vote submission failed");
         } catch (error) {
-            console.error('Error voting:', error);
+            console.error("Error submitting vote:", error);
         }
     }
 
-    function toggleSection(sectionId, show) {
+    function toggleSectionVisibility(sectionId, show) {
         const section = document.getElementById(sectionId);
         const placeholder = document.getElementById(`${sectionId}-placeholder`);
 
         if (show) {
-            section.style.display = 'block';
-            placeholder.style.display = 'none';
+            section.style.display = "block";
+            if (placeholder) placeholder.style.display = "none";
         } else {
-            section.style.display = 'none';
+            section.style.display = "none";
             if (!placeholder) {
-                const newPlaceholder = document.createElement('div');
+                const newPlaceholder = document.createElement("div");
                 newPlaceholder.id = `${sectionId}-placeholder`;
-                newPlaceholder.innerHTML = `<button class="green-button" onclick="toggleSection('${sectionId}', true)">Show Section</button>`;
-                section.insertAdjacentElement('afterend', newPlaceholder);
+                newPlaceholder.innerHTML = `<button class="green-button" onclick="handleShowSection('${sectionId}')">Show Section</button>`;
+                section.insertAdjacentElement("afterend", newPlaceholder);
             } else {
-                placeholder.style.display = 'block';
+                placeholder.style.display = "block";
             }
         }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('section').forEach((section, index) => {
-            const sectionId = `section-${index + 1}`; // Assigning section IDs starting at 1
+    async function handleUpvote(sectionId) {
+        await sendVote(sectionId, "upvote", "POST");
+        const section = document.getElementById(sectionId);
+        const upvoteButton = section.querySelector(".upvote-button");
+        const downvoteButton = section.querySelector(".downvote-button");
+
+        upvoteButton.textContent = "Suggestion Upvoted";
+        upvoteButton.disabled = true;
+        downvoteButton.disabled = false;
+    }
+
+    async function handleDownvote(sectionId) {
+        await sendVote(sectionId, "downvote", "POST");
+        toggleSectionVisibility(sectionId, false);
+    }
+
+    async function handleShowSection(sectionId) {
+        await sendVote(sectionId, "upvote", "PUT");
+        toggleSectionVisibility(sectionId, true);
+
+        const section = document.getElementById(sectionId);
+        const upvoteButton = section.querySelector(".upvote-button");
+        const downvoteButton = section.querySelector(".downvote-button");
+
+        upvoteButton.textContent = "Suggestion Upvoted";
+        upvoteButton.disabled = true;
+        downvoteButton.disabled = false;
+    }
+
+    window.handleShowSection = handleShowSection;
+
+    async function deleteVotesForPosts(postIds) {
+        try {
+            for (const postId of postIds) {
+                await fetch(`${pythonURI}/api/vote`, {
+                    ...fetchOptions,
+                    method: "DELETE",
+                    headers: {
+                        ...fetchOptions.headers,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ post_id: postId }),
+                });
+            }
+        } catch (error) {
+            console.error("Error deleting votes:", error);
+        }
+    }
+
+    async function handleResetAllSuggestions() {
+        await deleteVotesForPosts([1, 2, 3]);
+
+        document.querySelectorAll("section").forEach(section => {
+            const sectionId = section.id;
+
+            toggleSectionVisibility(sectionId, true);
+
+            const upvoteButton = section.querySelector(".upvote-button");
+            const downvoteButton = section.querySelector(".downvote-button");
+
+            upvoteButton.textContent = "Upvote";
+            upvoteButton.disabled = false;
+
+            downvoteButton.textContent = "Downvote";
+            downvoteButton.disabled = false;
+        });
+    }
+
+    async function initializeSections() {
+        const voteData = await fetchVoteData();
+
+        document.querySelectorAll("section").forEach((section, index) => {
+            const sectionId = `${index + 1}`;
             section.id = sectionId;
 
-            const voteButton = document.createElement('button');
-            voteButton.className = 'vote-button purple-button';
-            voteButton.textContent = 'Do you enjoy this feature on your feed?';
+            const isUpvoted = voteData.upvotes.includes(parseInt(sectionId, 10)); // Check if section is upvoted
+            const isDownvoted = voteData.downvotes.includes(parseInt(sectionId, 10)); // Check if section is downvoted
 
-            const upvoteButton = document.createElement('button');
-            upvoteButton.className = 'vote-button purple-button';
-            upvoteButton.textContent = 'Upvote';
-            upvoteButton.style.marginRight = '10px';
-            upvoteButton.onclick = () => handleVote(sectionId, 'upvote');
+            // Create a button container
+            const buttonContainer = document.createElement("div");
+            buttonContainer.style.textAlign = "right";
 
-            const downvoteButton = document.createElement('button');
-            downvoteButton.className = 'vote-button purple-button';
-            downvoteButton.textContent = 'Downvote';
-            downvoteButton.onclick = () => handleVote(sectionId, 'downvote');
+            // Upvote button
+            const upvoteButton = document.createElement("button");
+            upvoteButton.className = "vote-button purple-button upvote-button";
+            upvoteButton.textContent = isUpvoted ? "Suggestion Upvoted" : "Upvote";
+            upvoteButton.disabled = isUpvoted;
+            upvoteButton.onclick = () => handleUpvote(sectionId);
 
-            const buttonContainer = document.createElement('div');
-            buttonContainer.style.textAlign = 'right';
+            // Downvote button
+            const downvoteButton = document.createElement("button");
+            downvoteButton.className = "vote-button purple-button downvote-button";
+            downvoteButton.textContent = "Downvote";
+            downvoteButton.disabled = isDownvoted;
+            downvoteButton.onclick = () => {
+                if (isUpvoted) {
+                    sendVote(sectionId, "downvote", "PUT");
+                }
+                handleDownvote(sectionId);
+            };
+
             buttonContainer.appendChild(upvoteButton);
             buttonContainer.appendChild(downvoteButton);
-
             section.appendChild(buttonContainer);
-        });
-    });
-</script>
 
+            // Set visibility based on vote status
+            if (isDownvoted) {
+                toggleSectionVisibility(sectionId, false);
+            } else {
+                toggleSectionVisibility(sectionId, true);
+            }
+        });
+
+        // Add Reset All Suggestions Button if not already present
+        if (!document.querySelector("#reset-all-button")) {
+            const resetButton = document.createElement("button");
+            resetButton.id = "reset-all-button";
+            resetButton.className = "green-button";
+            resetButton.textContent = "Reset all Suggestions";
+            resetButton.onclick = handleResetAllSuggestions;
+
+            document.body.appendChild(resetButton);
+        }
+    }
+
+
+    document.addEventListener("DOMContentLoaded", initializeSections);
+</script>
