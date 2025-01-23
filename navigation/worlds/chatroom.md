@@ -470,7 +470,6 @@ permalink: /prism/topicchatroom
             chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom of the chat box
         } catch (error) {
             console.error('Error fetching data:', error);
-            alert('Failed to load chat messages.');
         }
     }
     window.updateAIQuestionAndCreateChannel = updateAIQuestionAndCreateChannel;
