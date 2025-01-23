@@ -139,6 +139,20 @@ show_reading_time: false
     .copyright p {
         margin: 0;
     }
+    #leaderboard-container {
+        background-color: #2e2e2e;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    #leaderboard-container div {
+        border-radius: 5px;
+    }
+
+    #leaderboard-container div div {
+        border-radius: 5px;
+    }
 </style>
 
 <div class="content">
@@ -156,8 +170,22 @@ show_reading_time: false
 
     <section>
         <h2>Leaderboard of Top Interests</h2>
-        <ul id="leaderboard"></ul>
+        <div id="leaderboard-container" style="position: relative; width: 100%; height: auto;"></div>
     </section>
+
+    <div id="user-modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                                background-color: #2e2e2e; padding: 20px; border-radius: 10px; 
+                                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); z-index: 1000;">
+        <h3 id="modal-title" style="color: #ff6666;">Users with this Interest</h3>
+        <ul id="user-list" style="list-style: none; padding: 0; color: #fff;"></ul>
+        <button onclick="closeModal()" style="margin-top: 10px; background-color: #b30000; color: white; border: none; 
+                                            padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+            Close
+        </button>
+    </div>
+
+    <div id="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                                    background-color: rgba(0, 0, 0, 0.5); z-index: 999;"></div>
 
     <section>
         <button class="purple-button" onclick="window.location.href='{{ site.baseurl }}/profile'">Access Your Profile</button>
@@ -212,29 +240,148 @@ show_reading_time: false
 
             const allUsers = await response.json();
             const interestCounts = {};
+            const interestToUsers = {};
 
+            // Count interests and map users to interests
             allUsers.forEach(user => {
                 user.interests.split(", ").forEach(interest => {
                     interestCounts[interest] = (interestCounts[interest] || 0) + 1;
+                    if (!interestToUsers[interest]) interestToUsers[interest] = [];
+                    interestToUsers[interest].push(user.name); // Add user name to the interest
                 });
             });
 
-            const sortedInterests = Object.entries(interestCounts)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 3);
+            // Sort interests by count
+            const sortedInterests = Object.entries(interestCounts).sort((a, b) => b[1] - a[1]);
+            const maxVotes = sortedInterests[0][1];
 
-            const leaderboardContainer = document.getElementById("leaderboard");
-            leaderboardContainer.innerHTML = "";
+            // State for showing all interests or top 5
+            let showAll = false;
 
-            sortedInterests.forEach(([interest, count]) => {
-                const listItem = document.createElement("li");
-                listItem.textContent = `${interest} - ${count} Votes`;
-                leaderboardContainer.appendChild(listItem);
-            });
+            const leaderboardContainer = document.getElementById("leaderboard-container");
+
+            // Create a reusable render function
+            const renderLeaderboard = () => {
+                leaderboardContainer.innerHTML = ""; // Clear previous content
+
+                // Determine how many interests to show
+                const interestsToShow = showAll ? sortedInterests : sortedInterests.slice(0, 5);
+
+                interestsToShow.forEach(([interest, count]) => {
+                    const barContainer = document.createElement("div");
+                    barContainer.style.display = "flex";
+                    barContainer.style.alignItems = "center";
+                    barContainer.style.marginBottom = "15px";
+                    barContainer.style.cursor = "pointer"; // Add cursor for clickability
+
+                    // Label
+                    const label = document.createElement("div");
+                    label.textContent = `${interest}`;
+                    label.style.width = "150px";
+                    label.style.fontWeight = "bold";
+                    label.style.color = "#ff6666";
+
+                    // Bar
+                    const bar = document.createElement("div");
+                    bar.style.height = "30px";
+                    bar.style.width = "0"; // Start width at 0 for animation
+                    bar.style.transition = "width 1s ease, transform 0.2s ease";
+                    bar.style.marginLeft = "10px";
+                    bar.style.background = `linear-gradient(90deg, #ff4d4d, #b30000)`; // Dynamic gradient
+                    bar.style.borderRadius = "5px";
+
+                    // Hover effect
+                    bar.addEventListener("mouseover", () => {
+                        bar.style.transform = "scale(1.05)";
+                    });
+                    bar.addEventListener("mouseout", () => {
+                        bar.style.transform = "scale(1)";
+                    });
+
+                    // Set bar width dynamically based on votes
+                    setTimeout(() => {
+                        bar.style.width = `${(count / maxVotes) * 80}%`; // Scale bar to max 80% width
+                    }, 100);
+
+                    // Click to show user details
+                    bar.addEventListener("click", () => {
+                        showModal(interest, interestToUsers[interest]);
+                    });
+
+                    // Count display
+                    const countLabel = document.createElement("div");
+                    countLabel.textContent = `${count} Votes`;
+                    countLabel.style.marginLeft = "10px";
+                    countLabel.style.color = "#ffffff";
+                    countLabel.style.fontWeight = "bold";
+
+                    barContainer.appendChild(label);
+                    barContainer.appendChild(bar);
+                    barContainer.appendChild(countLabel);
+
+                    leaderboardContainer.appendChild(barContainer);
+                });
+
+                // Ensure the toggle button stays persistent
+                if (!leaderboardContainer.querySelector("#toggle-button")) {
+                    const toggleButton = document.createElement("button");
+                    toggleButton.id = "toggle-button";
+                    toggleButton.className = "purple-button";
+                    toggleButton.style.marginTop = "20px";
+                    toggleButton.textContent = showAll ? "Show Less" : "Show More";
+
+                    // Toggle between showing all interests or top 5
+                    toggleButton.addEventListener("click", () => {
+                        showAll = !showAll;
+                        toggleButton.textContent = showAll ? "Show Less" : "Show More";
+                        renderLeaderboard();
+                    });
+
+                    leaderboardContainer.appendChild(toggleButton);
+                }
+            };
+
+            // Initial render
+            renderLeaderboard();
         } catch (error) {
             console.error("Error fetching leaderboard:", error);
+            const leaderboardContainer = document.getElementById("leaderboard-container");
+            leaderboardContainer.innerHTML = "<p>Error loading leaderboard.</p>";
         }
     }
+
+
+
+    // Show modal with user details
+    function showModal(interest, users) {
+        const modal = document.getElementById("user-modal");
+        const overlay = document.getElementById("modal-overlay");
+        const userList = document.getElementById("user-list");
+        const modalTitle = document.getElementById("modal-title");
+
+        modalTitle.textContent = `Users Interested in "${interest}"`;
+        userList.innerHTML = ""; // Clear previous content
+
+        // Populate user list
+        users.forEach(user => {
+            const listItem = document.createElement("li");
+            listItem.textContent = user;
+            userList.appendChild(listItem);
+        });
+
+        modal.style.display = "block";
+        overlay.style.display = "block";
+    }
+
+    // Close modal
+    function closeModal() {
+        const modal = document.getElementById("user-modal");
+        const overlay = document.getElementById("modal-overlay");
+        modal.style.display = "none";
+        overlay.style.display = "none";
+    }
+
+    window.closeModal = closeModal;
 
     document.addEventListener("DOMContentLoaded", () => {
         fetchSuggestions();
