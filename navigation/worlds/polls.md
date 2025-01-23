@@ -137,35 +137,48 @@ permalink: /prism/polls
     Quick Polls
 </header>
 <p class="poll-subtitle">Your voice, your community</p>
-
 <center>
 <div class="form-container submit-answer-container">
-    <h2 style="color: white;">Submit Your Answer Here</h2>
-    <form id="postForm">
-        <label for="title" style="color: white;">Title:</label>
-        <input type="text" id="title" name="title" value="What is your favorite genre of music?" readonly>
+    <h2 style="text-align: center;">Submit Your Answer Here</h2>
+    <form id="pollForm">
+        <label for="name">What is your name?</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name" required>
 
-        <label for="comment" style="color: white;">Choose Your Answer:</label>
-        <div class="poll-options" style="width: 100%;">
-            <label class="poll-option" style="background-color: rgb(80, 80, 80); color: white; width: 100%; display: block; padding: 15px; text-align: center; cursor: pointer;">
-                <input type="radio" name="comment" value="Jazz" required style="display: none;"> Jazz
-            </label>
-            <label class="poll-option" style="background-color: rgb(80, 80, 80); color: white; width: 100%; display: block; padding: 15px; text-align: center; cursor: pointer;">
-                <input type="radio" name="comment" value="R&B" style="display: none;"> R&amp;B
-            </label>
-            <label class="poll-option" style="background-color: rgb(80, 80, 80); color: white; width: 100%; display: block; padding: 15px; text-align: center; cursor: pointer;">
-                <input type="radio" name="comment" value="Classical" style="display: none;"> Classical
-            </label>
-            <label class="poll-option" style="background-color: rgb(80, 80, 80); color: white; width: 100%; display: block; padding: 15px; text-align: center; cursor: pointer;">
-                <input type="radio" name="comment" value="Rap" style="display: none;"> Rap
-            </label>
-        </div>
-        <button type="submit" style="background-color: red; color: white; width: 100%; margin-top: 15px; border: none; font-size: 18px; padding: 15px;">
-            Submit Poll
-        </button>
+        <label for="interests">What are your interests?</label>
+        <input type="text" id="interests" name="interests" placeholder="Enter your interests" required>
+
+        <button type="submit">Submit</button>
     </form>
 </div>
 </center>
+
+<script>
+    document.getElementById('pollForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const interests = document.getElementById('interests').value;
+
+        const payload = {
+            name: name,
+            interests: interests
+        };
+
+        fetch('http://localhost:8887/api/poll_add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // alert('Your poll response has been submitted!');
+            document.getElementById('pollForm').reset();
+            location.reload();
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
 
 <center>
 <div class="form-container submit-answer-container">
@@ -198,7 +211,10 @@ function updatePoll() {
     body: JSON.stringify({ id, name, interests })
   })
   .then(response => response.json())
-  .then(data => console.log(data));
+  .then(data => {
+    console.log(data);
+    location.reload();
+  });
 }
 
 function deletePoll() {
@@ -209,7 +225,10 @@ function deletePoll() {
     body: JSON.stringify({ id })
   })
   .then(response => response.json())
-  .then(data => console.log(data));
+  .then(data => {
+    console.log(data);
+    location.reload();
+  });
 }
 </script>
 
