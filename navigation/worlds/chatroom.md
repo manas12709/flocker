@@ -171,10 +171,10 @@ permalink: /prism/topicchatroom
         if (newComment !== null && newComment.trim() !== "") {
             const postData = {
                 id: postId,
-                comment: newComment, // Only include the updated comment field
+                message: newComment, // Only include the updated comment field
             };
             try {
-                const response = await fetch(`${pythonURI}/api/post`, {
+                const response = await fetch(`${pythonURI}/api/chat`, {
                     ...fetchOptions,
                     method: "PUT",
                     headers: {
@@ -206,7 +206,7 @@ permalink: /prism/topicchatroom
                 id: postId,
             };
             try {
-                const response = await fetch(`${pythonURI}/api/post`, {
+                const response = await fetch(`${pythonURI}/api/chat`, {
                     ...fetchOptions,
                     method: "DELETE",
                     headers: {
@@ -252,12 +252,11 @@ permalink: /prism/topicchatroom
             chatBox.scrollTop = chatBox.scrollHeight;
             // Send data to the backend
             const postData = {
-                title: "Comment on Random Discussion",
-                comment: message,
+                message: message,
                 channel_id: selectedChannelId,
             };
             try {
-                const response = await fetch(`${pythonURI}/api/post`, {
+                const response = await fetch(`${pythonURI}/api/chat`, {
                     ...fetchOptions,
                     method: 'POST',
                     headers: {
@@ -440,34 +439,35 @@ permalink: /prism/topicchatroom
     }
     async function fetchData(channelId) {
         try {
-            const response = await fetch(`${pythonURI}/api/posts/filter`, {
+            // Pass channelId as a query parameter
+            const response = await fetch(`${pythonURI}/api/chat?id=${channelId}`, {
                 ...fetchOptions,
-                method: 'POST',
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ channel_id: selectedChannelId })
+                }
             });
             if (!response.ok) {
-                throw new Error('Failed to fetch posts: ' + response.statusText);
+                throw new Error('Failed to fetch chats: ' + response.statusText);
             }
-            const postData = await response.json();
+            const chatData = await response.json();
             const chatBox = document.getElementById('chatBox');
-            chatBox.innerHTML = '';
-            postData.forEach(postItem => {
+            chatBox.innerHTML = ''; // Clear the chat box
+            // Populate chat messages
+            chatData.forEach(chatItem => {
                 const messageElement = document.createElement('div');
                 messageElement.className = 'chat-message';
-                messageElement.id = `post-${postItem.id}`;
+                messageElement.id = `chat-${chatItem.id}`;
                 messageElement.innerHTML = `
                     <div class="message-content">
-                        <p><strong>${postItem.comment}</strong></p>
-                        <button class="edit-button" onclick="editMessage(${postItem.id})">Edit</button>
-                        <button class="delete-button" onclick="deleteMessage(${postItem.id})">Delete</button>
+                        <p><strong>${chatItem.message}</strong></p>
+                        <button class="edit-button" onclick="editMessage(${chatItem.id})">Edit</button>
+                        <button class="delete-button" onclick="deleteMessage(${chatItem.id})">Delete</button>
                     </div>
                 `;
                 chatBox.appendChild(messageElement);
             });
-            chatBox.scrollTop = chatBox.scrollHeight;
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom of the chat box
         } catch (error) {
             console.error('Error fetching data:', error);
             alert('Failed to load chat messages.');
