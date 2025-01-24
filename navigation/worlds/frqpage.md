@@ -415,7 +415,7 @@ permalink: /prism/frqpage
 
             // Successful post
             const result = await response.json();
-            alert('Post added successfully!');
+            alert('Post added successfully! Your Post ID is: ${result.id}');
             document.getElementById('postForm').reset();
             fetchData(channelId);
         } catch (error) {
@@ -477,3 +477,155 @@ permalink: /prism/frqpage
     // Fetch groups when the page loads
     fetchGroups();
 </script>
+
+<div class="form-container crud-container">
+    <h2>Manage Posts</h2>
+
+    <!-- Update Post Section -->
+    <div class="crud-section update-post-container">
+        <h3>Update Post</h3>
+        <form id="updatePostForm">
+            <label for="updatePostId">Post ID:</label>
+            <input type="text" id="updatePostId" name="updatePostId" required>
+
+            <label for="updateComment">New Comment:</label>
+            <textarea id="updateComment" name="updateComment" required></textarea>
+
+            <button type="submit">Update Post</button>
+        </form>
+    </div>
+
+    <!-- Delete Post Section -->
+    <div class="crud-section delete-post-container">
+        <h3>Delete Post</h3>
+        <form id="deletePostForm">
+            <label for="deletePostId">Post ID:</label>
+            <input type="text" id="deletePostId" name="deletePostId" required>
+
+            <button type="submit">Delete Post</button>
+        </form>
+    </div>
+
+    <!-- Post List Section -->
+    <div class="crud-section post-list-container">
+        <h3>All Posts</h3>
+        <button id="fetchPostsButton">Fetch All Posts</button>
+        <div id="postList">
+            <!-- Posts will be dynamically populated here -->
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+
+    // Update Post
+    document.getElementById('updatePostForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const postId = document.getElementById('updatePostId').value;
+        const comment = document.getElementById('updateComment').value;
+
+        try {
+            const response = await fetch(`${pythonURI}/api/post`, {
+                ...fetchOptions,
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: postId, comment })
+            });
+
+            if (!response.ok) throw new Error('Failed to update post');
+            alert(`Post updated successfully! Post ID: ${postId}`);
+            document.getElementById('updatePostForm').reset();
+        } catch (error) {
+            console.error('Error updating post:', error);
+        }
+    });
+
+    // Delete Post
+    document.getElementById('deletePostForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const postId = document.getElementById('deletePostId').value;
+
+        try {
+            const response = await fetch(`${pythonURI}/api/post`, {
+                ...fetchOptions,
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: postId })
+            });
+
+            if (!response.ok) throw new Error('Failed to delete post');
+            alert(`Post deleted successfully! Post ID: ${postId}`);
+            document.getElementById('deletePostForm').reset();
+        } catch (error) {
+            console.error('Error deleting post:', error);
+        }
+    });
+
+    // Fetch All Posts
+    document.getElementById('fetchPostsButton').addEventListener('click', async function () {
+        const postList = document.getElementById('postList');
+        postList.innerHTML = '';
+
+        try {
+            const response = await fetch(`${pythonURI}/api/posts`, fetchOptions);
+            if (!response.ok) throw new Error('Failed to fetch posts');
+
+            const posts = await response.json();
+            posts.forEach(post => {
+                const postElement = document.createElement('div');
+                postElement.className = 'post-item';
+                postElement.innerHTML = `
+                    <h4>${post.title}</h4>
+                    <p>${post.comment}</p>
+                    <p><strong>Post ID:</strong> ${post.id}</p>
+                    <p><strong>Channel:</strong> ${post.channel_name || 'Unknown'}</p>
+                    <p><strong>User:</strong> ${post.user_name || 'Unknown'}</p>
+                `;
+                postList.appendChild(postElement);
+            });
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        }
+    });
+</script>
+
+<style>
+    .crud-container {
+        background-color: #34495e;
+        color: #ecf0f1;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        margin-top: 30px;
+    }
+
+    .crud-section {
+        margin-bottom: 40px;
+    }
+
+    .crud-section h3 {
+        color: #e74c3c;
+        margin-bottom: 20px;
+    }
+
+    .crud-section button {
+        padding: 10px 20px;
+        background-color: #c0392b;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .crud-section button:hover {
+        background-color: #e74c3c;
+    }
+
+    .post-item {
+        background-color: #2c3e50;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+</style>
