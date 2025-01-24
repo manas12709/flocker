@@ -306,10 +306,19 @@ show_reading_time: false
         </div>
     </section>
 
+    <section class="card">
+        <h3>My Interests</h3>
+        <p>Click on an interest to view more details</p>
+        <section class="grid grid-cols-2" id="interestsSection"></section>
+    </section>
+
     <section class="grid grid-cols-2" id="interestsSection">
     </section>
 
-    <section class="grid grid-cols-2" id="followersSection">
+    <section class="card">
+        <h3>My Following</h3>
+        <p>Click on a person you are following to view more details</p>
+        <section class="grid grid-cols-2" id="followersSection"></section>
     </section>
     
     <section class="card">
@@ -359,6 +368,7 @@ function createInterestCards(interests) {
             card.innerHTML = `
                 <h4>${interest}</h4>
                 <img src="https://placehold.co/300x200/d34e3f/a3adbf/png?text=${interest}" alt="${interest}">
+                <button onclick="deleteInterest('${interest}')">Delete</button>
             `;
             interestsSection.appendChild(card);
         });
@@ -371,6 +381,7 @@ function createInterestCards(interests) {
         card.innerHTML = `
             <h4>${interest}</h4>
             <img src="https://placehold.co/300x200/d34e3f/a3adbf/png?text=${interest}" alt="${interest}">
+            <button onclick="deleteInterest('${interest}')">Delete</button>
         `;
         interestsSection.appendChild(card);
     });
@@ -407,7 +418,10 @@ function createFollowerCards(followers) {
 
 async function updateUserInfo() {
     try {
-        const response = await fetch(pythonURI + "/api/user", fetchOptions);
+        const response = await fetch(pythonURI + "/api/user", {
+            ...fetchOptions,
+            method: 'GET'
+        });
         const data = await response.json();
         
         document.getElementById('username').textContent = data.name || 'User Name';
@@ -416,7 +430,12 @@ async function updateUserInfo() {
             document.getElementById('profilePicture').src = data.pfp;
         }
         
-        const interests = data.interests ? data.interests.split(',').map(i => i.trim()).filter(i => i) : [];
+        const interestsResponse = await fetch(pythonURI + "/api/interests", {
+            ...fetchOptions,
+            method: 'GET'
+        });
+        const interestsData = await interestsResponse.json();
+        const interests = interestsData ? interestsData.split(',').map(i => i.trim()).filter(i => i) : [];
         createInterestCards(interests);
 
         const followers = data.followers ? data.followers.split(',').map(i => i.trim()).filter(i => i) : [];
@@ -465,6 +484,20 @@ async function updateProfile(field, value) {
             const newInterests = value.split(',').map(i => i.trim());
             const combinedInterests = [...new Set([...currentInterests, ...newInterests])];
             value = combinedInterests.join(', ');
+
+            const updateResponse = await fetch(pythonURI + "/api/interests", {
+                ...fetchOptions,
+                method: 'PUT',
+                body: JSON.stringify({ interests: value })
+            });
+
+            if (!updateResponse.ok) {
+                throw new Error('Failed to update interests');
+            }
+
+            showError('Interests updated successfully', 'green');
+            updateUserInfo();
+            return;
         }
 
         if (field === 'followers' && value) {
@@ -495,6 +528,28 @@ async function updateProfile(field, value) {
         showError('Error updating profile');
     }
 }
+
+async function deleteInterest(interest) {
+    try {
+        const response = await fetch(pythonURI + "/api/interests", {
+            ...fetchOptions,
+            method: 'DELETE',
+            body: JSON.stringify({ interest: interest })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete interest');
+        }
+
+        showError('Interest deleted successfully', 'green');
+        updateUserInfo();
+    } catch (error) {
+        console.error('Error deleting interest:', error);
+        showError('Error deleting interest');
+    }
+}
+
+window.deleteInterest = deleteInterest;
 
 async function uploadProfilePicture(file) {
     try {

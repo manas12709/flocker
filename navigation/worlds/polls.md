@@ -137,35 +137,156 @@ permalink: /prism/polls
     Quick Polls
 </header>
 <p class="poll-subtitle">Your voice, your community</p>
-
 <center>
 <div class="form-container submit-answer-container">
-    <h2 style="color: white;">Submit Your Answer Here</h2>
-    <form id="postForm">
-        <label for="title" style="color: white;">Title:</label>
-        <input type="text" id="title" name="title" value="What is your favorite genre of music?" readonly>
+    <h2 style="text-align: center;">Submit Your Answer Here</h2>
+    <form id="pollForm">
+        <label for="name">What is your name?</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name" required>
 
-        <label for="comment" style="color: white;">Choose Your Answer:</label>
-        <div class="poll-options" style="width: 100%;">
-            <label class="poll-option" style="background-color: rgb(80, 80, 80); color: white; width: 100%; display: block; padding: 15px; text-align: center; cursor: pointer;">
-                <input type="radio" name="comment" value="Jazz" required style="display: none;"> Jazz
-            </label>
-            <label class="poll-option" style="background-color: rgb(80, 80, 80); color: white; width: 100%; display: block; padding: 15px; text-align: center; cursor: pointer;">
-                <input type="radio" name="comment" value="R&B" style="display: none;"> R&amp;B
-            </label>
-            <label class="poll-option" style="background-color: rgb(80, 80, 80); color: white; width: 100%; display: block; padding: 15px; text-align: center; cursor: pointer;">
-                <input type="radio" name="comment" value="Classical" style="display: none;"> Classical
-            </label>
-            <label class="poll-option" style="background-color: rgb(80, 80, 80); color: white; width: 100%; display: block; padding: 15px; text-align: center; cursor: pointer;">
-                <input type="radio" name="comment" value="Rap" style="display: none;"> Rap
-            </label>
-        </div>
-        <button type="submit" style="background-color: red; color: white; width: 100%; margin-top: 15px; border: none; font-size: 18px; padding: 15px;">
-            Submit Poll
-        </button>
+        <label for="interests">What are your interests?</label>
+        <input type="text" id="interests" name="interests" placeholder="Enter your interests" required>
+
+        <button type="submit">Submit</button>
     </form>
 </div>
 </center>
 
+<script>
+    document.getElementById('pollForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const interests = document.getElementById('interests').value;
+
+        const payload = {
+            name: name,
+            interests: interests
+        };
+
+        fetch('http://localhost:8887/api/poll_add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // alert('Your poll response has been submitted!');
+            document.getElementById('pollForm').reset();
+            location.reload();
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
+
+<center>
+<div class="form-container submit-answer-container">
+    <form id="updatePollForm" onsubmit="event.preventDefault(); updatePoll();" style="margin-bottom: 20px;">
+        <label style="color: white;">Update Poll</label><br>
+        <input type="text" id="updatePollId" placeholder="Poll ID"><br>
+        <input type="text" id="updatePollName" placeholder="Name"><br>
+        <input type="text" id="updatePollInterests" placeholder="Interests"><br>
+        <button type="submit" style="background-color: red; color: white; width: 100%; margin-top: 15px; border: none; font-size: 18px; padding: 15px;">Update</button>
+    </form>
+</div>
+
+<div class="form-container submit-answer-container">
+    <form id="deletePollForm" onsubmit="event.preventDefault(); deletePoll();" style="margin-bottom: 20px;">
+        <label style="color: white;">Delete Poll</label><br>
+        <input type="text" id="deletePollId" placeholder="Poll ID"><br>
+        <button type="submit" style="background-color: red; color: white; width: 100%; margin-top: 15px; border: none; font-size: 18px; padding: 15px;">Delete</button>
+    </form>
+</div>
+</center>
+
+<script>
+function updatePoll() {
+  const id = document.getElementById('updatePollId').value;
+  const name = document.getElementById('updatePollName').value;
+  const interests = document.getElementById('updatePollInterests').value;
+  fetch('http://localhost:8887/api/poll_update', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id, name, interests })
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log(data);
+    location.reload();
+  });
+}
+
+function deletePoll() {
+  const id = document.getElementById('deletePollId').value;
+  fetch('http://localhost:8887/api/poll_delete', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id })
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log(data);
+    location.reload();
+  });
+}
+</script>
+
+<center><h2>Poll Results</h2></center>
 <br>
-<center><a href="/prism_frontend/prism/pollresults">See Poll Results</a></center>
+
+<center>
+<table class="submit-answer-container">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Result</th>
+        </tr>
+    </thead>
+    <tbody id="poll-data">
+        <!-- Data will be dynamically inserted here -->
+    </tbody>
+</table>
+</center>
+
+<div id="dataOutput"></div>
+
+<script>
+    // Define the API endpoint
+    const apiEndpoint = 'http://localhost:8887/api/poll_read';
+
+// Send GET request
+fetch(apiEndpoint)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.json();
+  })
+  .then(data => {
+    // Get the tbody element
+    const pollData = document.getElementById('poll-data');
+    
+    // Clear any existing content in the tbody
+    pollData.innerHTML = '';
+
+    // Iterate through the data and create rows for each item
+    data.forEach(item => {
+      const row = document.createElement('tr');
+
+      const nameCell = document.createElement('td');
+      nameCell.textContent = item.name;
+
+      const interestsCell = document.createElement('td');
+      interestsCell.textContent = item.interests;
+
+      row.appendChild(nameCell);
+      row.appendChild(interestsCell);
+
+      pollData.appendChild(row);
+    });
+  })
+  .catch(error => {
+    console.error('There has been a problem with your fetch operation:', error);
+  });
+</script>
