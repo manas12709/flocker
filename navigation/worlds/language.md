@@ -1,81 +1,73 @@
 ---
-title: Language CRUD
+title: CodePalette
 show_reading_time: false
 search_exclude: true
 permalink: /prism/language
 ---
-
-<div class="language-container">
-    <h2>Language Tracker</h2>
-    <div class="language-form">
-        <input type="number" id="language-id" placeholder="Enter language ID" />
-        <input type="text" id="language-name" placeholder="Enter language name" />
-        <input type="text" id="language-creator" placeholder="Enter creator name" />
-        <button onclick="submitLanguage()">Submit Language</button>
-        <button onclick="updateLanguage()">Update</button>
-        <button onclick="deleteLanguage()">Delete</button>
-    </div>
-    <div id="last-recorded-language" class="qotd-container">
-        <h3>Last Recorded Language:</h3>
-        <p id="language-display">No language recorded</p>
-        <p id="motivation-message"></p>
-    </div>
-</div>
-
 <style>
-    /* General Layout */
     body {
-        font-family: Arial, sans-serif;
         margin: 0;
-        padding: 0;
-        background-color: #1e1e2f;
-        color: #fff;
-    }
-
-    .language-container {
-        max-width: 600px;
-        margin: 50px auto;
-        padding: 20px;
-        background-color:rgb(18, 4, 4);
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        text-align: center;
-    }
-
-    h2 {
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
-
-    h3 {
-        font-size: 20px;
-        margin-top: 30px;
-    }
-
-    /* Form Styling */
-    .language-form {
-        margin-bottom: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .language-form input {
-        padding: 10px;
-        font-size: 16px;
-        width: 100%;
-        border: 1px solid #555;
-        border-radius: 5px;
-        background-color:rgb(163, 12, 12);
+        font-family: Arial, sans-serif;
+        background-color: black;
         color: white;
     }
 
-    .language-form input::placeholder {
-        color: #aaa;
+    header.page {
+        background-color: red;
+        padding: 20px;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        border-radius: 15px;
     }
 
-    button {
-        padding: 10px 20px;
+    .subtitle {
+        margin-top: -10px;
+        font-size: 16px;
+        color: #ddd;
+    }
+
+    .main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 30px;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color:rgb(0, 0, 0);
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .container h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .container label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .container input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #555;
+        border-radius: 5px;
+        background-color:rgb(0, 0, 0);
+        color: white;
+    }
+
+    .container button {
+        width: 100%;
+        padding: 10px;
         font-size: 16px;
         background-color: #4CAF50;
         color: white;
@@ -85,63 +77,94 @@ permalink: /prism/language
         transition: background-color 0.3s ease;
     }
 
-    button:hover {
+    .container button:hover {
         background-color: #45a049;
     }
 
-    /* Display Section */
-    #last-recorded-language {
-        margin-top: 20px;
-        padding: 15px;
-        background-color:rgb(160, 14, 19);
-        border-radius: 5px;
+    .table-container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color:rgb(0, 0, 0);
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(156, 21, 21, 0.2);
     }
 
-    p {
-        font-size: 16px;
-        margin: 5px 0;
+    .table-container h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .table-container table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table-container th, .table-container td {
+        padding: 10px;
+        border: 1px solid #555;
+        text-align: left;
+    }
+
+    .table-container th {
+        background-color: #444;
+    }
+
+    .table-container tbody tr:nth-child(even) {
+        background-color:rgb(111, 14, 14);
     }
 </style>
+<header class="page">
+    <div class="subtitle">Manage Programming Languages</div>
+</header>
+
+<div class="container">
+    <h2>Code Submission</h2>
+    <form id="language-form">
+        <label for="language-id">Language ID:</label>
+        <input type="number" id="language-id" placeholder="Enter language ID" required />
+
+        <label for="language-name">Language Name:</label>
+        <input type="text" id="language-name" placeholder="Enter language name" required />
+
+        <label for="language-creator">Creator Name:</label>
+        <input type="text" id="language-creator" placeholder="Enter creator name" required />
+
+        <label for="language-popularity">Popularity (1-100):</label>
+        <input type="number" id="language-popularity" placeholder="Enter popularity" min="1" max="100" required />
+
+        <button type="button" onclick="submitLanguage()">Submit</button>
+        <button type="button" onclick="updateLanguage()">Update</button>
+        <button type="button" onclick="deleteLanguage()">Delete</button>
+    </form>
+</div>
+
+<div class="table-container">
+    <h2>Code Table</h2>
+    <table id="languages-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Creator</th>
+                <th>Popularity</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Table rows will be populated here -->
+        </tbody>
+    </table>
+</div>
 
 <script>
-    // Function to fetch the last recorded language
-    async function fetchLastLanguage() {
-        try {
-            const response = await fetch('http://127.0.0.1:8887/api/language', {
-                method: 'GET',
-                credentials: 'include', // Ensure JWT cookie is sent with the request
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                const language = data[0]; // Accessing the first language in the array
-                document.getElementById('language-display').innerText = language.name;
-                displayMotivationMessage(language.name);
-            } else {
-                document.getElementById('language-display').innerText = 'No language recorded';
-            }
-        } catch (error) {
-            document.getElementById('language-display').innerText = 'No language recorded';
-        }
-    }
-
-    // Function to display motivational message
-    function displayMotivationMessage(language) {
-        const messageElement = document.getElementById('motivation-message');
-        if (language) {
-            messageElement.innerText = 'Keep learning new languages!';
-        } else {
-            messageElement.innerText = 'Start learning a new language today!';
-        }
-    }
-
-    // Function to submit the language
     async function submitLanguage() {
         const id = document.getElementById('language-id').value;
         const name = document.getElementById('language-name').value;
         const creator = document.getElementById('language-creator').value;
+        const popularity = document.getElementById('language-popularity').value;
 
-        if (!id || !name || !creator) {
+        if (!id || !name || !creator || !popularity) {
             alert('Please fill out all fields');
             return;
         }
@@ -152,12 +175,12 @@ permalink: /prism/language
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id, name, creator }),
-                credentials: 'include',  // Ensure JWT cookie is sent with the request
+                body: JSON.stringify({ id, name, creator, popularity }),
             });
 
             if (response.ok) {
-                await fetchLastLanguage();  // Fetch and display the updated language after submission
+                alert('Language submitted successfully');
+                fetchLanguages();
             } else {
                 alert('Error submitting language');
             }
@@ -166,13 +189,13 @@ permalink: /prism/language
         }
     }
 
-    // Function to update the language
     async function updateLanguage() {
         const id = document.getElementById('language-id').value;
         const name = document.getElementById('language-name').value;
         const creator = document.getElementById('language-creator').value;
+        const popularity = document.getElementById('language-popularity').value;
 
-        if (!id || !name || !creator) {
+        if (!id || !name || !creator || !popularity) {
             alert('Please fill out all fields');
             return;
         }
@@ -183,12 +206,13 @@ permalink: /prism/language
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id, name, creator }),
-                credentials: 'include', // Ensure JWT cookie is sent with the request
+                body: JSON.stringify({ id, name, creator, popularity }),
+                credentials: 'include',
             });
 
             if (response.ok) {
-                await fetchLastLanguage(); // Refresh language display
+                alert('Language updated successfully');
+                fetchLanguages();
             } else {
                 alert('Error updating language');
             }
@@ -197,7 +221,6 @@ permalink: /prism/language
         }
     }
 
-    // Function to delete the language
     async function deleteLanguage() {
         const id = document.getElementById('language-id').value;
 
@@ -213,11 +236,12 @@ permalink: /prism/language
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ id }),
-                credentials: 'include', // Ensure JWT cookie is sent with the request
+                credentials: 'include',
             });
 
             if (response.ok) {
-                document.getElementById('language-display').innerText = 'No language recorded';
+                alert('Language deleted successfully');
+                fetchLanguages();
             } else {
                 const errorData = await response.json();
                 alert('Error deleting language: ' + errorData.message);
@@ -228,6 +252,33 @@ permalink: /prism/language
         }
     }
 
-    // Fetch the last recorded language on page load
-    window.onload = fetchLastLanguage;
+    async function fetchLanguages() {
+        try {
+            const response = await fetch('http://127.0.0.1:8887/api/language', {
+                method: 'GET',
+                credentials: 'include',
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const tableBody = document.getElementById('languages-table').getElementsByTagName('tbody')[0];
+                tableBody.innerHTML = '';
+
+                data.forEach(language => {
+                    const row = tableBody.insertRow();
+                    row.insertCell(0).innerText = language.id;
+                    row.insertCell(1).innerText = language.name;
+                    row.insertCell(2).innerText = language.creator;
+                    row.insertCell(3).innerText = language.popularity;
+                });
+            } else {
+                alert('Error fetching languages');
+            }
+        } catch (error) {
+            alert('Error fetching languages');
+        }
+    }
+
+    // Initialize the page
+    window.onload = fetchLanguages;
 </script>
