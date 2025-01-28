@@ -235,9 +235,7 @@ permalink: /prism/frqpage
     </form>
 </div>
 
-<footer class="copyright">
-    <p>© 2023 Prism. All rights reserved.</p>
-</footer>
+<div id="postIdDisplay" style="display: none; margin-top: 20px; background-color: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 5px; border: 1px solid #c0392b;"></div>
 
 <script type="module">
         async function sendToGeminiAPI(topic) {
@@ -415,9 +413,18 @@ permalink: /prism/frqpage
 
             // Successful post
             const result = await response.json();
-            alert('Post added successfully! Your Post ID is: ${result.id}');
-            document.getElementById('postForm').reset();
-            fetchData(channelId);
+
+            // Dynamically display the Post ID on the page
+            const postIdDisplay = document.getElementById('postIdDisplay');
+            postIdDisplay.innerHTML = `
+            <p>Your post was successfully created! Thank you for playing our game on Prism!</p>
+            <p><strong>Here is your Post ID if you would like to change/edit/delete your answer - Post ID:</strong> ${result.id}</p>
+        `;
+postIdDisplay.style.display = 'block'; // Ensure it's visible
+
+// Reset the form after submission
+document.getElementById('postForm').reset();
+fetchData(channelId);
         } catch (error) {
             // Present alert on error from backend
             console.error('Error adding post:', error);
@@ -629,3 +636,8 @@ permalink: /prism/frqpage
         margin-bottom: 10px;
     }
 </style>
+
+<footer class="copyright">
+    <p>© 2023 Prism. All rights reserved.</p>
+</footer>
+
