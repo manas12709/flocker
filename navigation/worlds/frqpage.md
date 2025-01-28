@@ -488,36 +488,10 @@ fetchData(channelId);
 <div class="form-container crud-container">
     <h2>Manage Posts</h2>
 
-    <!-- Update Post Section -->
-    <div class="crud-section update-post-container">
-        <h3>Update Post</h3>
-        <form id="updatePostForm">
-            <label for="updatePostId">Post ID:</label>
-            <input type="text" id="updatePostId" name="updatePostId" required>
-
-            <label for="updateComment">New Comment:</label>
-            <textarea id="updateComment" name="updateComment" required></textarea>
-
-            <button type="submit">Update Post</button>
-        </form>
-    </div>
-
-    <!-- Delete Post Section -->
-    <div class="crud-section delete-post-container">
-        <h3>Delete Post</h3>
-        <form id="deletePostForm">
-            <label for="deletePostId">Post ID:</label>
-            <input type="text" id="deletePostId" name="deletePostId" required>
-
-            <button type="submit">Delete Post</button>
-        </form>
-    </div>
-
-    <!-- Post List Section -->
+    <!-- Post Cards Section with Edit & Delete Buttons -->
     <div class="crud-section post-list-container">
         <h3>All Posts</h3>
-        <button id="fetchPostsButton">Fetch All Posts</button>
-        <div id="postList">
+        <div id="postList" class="post-card-container">
             <!-- Posts will be dynamically populated here -->
         </div>
     </div>
@@ -526,51 +500,8 @@ fetchData(channelId);
 <script type="module">
     import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
 
-    // Update Post
-    document.getElementById('updatePostForm').addEventListener('submit', async function (event) {
-        event.preventDefault();
-        const postId = document.getElementById('updatePostId').value;
-        const comment = document.getElementById('updateComment').value;
-
-        try {
-            const response = await fetch(`${pythonURI}/api/post`, {
-                ...fetchOptions,
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: postId, comment })
-            });
-
-            if (!response.ok) throw new Error('Failed to update post');
-            alert(`Post updated successfully! Post ID: ${postId}`);
-            document.getElementById('updatePostForm').reset();
-        } catch (error) {
-            console.error('Error updating post:', error);
-        }
-    });
-
-    // Delete Post
-    document.getElementById('deletePostForm').addEventListener('submit', async function (event) {
-        event.preventDefault();
-        const postId = document.getElementById('deletePostId').value;
-
-        try {
-            const response = await fetch(`${pythonURI}/api/post`, {
-                ...fetchOptions,
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: postId })
-            });
-
-            if (!response.ok) throw new Error('Failed to delete post');
-            alert(`Post deleted successfully! Post ID: ${postId}`);
-            document.getElementById('deletePostForm').reset();
-        } catch (error) {
-            console.error('Error deleting post:', error);
-        }
-    });
-
-    // Fetch All Posts
-    document.getElementById('fetchPostsButton').addEventListener('click', async function () {
+    // Fetch and Display All Posts Automatically
+    async function fetchPosts() {
         const postList = document.getElementById('postList');
         postList.innerHTML = '';
 
@@ -581,20 +512,88 @@ fetchData(channelId);
             const posts = await response.json();
             posts.forEach(post => {
                 const postElement = document.createElement('div');
-                postElement.className = 'post-item';
+                postElement.className = 'post-card';
                 postElement.innerHTML = `
-                    <h4>${post.title}</h4>
-                    <p>${post.comment}</p>
-                    <p><strong>Post ID:</strong> ${post.id}</p>
-                    <p><strong>Channel:</strong> ${post.channel_name || 'Unknown'}</p>
-                    <p><strong>User:</strong> ${post.user_name || 'Unknown'}</p>
+                    <div class="post-content">
+                        <h4>${post.title}</h4>
+                        <p>${post.comment}</p>
+                        <p><strong>Channel:</strong> ${post.channel_name || 'Unknown'}</p>
+                        <p><strong>User:</strong> ${post.user_name || 'Unknown'}</p>
+                    </div>
+                    <div class="post-actions">
+                        <button class="edit-button" data-id="${post.id}" data-comment="${post.comment}">Edit</button>
+                        <button class="delete-button" data-id="${post.id}">Delete</button>
+                    </div>
                 `;
                 postList.appendChild(postElement);
             });
+
+            // Attach event listeners to Edit and Delete buttons
+            attachEditDeleteListeners();
         } catch (error) {
             console.error('Error fetching posts:', error);
         }
-    });
+    }
+
+    // Attach event listeners to dynamically added Edit and Delete buttons
+    function attachEditDeleteListeners() {
+        document.querySelectorAll('.edit-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const postId = this.dataset.id;
+                const comment = this.dataset.comment;
+                const newComment = prompt('Edit your comment:', comment);
+                if (newComment !== null) {
+                    updatePost(postId, newComment);
+                }
+            });
+        });
+
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const postId = this.dataset.id;
+                if (confirm('Are you sure you want to delete this post?')) {
+                    deletePost(postId);
+                }
+            });
+        });
+    }
+
+    // Update Post Function
+    async function updatePost(postId, comment) {
+        try {
+            const response = await fetch(`${pythonURI}/api/post`, {
+                ...fetchOptions,
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: postId, comment })
+            });
+            if (!response.ok) throw new Error('Failed to update post');
+            alert('Post updated successfully!');
+            fetchPosts(); // Refresh posts list
+        } catch (error) {
+            console.error('Error updating post:', error);
+        }
+    }
+
+    // Delete Post Function
+    async function deletePost(postId) {
+        try {
+            const response = await fetch(`${pythonURI}/api/post`, {
+                ...fetchOptions,
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: postId })
+            });
+            if (!response.ok) throw new Error('Failed to delete post');
+            alert('Post deleted successfully!');
+            fetchPosts(); // Refresh posts list
+        } catch (error) {
+            console.error('Error deleting post:', error);
+        }
+    }
+
+    // Fetch posts when the page loads
+    document.addEventListener('DOMContentLoaded', fetchPosts);
 </script>
 
 <style>
@@ -616,24 +615,53 @@ fetchData(channelId);
         margin-bottom: 20px;
     }
 
-    .crud-section button {
-        padding: 10px 20px;
-        background-color: #c0392b;
-        color: white;
-        border: none;
+    .post-card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
+    }
+
+    .post-card {
+        background-color: #2c3e50;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        width: 300px;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .post-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    .edit-button, .delete-button {
+        padding: 8px 15px;
         border-radius: 5px;
         cursor: pointer;
     }
 
-    .crud-section button:hover {
-        background-color: #e74c3c;
+    .edit-button {
+        background-color: #f1c40f;
+        color: #2c3e50;
     }
 
-    .post-item {
-        background-color: #2c3e50;
-        padding: 15px;
-        border-radius: 5px;
-        margin-bottom: 10px;
+    .delete-button {
+        background-color: #e74c3c;
+        color: white;
+    }
+
+    .edit-button:hover {
+        background-color: #f39c12;
+    }
+
+    .delete-button:hover {
+        background-color: #c0392b;
     }
 </style>
 
