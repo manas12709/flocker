@@ -452,8 +452,7 @@ permalink: /prism/topicchatroom
             }
             const chatData = await response.json();
             const chatBox = document.getElementById('chatBox');
-            chatBox.innerHTML = ''; // Clear the chat box
-            // Populate chat messages
+            chatBox.innerHTML = '';
             chatData.forEach(chatItem => {
                 const messageElement = document.createElement('div');
                 messageElement.className = 'chat-message';

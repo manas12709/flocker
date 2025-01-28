@@ -164,7 +164,7 @@ permalink: /prism/polls
             interests: interests
         };
 
-        fetch('http://localhost:8887/api/poll_add', {
+        fetch('http://localhost:8887/api/poll', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -205,7 +205,7 @@ function updatePoll() {
   const id = document.getElementById('updatePollId').value;
   const name = document.getElementById('updatePollName').value;
   const interests = document.getElementById('updatePollInterests').value;
-  fetch('http://localhost:8887/api/poll_update', {
+  fetch('http://localhost:8887/api/poll', {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id, name, interests })
@@ -219,7 +219,7 @@ function updatePoll() {
 
 function deletePoll() {
   const id = document.getElementById('deletePollId').value;
-  fetch('http://localhost:8887/api/poll_delete', {
+  fetch('http://localhost:8887/api/poll', {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id })
@@ -253,7 +253,7 @@ function deletePoll() {
 
 <script>
     // Define the API endpoint
-    const apiEndpoint = 'http://localhost:8887/api/poll_read';
+    const apiEndpoint = 'http://localhost:8887/api/poll';
 
 // Send GET request
 fetch(apiEndpoint)
