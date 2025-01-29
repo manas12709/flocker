@@ -557,6 +557,14 @@ async function editInterest(oldInterest) {
     const newInterest = prompt("Edit interest:", oldInterest);
     if (newInterest && newInterest.trim() !== "") {
         try {
+            // Delete the old interest
+            await fetch(pythonURI + "/api/interests", {
+                ...fetchOptions,
+                method: 'DELETE',
+                body: JSON.stringify({ interest: oldInterest })
+            });
+
+            // Add the new interest
             const response = await fetch(pythonURI + "/api/interests", {
                 ...fetchOptions,
                 method: 'PUT',
