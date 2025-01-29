@@ -52,7 +52,7 @@ permalink: /prism/pollresults
 
 <script>
     // Define the API endpoint
-    const apiEndpoint = 'http://localhost:8887/api/poll_read';
+    const apiEndpoint = 'http://localhost:8887/api/poll';
 
 // Send GET request
 fetch(apiEndpoint)
