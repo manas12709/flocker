@@ -1,9 +1,11 @@
 ---
+layout: post
 title: CodePalette
 show_reading_time: false
 search_exclude: true
 permalink: /prism/language
 ---
+
 <style>
     body {
         margin: 0;
@@ -19,6 +21,7 @@ permalink: /prism/language
         font-size: 24px;
         font-weight: bold;
         border-radius: 15px;
+        margin-bottom: 30px;
     }
 
     .subtitle {
@@ -29,23 +32,37 @@ permalink: /prism/language
 
     .main {
         display: flex;
+        justify-content: space-between;
+        margin: 20px auto;
+        padding: 20px;
+        max-width: 1200px;
+        gap: 30px;
+    }
+
+    .left-column {
+        width: 48%;
+        display: flex;
         flex-direction: column;
-        align-items: center;
-        margin-top: 30px;
+        gap: 20px;
+    }
+
+    .right-column {
+        width: 48%;
+        display: flex;
+        flex-direction: column;
     }
 
     .container {
-        max-width: 600px;
-        margin: 20px auto;
-        padding: 20px;
-        background-color:rgb(0, 0, 0);
+        background-color: rgb(0, 0, 0);
         border-radius: 10px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        color: white;
     }
 
     .container h2 {
-        font-size: 24px;
-        margin-bottom: 20px;
+        font-size: 20px;
+        margin-bottom: 15px;
         text-align: center;
     }
 
@@ -58,10 +75,10 @@ permalink: /prism/language
     .container input {
         width: 100%;
         padding: 10px;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
         border: 1px solid #555;
         border-radius: 5px;
-        background-color:rgb(0, 0, 0);
+        background-color: rgb(0, 0, 0);
         color: white;
     }
 
@@ -82,12 +99,10 @@ permalink: /prism/language
     }
 
     .table-container {
-        max-width: 800px;
-        margin: 20px auto;
-        padding: 20px;
-        background-color:rgb(0, 0, 0);
+        background-color: rgb(0, 0, 0);
         border-radius: 10px;
         box-shadow: 0 4px 10px rgba(156, 21, 21, 0.2);
+        padding: 20px;
     }
 
     .table-container h2 {
@@ -112,85 +127,107 @@ permalink: /prism/language
     }
 
     .table-container tbody tr:nth-child(even) {
-        background-color:rgb(111, 14, 14);
+        background-color: rgb(111, 14, 14);
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 20px;
+    }
+
+    .form-actions button {
+        width: 100%;
     }
 </style>
+
+<script type="module">
+    import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
+
+    async function checkAuthorization() {
+        try {
+            const response = await fetch(`${pythonURI}/api/id`, fetchOptions);
+
+            if (response.status === 401) {
+                window.location.href = "{{site.baseurl}}/login";
+            } else if (response.ok) {
+                const contentElements = document.querySelectorAll('.content');
+                contentElements.forEach(element => {
+                    element.style.display = "block";
+                });
+            }
+        } catch (error) {
+            console.error("Authorization check failed:", error);
+            window.location.href = "{{site.baseurl}}/login";
+        }
+    }
+
+    checkAuthorization();
+</script>
+
 <header class="page">
     <div class="subtitle">Manage Programming Languages</div>
 </header>
 
-<div class="container">
-    <h2>Code Submission</h2>
-    <form id="language-form">
-        <label for="language-id">Language ID:</label>
-        <input type="number" id="language-id" placeholder="Enter language ID" required />
+<!-- Main content area with two columns -->
+<div class="main">
 
-        <label for="language-name">Language Name:</label>
-        <input type="text" id="language-name" placeholder="Enter language name" required />
+    <!-- Left Column: CRUD Functions (Vertical) -->
+    <div class="left-column">
 
-        <label for="language-creator">Creator Name:</label>
-        <input type="text" id="language-creator" placeholder="Enter creator name" required />
+        <!-- Submit, Update, and Delete forms inside one table -->
+        <div class="container">
+            <h2>Submit, Update, and Delete a Language</h2>
+            <form id="crud-form">
+                <label for="language-id">Language ID</label>
+                <input type="number" id="language-id" placeholder="Enter ID" required />
 
-        <label for="language-popularity">Popularity (1-100):</label>
-        <input type="number" id="language-popularity" placeholder="Enter popularity" min="1" max="100" required />
+                <label for="language-name">Language Name</label>
+                <input type="text" id="language-name" placeholder="Enter name" required />
 
-        <button type="button" onclick="submitLanguage()">Submit</button>
-        <button type="button" onclick="updateLanguage()">Update</button>
-        <button type="button" onclick="deleteLanguage()">Delete</button>
-    </form>
+                <label for="language-creator">Creator Name</label>
+                <input type="text" id="language-creator" placeholder="Enter creator" required />
+
+                <label for="language-popularity">Popularity (1-100)</label>
+                <input type="number" id="language-popularity" placeholder="Enter popularity" min="1" max="100" required />
+
+                <div class="form-actions">
+                    <button type="button" onclick="submitLanguage()">Submit</button>
+                    <button type="button" onclick="updateLanguage()">Update</button>
+                    <button type="button" onclick="deleteLanguage()">Delete</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- Right Column: CodePalette Table -->
+    <div class="right-column">
+        <div class="table-container">
+            <h2>Language List</h2>
+            <table id="languages-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Creator</th>
+                        <th>Popularity</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table rows will be populated dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
 
-<div class="table-container">
-    <h2>Code Table</h2>
-    <table id="languages-table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Creator</th>
-                <th>Popularity</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Table rows will be populated here -->
-        </tbody>
-    </table>
-</div>
+<script type="module">
+    import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
 
-<script>
-    async function submitLanguage() {
-        const id = document.getElementById('language-id').value;
-        const name = document.getElementById('language-name').value;
-        const creator = document.getElementById('language-creator').value;
-        const popularity = document.getElementById('language-popularity').value;
-
-        if (!id || !name || !creator || !popularity) {
-            alert('Please fill out all fields');
-            return;
-        }
-
-            try {
-        const response = await fetch('http://127.0.0.1:8887/api/language', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ id, name, creator, popularity }),
-            credentials: 'include',  // Ensure JWT cookie is sent with the request
-        });
-
-        if (response.ok) {
-            alert('Language submitted successfully');
-            await fetchLanguages();  // Fetch and display the updated language list after submission
-        } else {
-            alert('Error submitting language');
-        }
-    } catch (error) {
-        alert('Error submitting language');
-    }
-}
-
-    async function updateLanguage() {
+    // Function to submit new language
+    window.submitLanguage = async function submitLanguage() {
         const id = document.getElementById('language-id').value;
         const name = document.getElementById('language-name').value;
         const creator = document.getElementById('language-creator').value;
@@ -202,13 +239,40 @@ permalink: /prism/language
         }
 
         try {
-            const response = await fetch('http://127.0.0.1:8887/api/language', {
+            const response = await fetch(`${pythonURI}/api/language`, {
+                ...fetchOptions,
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, name, creator, popularity })
+            });
+
+            if (response.ok) {
+                alert('Language submitted successfully');
+                fetchLanguages();
+            } else {
+                alert('Error submitting language');
+            }
+        } catch (error) {
+            console.error('Error submitting language:', error);
+            alert('Error submitting language');
+        }
+    };
+
+    // Function to update a language
+    window.updateLanguage = async function updateLanguage() {
+        const id = document.getElementById('language-id').value;
+        const name = document.getElementById('language-name').value;
+        const creator = document.getElementById('language-creator').value;
+        const popularity = document.getElementById('language-popularity').value;
+
+        const payload = { id, name, creator, popularity };
+
+        try {
+            const response = await fetch(`${pythonURI}/api/language`, {
+                ...fetchOptions,
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id, name, creator, popularity }),
-                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
             });
 
             if (response.ok) {
@@ -218,47 +282,39 @@ permalink: /prism/language
                 alert('Error updating language');
             }
         } catch (error) {
+            console.error('Error updating language:', error);
             alert('Error updating language');
         }
-    }
+    };
 
-    async function deleteLanguage() {
+    // Function to delete a language
+    window.deleteLanguage = async function deleteLanguage() {
         const id = document.getElementById('language-id').value;
 
-        if (!id) {
-            alert('Please enter the language ID to delete');
-            return;
-        }
-
         try {
-            const response = await fetch('http://127.0.0.1:8887/api/language', {
+            const response = await fetch(`${pythonURI}/api/language`, {
+                ...fetchOptions,
                 method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ id }),
-                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
             });
 
             if (response.ok) {
                 alert('Language deleted successfully');
                 fetchLanguages();
             } else {
-                const errorData = await response.json();
-                alert('Error deleting language: ' + errorData.message);
+                alert('Error deleting language');
             }
         } catch (error) {
             console.error('Error deleting language:', error);
-            alert('Error deleting language: ' + error.message);
+            alert('Error deleting language');
         }
-    }
+    };
 
+    // Function to fetch and display the list of languages
     async function fetchLanguages() {
         try {
-            const response = await fetch('http://127.0.0.1:8887/api/language', {
-                method: 'GET',
-                credentials: 'include',
-            });
+            const response = await fetch(`${pythonURI}/api/language`, fetchOptions);
 
             if (response.ok) {
                 const data = await response.json();
@@ -271,6 +327,22 @@ permalink: /prism/language
                     row.insertCell(1).innerText = language.name;
                     row.insertCell(2).innerText = language.creator;
                     row.insertCell(3).innerText = language.popularity;
+
+                    const actionsCell = row.insertCell(4);
+                    const updateButton = document.createElement('button');
+                    updateButton.innerText = 'Update';
+                    updateButton.onclick = () => {
+                        document.getElementById('language-id').value = language.id;
+                        document.getElementById('language-name').value = language.name;
+                        document.getElementById('language-creator').value = language.creator;
+                        document.getElementById('language-popularity').value = language.popularity;
+                    };
+                    actionsCell.appendChild(updateButton);
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.innerText = 'Delete';
+                    deleteButton.onclick = () => deleteLanguage(language.id);
+                    actionsCell.appendChild(deleteButton);
                 });
             } else {
                 alert('Error fetching languages');
@@ -280,6 +352,5 @@ permalink: /prism/language
         }
     }
 
-    // Initialize the page
     window.onload = fetchLanguages;
 </script>
