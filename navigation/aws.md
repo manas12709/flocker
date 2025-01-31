@@ -137,45 +137,24 @@ Run command below and follow prompts:
 sudo certbot --nginx
 ```
 
---- FIX EVERYTHING AFTER THIS
-
 ### Changing Code will require Deployment Updates
 
-1. **Make sure to git pull before making changes**
-2. **Open terminal in VSCode and run python3 main.py**
+1. **Run git pull before making changes**
+2. **Open terminal in VSCode and run python main.py**
 3. **Make changes that are needed**
-4. **Commit your changes locally**
-5. **Test docker-compose up or sudo docker-compose up in your VSCode terminal**
-6. **Sync change from UI or git push from terminal**
+4. **Commit the changes locally**
+5. **Test docker-compose up or sudo docker-compose up in VSCode terminal**
+6. **Sync change from UI/git push from terminal**
 
 ### Pulling Changes into AWS EC2 deployment
 
-1. **Navigate to your repo**: `cd ~/my_unique_name`
+1. **Navigate to repo**: `cd ~/prism_2025`
 2. **docker-compose down**
 3. **git pull**
-4. **Rebuild your docker container**: `docker-compose up -d --build`
+4. **Rebuild docker container**: `docker-compose up -d --build`
 
-### Optional, Troubleshooting checks on AWS EC2
+### Troubleshooting checks on AWS EC2
 
-1. **Try to curl**: `curl localhost:8---` (replace ‘8—’ with your port number)
+1. **Try to curl**: `curl localhost:8085`
 2. **Run docker-compose ps**
 3. **Run docker ps**
-
-### Cockpit Navigation
-
-Login to Cockpit by accessing your subdomain. The left navigation bar in Cockpit presents a few options that you can select:
-
-- **Overview**
-- **Logs**
-- **Storage**
-- **Networking**
-- **Accounts**
-- **Services**
-- **Software Updates**
-- **Terminal**
-- **Update hostname and system time**
-- **User account settings**
-
-### Congratulations!
-
-Congratulations on deploying your site with AWS!
