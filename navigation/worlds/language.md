@@ -169,25 +169,26 @@ permalink: /prism/language
             return;
         }
 
-        try {
-            const response = await fetch('http://127.0.0.1:8887/api/language', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id, name, creator, popularity }),
-            });
+            try {
+        const response = await fetch('http://127.0.0.1:8887/api/language', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id, name, creator, popularity }),
+            credentials: 'include',  // Ensure JWT cookie is sent with the request
+        });
 
-            if (response.ok) {
-                alert('Language submitted successfully');
-                fetchLanguages();
-            } else {
-                alert('Error submitting language');
-            }
-        } catch (error) {
+        if (response.ok) {
+            alert('Language submitted successfully');
+            await fetchLanguages();  // Fetch and display the updated language list after submission
+        } else {
             alert('Error submitting language');
         }
+    } catch (error) {
+        alert('Error submitting language');
     }
+}
 
     async function updateLanguage() {
         const id = document.getElementById('language-id').value;

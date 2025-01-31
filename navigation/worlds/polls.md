@@ -1,5 +1,5 @@
 ---
-layout: post 
+layout: post
 title: Worlds
 show_reading_time: false
 search_exclude: true
@@ -79,7 +79,8 @@ permalink: /prism/polls
         font-size: 12px;
         color: #aaa;
     }
-        /* Form container styles */
+
+    /* Form container styles */
     .form-container {
         display: flex;
         flex-direction: column;
@@ -88,7 +89,8 @@ permalink: /prism/polls
         padding: 30px;
         border-radius: 10px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        margin-bottom: 40px; /* Increased margin between containers */
+        margin-bottom: 40px;
+        /* Increased margin between containers */
     }
 
     .form-container label {
@@ -99,7 +101,8 @@ permalink: /prism/polls
     .form-container input,
     .form-container textarea,
     .form-container select {
-        margin-bottom: 20px; /* Increased margin for spacing */
+        margin-bottom: 20px;
+        /* Increased margin for spacing */
         padding: 15px;
         border-radius: 5px;
         border: 1px rgb(95, 95, 95);
@@ -112,48 +115,110 @@ permalink: /prism/polls
         padding: 15px;
         border-radius: 5px;
         border: none;
-        background-color:rgb(95, 95, 95); /* Red button */
+        background-color: rgb(95, 95, 95);
+        /* Red button */
         color: #ecf0f1;
         cursor: pointer;
         font-size: 18px;
     }
 
     .form-container button:hover {
-        background-color:rgb(95, 95, 95); /* Darker red on hover */
+        background-color: rgb(95, 95, 95);
+        /* Darker red on hover */
     }
 
     /* Color for 'Select Group and Channel' container */
     .form-container.group-channel-container {
-        background-color:rgb(95, 95, 95); /* Dark Red color */
+        background-color: rgb(95, 95, 95);
+        /* Dark Red color */
     }
 
     /* Color for 'Submit Your Answer Here' container */
     .form-container.submit-answer-container {
-        background-color: rgb(95, 95, 95); /* Lighter Red color */
+        background-color: rgb(95, 95, 95);
+        /* Lighter Red color */
     }
 </style>
+
+<script type="module">
+    import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
+
+    async function checkAuthorization() {
+        try {
+            const response = await fetch(`${pythonURI}/api/id`, fetchOptions);
+
+            if (response.status === 401) {
+                // Redirect immediately to login if unauthorized
+                window.location.href = "{{site.baseurl}}/login";
+            } else if (response.ok) {
+                // If authorized, allow body to render
+                const contentElements = document.querySelectorAll('.content');
+                contentElements.forEach(element => {
+                    element.style.display = "block";
+                });
+            }
+        } catch (error) {
+            console.error("Authorization check failed:", error);
+            // Redirect to login as a fallback
+            window.location.href = "{{site.baseurl}}/login";
+        }
+    }
+
+    // Run the check before rendering anything
+    checkAuthorization();
+</script>
 
 <header class="poll-header">
     Quick Polls
 </header>
 <p class="poll-subtitle">Your voice, your community</p>
 <center>
-<div class="form-container submit-answer-container">
-    <h2 style="text-align: center;">Submit Your Answer Here</h2>
-    <form id="pollForm">
-        <label for="name">What is your name?</label>
-        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+    <div class="form-container submit-answer-container">
+        <h2 style="text-align: center;">Submit Your Answer Here</h2>
+        <form id="pollForm" onsubmit="event.preventDefault(); addPoll();">
+            <label for="name">What is your name?</label>
+            <input type="text" id="addPollName" name="name" placeholder="Enter your name" required>
 
-        <label for="interests">What are your interests?</label>
-        <input type="text" id="interests" name="interests" placeholder="Enter your interests" required>
+            <label for="interests">What are your interests?</label>
+            <input type="text" id="addPollInterests" name="interests" placeholder="Enter your interests" required>
 
-        <button type="submit">Submit</button>
-    </form>
-</div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
 </center>
 
-<script>
-    document.getElementById('pollForm').addEventListener('submit', function(event) {
+<script type="module">
+    import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
+
+    window.addPoll = async function addPoll() {
+        const name = document.getElementById('addPollName').value;
+        const interests = document.getElementById('addPollInterests').value;
+        const payload = { name, interests };
+
+        try {
+            const response = await fetch(`${pythonURI}/api/poll`, {
+                ...fetchOptions,
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            const data = await response.json();
+            console.log('Poll updated:', data);
+            location.reload();
+        } catch (error) {
+            console.error('Error updating poll:', error);
+        }
+    }
+
+
+</script>
+
+<!--     import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
+
+    document.getElementById('pollForm').addEventListener('submit', function (event) {
         event.preventDefault();
 
         const name = document.getElementById('name').value;
@@ -164,129 +229,156 @@ permalink: /prism/polls
             interests: interests
         };
 
-        fetch('http://localhost:8887/api/poll_add', {
+        fetch('http://localhost:8887/api/poll', { // need to replace with pythonURI
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
+            credentials: 'include'
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            // alert('Your poll response has been submitted!');
-            document.getElementById('pollForm').reset();
-            location.reload();
-        })
-        .catch(error => console.error('Error:', error));
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                // alert('Your poll response has been submitted!');
+                document.getElementById('pollForm').reset();
+                location.reload();
+            })
+            .catch(error => console.error('Error:', error));
     });
+ -->
+
+<center>
+    <div class="form-container submit-answer-container">
+        <form id="updatePollForm" onsubmit="event.preventDefault(); updatePoll();" style="margin-bottom: 20px;">
+            <label style="color: white;">Update Poll</label><br>
+            <input type="text" id="updatePollId" placeholder="Poll ID"><br>
+            <input type="text" id="updatePollName" placeholder="Name"><br>
+            <input type="text" id="updatePollInterests" placeholder="Interests"><br>
+            <button type="submit"
+                style="background-color: red; color: white; width: 100%; margin-top: 15px; border: none; font-size: 18px; padding: 15px;">Update</button>
+        </form>
+    </div>
+
+    <div class="form-container submit-answer-container">
+        <form id="deletePollForm" onsubmit="event.preventDefault(); deletePoll();" style="margin-bottom: 20px;">
+            <label style="color: white;">Delete Poll</label><br>
+            <input type="text" id="deletePollId" placeholder="Poll ID"><br>
+            <button type="submit"
+                style="background-color: red; color: white; width: 100%; margin-top: 15px; border: none; font-size: 18px; padding: 15px;">Delete</button>
+        </form>
+    </div>
+</center>
+
+<script type="module">
+    import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
+
+
+    window.updatePoll = async function updatePoll() {
+        const id = document.getElementById('updatePollId').value;
+        const name = document.getElementById('updatePollName').value;
+        const interests = document.getElementById('updatePollInterests').value;
+        const payload = { id, name, interests };
+
+        try {
+            const response = await fetch(`${pythonURI}/api/poll`, {
+                ...fetchOptions,
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            const data = await response.json();
+            console.log('Poll updated:', data);
+            location.reload();
+        } catch (error) {
+            console.error('Error updating poll:', error);
+        }
+    }
+
+    window.deletePoll = async function deletePoll() {
+        const id = document.getElementById('deletePollId').value;
+        const payload = { id };
+
+        try {
+            const response = await fetch(`${pythonURI}/api/poll`, {
+                ...fetchOptions,
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            const data = await response.json();
+            console.log(data);
+            location.reload();
+        } catch (error) {
+            console.error('Error deleting poll:', error);
+        }
+    }
+
+    try {
+        const response = await fetch(`${pythonURI}/api/poll`, fetchOptions);
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error('There has been a problem with your fetch operation:', error);
+    }
 </script>
 
 <center>
-<div class="form-container submit-answer-container">
-    <form id="updatePollForm" onsubmit="event.preventDefault(); updatePoll();" style="margin-bottom: 20px;">
-        <label style="color: white;">Update Poll</label><br>
-        <input type="text" id="updatePollId" placeholder="Poll ID"><br>
-        <input type="text" id="updatePollName" placeholder="Name"><br>
-        <input type="text" id="updatePollInterests" placeholder="Interests"><br>
-        <button type="submit" style="background-color: red; color: white; width: 100%; margin-top: 15px; border: none; font-size: 18px; padding: 15px;">Update</button>
-    </form>
-</div>
-
-<div class="form-container submit-answer-container">
-    <form id="deletePollForm" onsubmit="event.preventDefault(); deletePoll();" style="margin-bottom: 20px;">
-        <label style="color: white;">Delete Poll</label><br>
-        <input type="text" id="deletePollId" placeholder="Poll ID"><br>
-        <button type="submit" style="background-color: red; color: white; width: 100%; margin-top: 15px; border: none; font-size: 18px; padding: 15px;">Delete</button>
-    </form>
-</div>
+    <h2>Poll Results</h2>
 </center>
-
-<script>
-function updatePoll() {
-  const id = document.getElementById('updatePollId').value;
-  const name = document.getElementById('updatePollName').value;
-  const interests = document.getElementById('updatePollInterests').value;
-  fetch('http://localhost:8887/api/poll_update', {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id, name, interests })
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log(data);
-    location.reload();
-  });
-}
-
-function deletePoll() {
-  const id = document.getElementById('deletePollId').value;
-  fetch('http://localhost:8887/api/poll_delete', {
-    method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id })
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log(data);
-    location.reload();
-  });
-}
-</script>
-
-<center><h2>Poll Results</h2></center>
 <br>
 
 <center>
-<table class="submit-answer-container">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Result</th>
-        </tr>
-    </thead>
-    <tbody id="poll-data">
-        <!-- Data will be dynamically inserted here -->
-    </tbody>
-</table>
+    <table class="submit-answer-container">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody id="poll-data">
+            <!-- Data will be dynamically inserted here -->
+        </tbody>
+    </table>
 </center>
 
 <div id="dataOutput"></div>
 
-<script>
-    // Define the API endpoint
-    const apiEndpoint = 'http://localhost:8887/api/poll_read';
 
-// Send GET request
-fetch(apiEndpoint)
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
+<script type="module">
+    import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
+
+    try {
+        var response = await fetch(`${pythonURI}/api/poll`, fetchOptions);
     }
-    return response.json();
-  })
-  .then(data => {
-    // Get the tbody element
+    catch (error) {
+        console.error('There has been a problem with your fetch operation:', error);
+    }
+
+    var data = await response.json();
+
     const pollData = document.getElementById('poll-data');
-    
-    // Clear any existing content in the tbody
     pollData.innerHTML = '';
 
-    // Iterate through the data and create rows for each item
     data.forEach(item => {
-      const row = document.createElement('tr');
+        const row = document.createElement('tr');
 
-      const nameCell = document.createElement('td');
-      nameCell.textContent = item.name;
+        const nameCell = document.createElement('td');
+        nameCell.textContent = item.name;
 
-      const interestsCell = document.createElement('td');
-      interestsCell.textContent = item.interests;
+        const interestsCell = document.createElement('td');
+        interestsCell.textContent = item.interests;
 
-      row.appendChild(nameCell);
-      row.appendChild(interestsCell);
-
-      pollData.appendChild(row);
+        row.appendChild(nameCell);
+        row.appendChild(interestsCell);
+        pollData.appendChild(row);
     });
-  })
-  .catch(error => {
-    console.error('There has been a problem with your fetch operation:', error);
-  });
+
 </script>

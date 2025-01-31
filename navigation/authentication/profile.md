@@ -369,6 +369,7 @@ function createInterestCards(interests) {
                 <h4>${interest}</h4>
                 <img src="https://placehold.co/300x200/d34e3f/a3adbf/png?text=${interest}" alt="${interest}">
                 <button onclick="deleteInterest('${interest}')">Delete</button>
+                <button onclick="editInterest('${interest}')">Edit</button>
             `;
             interestsSection.appendChild(card);
         });
@@ -382,6 +383,7 @@ function createInterestCards(interests) {
             <h4>${interest}</h4>
             <img src="https://placehold.co/300x200/d34e3f/a3adbf/png?text=${interest}" alt="${interest}">
             <button onclick="deleteInterest('${interest}')">Delete</button>
+            <button onclick="editInterest('${interest}')">Edit</button>
         `;
         interestsSection.appendChild(card);
     });
@@ -550,6 +552,39 @@ async function deleteInterest(interest) {
 }
 
 window.deleteInterest = deleteInterest;
+
+async function editInterest(oldInterest) {
+    const newInterest = prompt("Edit interest:", oldInterest);
+    if (newInterest && newInterest.trim() !== "") {
+        try {
+            // Delete the old interest
+            await fetch(pythonURI + "/api/interests", {
+                ...fetchOptions,
+                method: 'DELETE',
+                body: JSON.stringify({ interest: oldInterest })
+            });
+
+            // Add the new interest
+            const response = await fetch(pythonURI + "/api/interests", {
+                ...fetchOptions,
+                method: 'PUT',
+                body: JSON.stringify({ interests: newInterest })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to edit interest');
+            }
+
+            showError('Interest edited successfully', 'green');
+            updateUserInfo();
+        } catch (error) {
+            console.error('Error editing interest:', error);
+            showError('Error editing interest');
+        }
+    }
+}
+
+window.editInterest = editInterest;
 
 async function uploadProfilePicture(file) {
     try {
