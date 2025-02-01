@@ -159,6 +159,10 @@ sudo certbot --nginx
 2. **Run docker-compose ps**
 3. **Run docker ps**
 
+# AWS Flowchart (How it works/Process)
+
+![Flowchart](https://mermaid.ink/img/pako:eNpdlN1uGjEQhV9ltBe9SiKRqjdUqhQWSEgI2bAQqpqoMrsDuPHaK_80QSHvXq9tNlCuMPOdGc8cD-9JIUtMusmay9diS5WBWf_7UoD7XJHcuB-e4fz8B_TIWG6YACPhapE_B6LnQylJFVKDMLq6h7lGdRLtk5HQhnIOXyCVYs02VmGTA9LxKJJ9Tw7IDLWBsSwohxzV3zbToInvR2t4leqFic0ehiRHY2ufZyqtK_7tK-R2VcqKMvG_TEjzKR10yJC9xTIjrS3q0OIgqIb-cO0KcCwM9GjxgqKETLpRBOLaEzdkXpdN203Fi3oHr8xsIajwhL_x_IhkCmvqmu9Ll1KtGccIjDxw2wKlB84LWdVS48Wu4hG89eBdCwpnydvvJhOspYIpuplphEzJt12U3HnJuJUMlRSmaSiYcfFHR3DswfsTn2GQXsbwvQ9PSMqlwHYqU6xlBCYeeCA9y3gJOXOTsdpNPLYbqQdPZcHqYHLEUqsObWbeuNwWBWq9h8dodmt0f5KfkEPKuHtVe8g6ZKakXXHUWykPBYK9D0Hx6A_TmHLSDLB9l9QweXg8U8_l5Ily5m3-4prVzUIEUcRyj83I1ApIUZmVq9pYkefjSMw8MSepWzRIt1RsULtkfay53FUoDIR3dPBh7lsKzzPie5h3nL6qmHHKzOrtIRJaezpW-tVqdZcks7xNBEx8Gnt0hZM0T_6wOJmkMyhebxEm7jYo7M4eFh0yxZV3PVh9NKrGAFYc7pkdp5jINsNPMhCly5-cJRUqt0-l-0d6b-BlYrZY4TLpuq8lVS_LZCk-HEetkflOFEnXKItnibvrZpt015Rrd7J-on1GN4pW7a81Fb-kPJw__gHKGpKg?type=png)
+
 ## Quick Notes on Deployment (From Mortenson's Slack Message)
 
 To login to the deployment server on AWS EC2 you will use cockpit backdoor.
@@ -166,17 +170,84 @@ https://cockpit.stu.nighthawkcodingsociety.com/
 
 The username for the account is shown in the image and is "ubuntu" in all lowercase.You will need to DM Mr. Mortenson if you will be Deployment admin for the 3 Musketeer password.
 
-### First time Install (Steps in Order)
+## First Time Install (Steps in Order)
 
-1. **Login**
-2. **Clone your repo**
-3. **In your project directory, create a .env file with passwords**
-4. **Run** `./scripts/db_init.py`
-5. **In your repo run Docker commands**
-    - `docker-compose build`
-    - `docker-compose up -d`
-6. **Test your server, curl provides text response of your requested page**
-    - `docker ps` # look for your application and port
-    - `curl localhost:8087` # remember 8087 is mine, mine, mine (8087 is Mortenson's NOT OURS)
+### 1. **Login**
+- Log into your development environment (your computer, a cloud server, or a remote machine).
+- This could mean using SSH (`ssh user@server`), logging into a local terminal, or signing into a version control platform like GitHub.
 
-*** Note. We don't write passwords in our blogs or commit them to GitHub. (edited)
+### 2. **Clone your repo**
+- Copy the project repository from GitHub (or another Git-based platform) onto your local machine.
+- Example command:
+  
+  ```bash
+  git clone https://github.com/your-username/your-repo.git
+  cd your-repo
+  ```
+
+### 3. **In your project directory, create a `.env` file with passwords**
+- The `.env` file stores environment variables like database passwords, API keys, or secret keys.
+- This file is usually ignored by Git to keep credentials secure.
+- Example:
+  
+  ```bash
+  touch .env
+  nano .env
+  ```
+  Inside `.env`, you might add:
+  
+  ```
+  DB_USER=username
+  DB_PASSWORD=supersecretpassword
+  ```
+
+### 4. **Run `./scripts/db_init.py`**
+- This script likely initializes the database by creating tables, inserting default values, or running migrations.
+- To execute:
+  
+  ```bash
+  python3 ./scripts/db_init.py
+  ```
+  
+- Ensure you have the required dependencies installed:
+  
+  ```bash
+  pip install -r requirements.txt
+  ```
+
+### 5. **In your repo, run Docker commands**
+- Docker is used to containerize the application, ensuring a consistent environment.
+
+- **Build the Docker images:**
+  
+  ```bash
+  docker-compose build
+  ```
+  This creates or updates the necessary containers.
+
+- **Run the containers in detached mode (-d for background running):**
+  
+  ```bash
+  docker-compose up -d
+  ```
+  This starts the application and related services (like a database or web server).
+
+### 6. **Test your server, use `curl` to verify response**
+- Check if your container is running:
+  
+  ```bash
+  docker ps
+  ```
+  This lists all active containers and their assigned ports.
+
+- Send a request to your application to verify it's working:
+  
+  ```bash
+  curl localhost:8087
+  ```
+  Replace `8087` with your actual port number.
+
+### **Security Note**
+- **Never** store passwords directly in your code.
+- Use `.env` files and **never commit them to GitHub**.
+- `.gitignore` should include `.env` to prevent accidental uploads.
