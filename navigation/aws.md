@@ -158,3 +158,25 @@ sudo certbot --nginx
 1. **Try to curl**: `curl localhost:8085`
 2. **Run docker-compose ps**
 3. **Run docker ps**
+
+## Quick Notes on Deployment (From Mortenson's Slack Message)
+
+To login to the deployment server on AWS EC2 you will use cockpit backdoor.
+https://cockpit.stu.nighthawkcodingsociety.com/ 
+
+In your blog you should be considering these steps. You will need to DM Mr. Mortenson if you will be Deployment admin for the 3 Musketeer password.
+
+### First time Install (Steps in Order)
+
+1. **Login**
+2. **Clone your repo**
+3. **In your project directory, create a .env file with passwords**
+4. **Run** `./scripts/db_init.py`
+5. **In your repo run Docker commands**
+    - `docker-compose build`
+    - `docker-compose up -d`
+6. **Test your server, curl provides text response of your requested page**
+    - `docker ps` # look for your application and port
+    - `curl localhost:8087` # remember 8087 is mine, mine, mine (8087 is Mortenson's NOT OURS)
+
+*** Note. We don't write passwords in our blogs or commit them to GitHub. (edited)
