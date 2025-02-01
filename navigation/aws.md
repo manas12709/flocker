@@ -164,7 +164,7 @@ sudo certbot --nginx
 To login to the deployment server on AWS EC2 you will use cockpit backdoor.
 https://cockpit.stu.nighthawkcodingsociety.com/ 
 
-In your blog you should be considering these steps. You will need to DM Mr. Mortenson if you will be Deployment admin for the 3 Musketeer password.
+The username for the account is shown in the image and is "ubuntu" in all lowercase.You will need to DM Mr. Mortenson if you will be Deployment admin for the 3 Musketeer password.
 
 ### First time Install (Steps in Order)
 
