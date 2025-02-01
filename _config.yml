@@ -18,3 +18,4 @@ plugins:
 header_pages:
   - navigation/worlds/home.md
   - navigation/aboutus.md
+  - navigation/aws.md
