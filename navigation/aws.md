@@ -11,25 +11,25 @@ permalink: /prism/aws
 
 1. **AWS Account**: Get the active AWS account from Mr. Mortensen. [AWS](https://aws.amazon.com/).
 2. **IAM User**: Create an IAM user - Identity and Access Management, so that we have permissions we need.
-3. **AWS CLI**: Install and configure the AWS CLI on your local machine. Follow the instructions [here](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).
+3. **AWS CLI**: Install and configure the AWS CLI on local machine. Follow the instructions [here](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).
 
 ### Test Server
 
-Ensure you have a working frontend-to-backend test server. If it does not work locally, there is no need to try it on deployment.
+Ensure that we have a working frontend-to-backend test server. If it does not work locally, there is no need to try it on deployment.
 
 ### Subdomain
 
 Setup DNS endpoint through AWS Route 53.
 
 ```yml
-Server: https://flask2025.nighthawkcodingsociety.com/
+Server: https://prism2025.nighthawkcodingsociety.com/
 Domain: nighthawkcodingsociety.com
-Subdomain: flask2025
+Subdomain: prism2025
 ```
 
 ### Port (Backend)
 
-Select a unique port for your application. Update all locations:
+Select a unique port for the application. Update all locations:
 
 - **main.py**: Prepare the localhost test server port to run on the same port for consistency.
   ```python
@@ -90,33 +90,47 @@ Select a unique port for your application. Update all locations:
 
 ### Port (Frontend)
 
-Prepare the frontend to access your domain and ports to match your localhost, port, and domain settings.
+Prepare the frontend to access our domain and ports to match our localhost, port 8085 (OURS OURS OURS OURS OURS), and domain settings.
 
 - **assets/api/config.js**:
   ```javascript
   export var pythonURI;
   if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-      pythonURI = "http://localhost:8085"; (MINE)
+      pythonURI = "http://localhost:8085";
   } else {
-      pythonURI = "https://prism.nighthawkcodingsociety.com";
+      pythonURI = "https://prism2025.nighthawkcodingsociety.com";
   }
   ```
 
-### Accessing AWS EC2
+## Accessing AWS EC2
 
 Login to AWS Console using our account.
+Access EC2 Dashboard and launch an instance.
+Select CSP
 
-### Application Setup
+![Our EC2]({{site.baseurl}}/assets/images/fake_ec2.png)
+
+Alternatively, use Cockpit:
+
+At cockpit.stu.nighthawkcodingsociety.com
+Username is ubuntu
+Password hint is 3 Musketeers
+
+![Cockpit](https://files.slack.com/files-tmb/TUDAF53UJ-F08BBR3MV8A-a30e06c6f3/image_720.png)
+
+## Application Setup
 
 1. **Finding a Port**: Run `docker ps` to make sure port 8085 is open
 2. **On localhost setup Docker files using VSCode**: Make sure the Dockerfile and docker-compose.yml match port 8085 on AWS EC2.
+- Use docker-compose up in the repo folder
+- Access the server after it's done building in browser on localhost:8085
 
-### Server Setup
+## Server Setup
 
-1. **Clone backend repo**: `git clone github.com/server/project.git my_unique_name`
-2. **Navigate to repo**: `cd my_unique_name`
+1. **Clone backend repo**: `git clone https://github.com/illuminati1618/prism_backend.git`
+2. **Navigate to repo**: `cd prism_backend`
 3. **Build site**: `docker-compose up -d --build`
-4. **Test site**: `curl localhost:8085` (replace ‘8—’ with your port number)
+4. **Test site**: `curl localhost:8085`
 
 ### Route 53 DNS
 
@@ -125,8 +139,8 @@ Go to AWS Route 53 and setup DNS subdomain for backend server.
 ### Nginx setup
 
 1. **Navigate to nginx**: `cd /etc/nginx/sites-available`
-2. **Create an nginx config file**: `sudo nano projectUniqueName`
-3. **Activate configuration**: `cd /etc/nginx/sites-enabled`, then `sudo ln -s /etc/nginx/sites-available/projectUniqueName /etc/nginx/sites-enabled`
+2. **Create an nginx config file**: `sudo nano prism`
+3. **Activate configuration**: `cd /etc/nginx/sites-enabled`, then `sudo ln -s /etc/nginx/sites-available/prism /etc/nginx/sites-enabled`
 4. **Validate**: `sudo nginx -t`
 5. **Restart nginx**: `sudo systemctl restart nginx`
 
