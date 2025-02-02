@@ -401,29 +401,6 @@ Steps:
 
 ----------
 
-## **Troubleshooting Checks on AWS EC2**
-
-1.  **Try to curl**:
-    
-    ```bash
-    curl localhost:8085
-    ```
-    
-2.  **Check running containers**:
-    
-    ```bash
-    docker-compose ps
-    ```
-    
-3.  **Check all Docker containers and images**:
-    
-    ```bash
-    docker ps
-    ```
-    
-
-----------
-
 ## **Debugging NGINX**
 
   - If something fails, we will **check Nginx logs**:
