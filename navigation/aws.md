@@ -266,7 +266,174 @@ The username for the account is shown in the image and is "ubuntu" in all lowerc
 - `.gitignore` should include `.env` to prevent accidental uploads.
 
 
+---
 
+## **NGINX & Certbot Setup**
+
+### **Route 53 DNS**
+
+Go to AWS Route 53 and set up a DNS subdomain for the backend server.
+
+### **NGINX Setup**
+
+1.  **Go to nginx directory and create an Nginx config file**:
+    
+    ```bash
+    cd /etc/nginx/sites-available
+    sudo nano prism
+    
+    ```
+    
+2.  **Add the following config:**
+    
+    ```nginx
+    server {
+        listen 80;
+        listen [::]:80;
+        server_name prism2025.nighthawkcodingsociety.com;
+        location / {
+            proxy_pass http://localhost:8085;
+            if ($request_method = OPTIONS) {
+                add_header "Access-Control-Allow-Credentials" "true" always;
+                add_header "Access-Control-Allow-Origin"  "https://nighthawkcoders.github.io" always;
+                add_header "Access-Control-Allow-Methods" "GET, POST, PUT, DELETE, OPTIONS, HEAD" always;
+                add_header "Access-Control-Allow-MaxAge" 600 always;
+                add_header "Access-Control-Allow-Headers" "Authorization, Origin, X-Origin, X-Requested-With, Content-Type, Accept" always;
+                return 204;
+            }
+        }
+    }
+    
+    ```
+    
+3.  **Save the file** (`Ctrl + X`, then `Y`, then `Enter`).
+    
+4.  **Activate configuration**:
+    
+    ```bash
+    cd /etc/nginx/sites-enabled
+    sudo ln -s /etc/nginx/sites-available/prism /etc/nginx/sites-enabled
+    
+    ```
+    
+5.  **Check for all proper configs and restart Nginx**:
+    
+    ```bash
+    sudo nginx -t
+    sudo systemctl restart nginx
+    
+    ```
+    
+6.  **Test if Nginx is serving requests**:  
+    Open **[http://prism2025.nighthawkcodingsociety.com](http://prism2025.nighthawkcodingsociety.com/)** in our browser.
+    
+
+----------
+
+### **Certbot Configuration for HTTPS**
+
+Here are all the steps we will follow to install Certbot to deploy our site
+
+1.  **Install Certbot**:
+    
+    ```bash
+    sudo apt-get install certbot python3-certbot-nginx
+    ```
+    
+2.  **Run Certbot to get SSL certificate**:
+    
+    ```bash
+    sudo certbot --nginx
+    ```
+    
+3.  **Follow the prompts**:
+    -   Select `prism2025.nighthawkcodingsociety.com` from the list.
+    -   Choose option `2` because it will redirect us from HTTP to HTTPS, which is more secure.
+4.  **Restart Nginx**:
+    
+    ```bash
+    sudo systemctl restart nginx
+    ```
+    
+5.  **Test HTTPS access**:  
+    Open **[https://prism2025.nighthawkcodingsociety.com](https://prism2025.nighthawkcodingsociety.com/)** in our browser.
+
+----------
+
+## **Updating Deployment**
+
+### **Changing Code in VSCode**
+
+Steps:
+1.  **Run `git pull` before making changes**.
+2.  **Open terminal in VSCode and run `python main.py`**.
+3.  **Make changes that are needed**.
+4.  **Commit the changes locally**.
+5.  **Test `docker-compose up` or `sudo docker-compose up` in VSCode terminal**.
+6.  **Push changes to GitHub**.
+
+### **Pulling Changes into AWS EC2 Deployment**
+
+1.  **Navigate to repo**:
+    
+    ```bash
+    cd ~/prism_2025
+    ```
+    
+2.  **Stop running containers**:
+    
+    ```bash
+    docker-compose down
+    ```
+    
+3.  **Pull the latest code**:
+    
+    ```bash
+    git pull
+    ```
+    
+4.  **Rebuild the docker container**:
+    
+    ```bash
+    docker-compose up -d --build
+    ```
+    
+
+----------
+
+## **Troubleshooting Checks on AWS EC2**
+
+1.  **Try to curl**:
+    
+    ```bash
+    curl localhost:8085
+    ```
+    
+2.  **Check running containers**:
+    
+    ```bash
+    docker-compose ps
+    ```
+    
+3.  **Check all Docker containers and images**:
+    
+    ```bash
+    docker ps
+    ```
+    
+
+----------
+
+## **Debugging NGINX**
+
+  - If something fails, we will **check Nginx logs**:
+    
+    ```bash
+    sudo tail -f /var/log/nginx/error.log
+    ```
+    
+
+----------
 
 
 
