@@ -34,7 +34,7 @@ Select a unique port for your application. Update all locations:
 - **main.py**: Prepare the localhost test server port to run on the same port for consistency.
   ```python
   if __name__ == "__main__":
-      app.run(debug=True, host="0.0.0.0", port="8087")
+      app.run(debug=True, host="0.0.0.0", port="8085")
   ```
 
 - **Dockerfile**: Prepare this file to run a server as a virtual machine on the deployment host.
@@ -46,8 +46,8 @@ Select a unique port for your application. Update all locations:
   COPY . /
   RUN pip install --no-cache-dir -r requirements.txt
   RUN pip install gunicorn
-  ENV GUNICORN_CMD_ARGS="--workers=1 --bind=0.0.0.0:8087"
-  EXPOSE 8087
+  ENV GUNICORN_CMD_ARGS="--workers=1 --bind=0.0.0.0:8085"
+  EXPOSE 8085
   ENV FLASK_ENV=production
   CMD [ "gunicorn", "main:app" ]
   ```
@@ -62,7 +62,7 @@ Select a unique port for your application. Update all locations:
           env_file:
               - .env
           ports:
-              - "8087:8087"
+              - "8085:8085"
           volumes:
               - ./instance:/instance
           restart: unless-stopped
@@ -243,11 +243,16 @@ The username for the account is shown in the image and is "ubuntu" in all lowerc
 - Send a request to your application to verify it's working:
   
   ```bash
-  curl localhost:8087
+  curl localhost:8085
   ```
-  Replace `8087` with your actual port number.
 
 ### **Security Note**
 - **Never** store passwords directly in your code.
 - Use `.env` files and **never commit them to GitHub**.
 - `.gitignore` should include `.env` to prevent accidental uploads.
+
+
+
+
+
+
