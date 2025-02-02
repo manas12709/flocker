@@ -186,37 +186,8 @@ The username for the account is shown in the image and is "ubuntu" in all lowerc
 
 ## First Time Install (Steps in Order)
 
-### 1. **Login**
-- Log into your development environment (your computer, a cloud server, or a remote machine).
-- This could mean using SSH (`ssh user@server`), logging into a local terminal, or signing into a version control platform like GitHub.
-
-### 2. **Clone your repo**
-- Copy the project repository from GitHub (or another Git-based platform) onto your local machine.
-- Example command:
-  
-  ```bash
-  git clone https://github.com/illuminati1618/prism_backend.git
-  cd prism_backend
-  ```
-
-### 3. **In your project directory, create a `.env` file with passwords**
-- The `.env` file stores environment variables like database passwords, API keys, or secret keys.
-- This file is usually ignored by Git to keep credentials secure.
-- Example:
-  
-  ```bash
-  touch .env
-  nano .env
-  ```
-  Inside `.env`, you might add:
-  
-  ```
-  DB_USER=username
-  DB_PASSWORD=supersecretpassword
-  ```
-
-### 4. **Run `./scripts/db_init.py`**
-- This script likely initializes the database by creating tables, inserting default values, or running migrations.
+### 1. **Run `./scripts/db_init.py`**
+- This script likely initializes the database by creating tables, inserting default values, or running migrations. This will reset the data tables.
 - To execute:
   
   ```bash
@@ -229,7 +200,7 @@ The username for the account is shown in the image and is "ubuntu" in all lowerc
   pip install -r requirements.txt
   ```
 
-### 5. **In your repo, run Docker commands**
+### 2. **In your repo, run Docker commands**
 - Docker is used to containerize the application, ensuring a consistent environment.
 
 - **Build the Docker images:**
@@ -246,7 +217,7 @@ The username for the account is shown in the image and is "ubuntu" in all lowerc
   ```
   This starts the application and related services (like a database or web server).
 
-### 6. **Test your server, use `curl` to verify response**
+### 3. **Test your server, use `curl` to verify response**
 - Check if your container is running:
   
   ```bash
