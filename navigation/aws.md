@@ -195,8 +195,8 @@ The username for the account is shown in the image and is "ubuntu" in all lowerc
 - Example command:
   
   ```bash
-  git clone https://github.com/your-username/your-repo.git
-  cd your-repo
+  git clone https://github.com/illuminati1618/prism_backend.git
+  cd prism_backend
   ```
 
 ### 3. **In your project directory, create a `.env` file with passwords**
