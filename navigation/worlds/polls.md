@@ -216,36 +216,6 @@ permalink: /prism/polls
 
 </script>
 
-<!--     import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
-
-    document.getElementById('pollForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        const name = document.getElementById('name').value;
-        const interests = document.getElementById('interests').value;
-
-        const payload = {
-            name: name,
-            interests: interests
-        };
-
-        fetch('http://localhost:8887/api/poll', { // need to replace with pythonURI
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-            credentials: 'include'
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                // alert('Your poll response has been submitted!');
-                document.getElementById('pollForm').reset();
-                location.reload();
-            })
-            .catch(error => console.error('Error:', error));
-    });
- -->
-
 <center>
     <div class="form-container submit-answer-container">
         <form id="updatePollForm" onsubmit="event.preventDefault(); updatePoll();" style="margin-bottom: 20px;">

@@ -378,9 +378,18 @@ Steps:
     ```bash
     sudo tail -f /var/log/nginx/error.log
     ```
-    
 
-----------
+## Notes from CB Big Idea 4:
 
+The internet is just a network of connected computers, and AWS provides a bunch of services such as compute, storage, and networking.
 
+TCP handshake to establish a connection:
+<br>
+<img src="https://i.ibb.co/4nrSWrrQ/676fffa13937ff6a6bdaa846-627cb3d4fcfd563ee9f2d43d-How-does-TCP-work.jpg">
+<br>
 
+### What happens when you open a webpage hosted on AWS:
+
+When you open a webpage hosted on AWS, your browser sends a request through the Internet to a remote server on AWS. Routers and switches help forward the packets until they reach the AWS server, which returns the webpage data. This process uses TCP/IP protocols and handshake to ensure reliable transfer. Once the data arrives back at your computer, the browser displays the webpage content.
+<br>
+The network layer of the TCP/IP protocol is responsible for accepting and delivering the packets that contain the data of our website.
