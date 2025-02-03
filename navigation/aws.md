@@ -109,15 +109,13 @@ Login to AWS Console using our account.
 Access EC2 Dashboard and launch an instance.
 Select CSP
 
-![Our EC2]({{site.baseurl}}/assets/images/fake_ec2.png)
+![Our EC2]({{site.baseurl}}/images/fake_ec2.png)
 
 Alternatively, use Cockpit:
 
 At cockpit.stu.nighthawkcodingsociety.com
 Username is ubuntu
 Password hint is 3 Musketeers
-
-![Cockpit](https://files.slack.com/files-tmb/TUDAF53UJ-F08BBR3MV8A-a30e06c6f3/image_720.png)
 
 ## Application Setup
 
