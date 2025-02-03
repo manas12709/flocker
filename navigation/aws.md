@@ -35,7 +35,7 @@ Select a unique port for the application. Update all locations:
 - **main.py**: Prepare the localhost test server port to run on the same port for consistency.
   ```python
   if __name__ == "__main__":
-      app.run(debug=True, host="0.0.0.0", port="8085")
+      app.run(debug=True, host="0.0.0.0", port="8505")
   ```
 
 - **Dockerfile**: Prepare this file to run a server as a virtual machine on the deployment host.
@@ -47,8 +47,8 @@ Select a unique port for the application. Update all locations:
   COPY . /
   RUN pip install --no-cache-dir -r requirements.txt
   RUN pip install gunicorn
-  ENV GUNICORN_CMD_ARGS="--workers=1 --bind=0.0.0.0:8085"
-  EXPOSE 8085
+  ENV GUNICORN_CMD_ARGS="--workers=1 --bind=0.0.0.0:8505"
+  EXPOSE 8505
   ENV FLASK_ENV=production
   CMD [ "gunicorn", "main:app" ]
   ```
@@ -63,7 +63,7 @@ Select a unique port for the application. Update all locations:
           env_file:
               - .env
           ports:
-              - "8085:8085"
+              - "8505:8505"
           volumes:
               - ./instance:/instance
           restart: unless-stopped
@@ -76,7 +76,7 @@ Select a unique port for the application. Update all locations:
       listen [::]:80;
       server_name prism.nighthawkcodingsociety.com;
       location / {
-          proxy_pass http://localhost:8085; (MINE)
+          proxy_pass http://localhost:8505; (MINE)
           if ($request_method = OPTIONS) {
               add_header "Access-Control-Allow-Credentials" "true" always;
               add_header "Access-Control-Allow-Origin"  "https://nighthawkcoders.github.io" always;
@@ -91,13 +91,13 @@ Select a unique port for the application. Update all locations:
 
 ### Port (Frontend)
 
-Prepare the frontend to access our domain and ports to match our localhost, port 8085 (OURS OURS OURS OURS OURS), and domain settings.
+Prepare the frontend to access our domain and ports to match our localhost, port 8505 (OURS OURS OURS OURS OURS), and domain settings.
 
 - **assets/api/config.js**:
   ```javascript
   export var pythonURI;
   if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-      pythonURI = "http://localhost:8085";
+      pythonURI = "http://localhost:8505";
   } else {
       pythonURI = "https://prism2025.nighthawkcodingsociety.com";
   }
@@ -121,17 +121,17 @@ Password hint is 3 Musketeers
 
 ## Application Setup
 
-1. **Finding a Port**: Run `docker ps` to make sure port 8085 is open
-2. **On localhost setup Docker files using VSCode**: Make sure the Dockerfile and docker-compose.yml match port 8085 on AWS EC2.
+1. **Finding a Port**: Run `docker ps` to make sure port 8505 is open
+2. **On localhost setup Docker files using VSCode**: Make sure the Dockerfile and docker-compose.yml match port 8505 on AWS EC2.
 - Use docker-compose up in the repo folder
-- Access the server after it's done building in browser on localhost:8085
+- Access the server after it's done building in browser on localhost:8505
 
 ## Server Setup
 
 1. **Clone backend repo**: `git clone https://github.com/illuminati1618/prism_backend.git`
 2. **Navigate to repo**: `cd prism_backend`
 3. **Build site**: `docker-compose up -d --build`
-4. **Test site**: `curl localhost:8085`
+4. **Test site**: `curl localhost:8505`
 
 ### Route 53 DNS
 
@@ -170,7 +170,7 @@ sudo certbot --nginx
 
 ### Troubleshooting checks on AWS EC2
 
-1. **Try to curl**: `curl localhost:8085`
+1. **Try to curl**: `curl localhost:8505`
 2. **Run docker-compose ps**
 3. **Run docker ps**
 
@@ -229,7 +229,7 @@ The username for the account is shown in the image and is "ubuntu" in all lowerc
 - Send a request to your application to verify it's working:
   
   ```bash
-  curl localhost:8085
+  curl localhost:8505
   ```
 
 ### **Security Note**
@@ -264,7 +264,7 @@ Go to AWS Route 53 and set up a DNS subdomain for the backend server.
         listen [::]:80;
         server_name prism2025.nighthawkcodingsociety.com;
         location / {
-            proxy_pass http://localhost:8085;
+            proxy_pass http://localhost:8505;
             if ($request_method = OPTIONS) {
                 add_header "Access-Control-Allow-Credentials" "true" always;
                 add_header "Access-Control-Allow-Origin"  "https://nighthawkcoders.github.io" always;
