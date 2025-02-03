@@ -135,21 +135,6 @@ Password hint is 3 Musketeers
 
 Go to AWS Route 53 and setup DNS subdomain for backend server.
 
-### Nginx setup
-
-1. **Navigate to nginx**: `cd /etc/nginx/sites-available`
-2. **Create an nginx config file**: `sudo nano prism`
-3. **Activate configuration**: `cd /etc/nginx/sites-enabled`, then `sudo ln -s /etc/nginx/sites-available/prism /etc/nginx/sites-enabled`
-4. **Validate**: `sudo nginx -t`
-5. **Restart nginx**: `sudo systemctl restart nginx`
-
-### Certbot Config
-
-Run command below and follow prompts:
-```bash
-sudo certbot --nginx
-```
-
 ### Changing Code will require Deployment Updates
 
 1. **Run git pull before making changes**
