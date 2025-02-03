@@ -10,7 +10,8 @@ permalink: /prism/ourteam
 <script>
 async function fetchTeamInfo() {
     try {
-        const response = await fetch('http://127.0.0.1:8887/api/members');
+        const url = `${pythonURI}/api/members`;
+        const response = await fetch(url);
         const data = await response.json();
         const teamData = data.students;
         displayTeamInfo(teamData);
