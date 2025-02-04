@@ -378,3 +378,128 @@ TCP handshake to establish a connection:
 When you open a webpage hosted on AWS, your browser sends a request through the Internet to a remote server on AWS. Routers and switches help forward the packets until they reach the AWS server, which returns the webpage data. This process uses TCP/IP protocols and handshake to ensure reliable transfer. Once the data arrives back at your computer, the browser displays the webpage content.
 <br>
 The network layer of the TCP/IP protocol is responsible for accepting and delivering the packets that contain the data of our website.
+
+---
+
+# Pranav's Notes for Tuesday Tech Talk (2/4/2025)
+
+## Start Deployment Procedures:
+
+### System Info (Image 1):
+- Go to the terminal to access the machine.
+- Now go to Amazon.
+
+### DNS & Routing:
+- Anvay handled this part to find our **route, type, alias, and IP address** to locate our Prism service.
+- **IP address** is a way to register our address.
+- Right now, we are on an **intranet**.
+  - **Intranet** = local to campus.
+  - **Internet** = external/global.
+- Anvay already got the **DNS** set up.
+- The websites are already assigned.
+- We have **different names for different servers**.
+- One of us has to handle this (**Anvay, the nonchalant sigma**).
+- **Current setup:**
+  - We should have a **subdomain**: `Prism`.
+  - Then, we type our **IP address** (Anvay’s thing).
+- **Make sure the IP address is the exact same.**
+- **Funny Moment:** The sub heard **PRISON instead of PRISM** 
+- **Final step:** Ensure a **friendly address** is registering to our IP name.
+  - Often, we call these our **domain names**, but it’s actually our **URL**.
+
+### Understanding What We Did:
+- Everybody there?
+- **What did we just do?**
+  - This is a **database**, and we created an **A record** called `Prism`.
+  - This maps to an **IP address**.
+  - We have a bunch of **nonhumans** in our class (`studybuddy` and `prism team` are normal).
+  - **DNS maps record names to computers.**
+  - If it's a **named service record**, it looks through other routes to understand the rest of the database.
+
+### AWS Setup:
+1. Go to **EC2**.
+2. On EC2, go to **Instances Running** and scroll to the right to find the **Elastic IP**.
+3. **We created a machine on AWS that has its own IP.**
+4. Now, we’ll **launch a new instance**:
+   - Name it `xxx`.
+   - Pick **Operating System**.
+   - Choose **Micro/Nano** instance type.
+   - Set **disk size**, then click **Launch Instance**.
+5. **Reminder:** Every one of these hardware instances **costs money per hour**.
+
+### Additional Notes:
+- **Permissions:** We **don’t** give blanket permissions.
+- **Backend Setup:**
+  - Talks about **fetches** and **directories**.
+  - **"Better than candy"** (??).
+  - We need to **clone ours**—only **one person** has to do it.
+  - **Stick with the naming convention.**
+
+
+
+--- 
+
+# Transcript of 5 minute clip from Pranav's Laptop (This is not corrected this is purley what the laptop heard)
+
+## Transcript by Pranav Santhosh
+
+0:00: You're a regularly scheduled programming we're gonna finish these files up and we're gonna commit them.
+0:09: We're gonna make sure we commit this file over here, so commit it, but we need to commit these so we can go forward.
+0:16: Once you're committed and you have your .env file over in your other directory, you should be able to do a document in here.
+0:31: The objective here is what we wanna do is we're gonna do `ps` here.
+0:36: These are all the people that are successful today.
+0:40: You can see some 2s, a 0, which is me.
+0:45: Right, 113234.
+0:52: See if you can guys set a record, right?
+0:55: All right, all right, so here we go.
+1:05: I'm gonna, I'm just gonna shut mine down right now.
+1:10: You don't need to do this because I'm, I'm up, so I gotta, I gotta go down `docker-compose down` and then I'm gonna do `docker-compose up`, you guys all need to do this.
+1:28: Wait, wait, wait, wait, hold on, don't do it yet.
+1:31: Do a `git pull` because you're gonna get all your new files, right?
+1:36: And then you're gonna do a `docker-compose up`.
+1:41: Cool, mine were up today, but you should, you should, you should see a little like red things and green things going on there.
+1:51: Did you guys get some red things and green things, right?
+1:54: If you didn't get any red things and green things, you messed up.
+1:59: All right, then you're gonna do `docker-compose up`.
+2:02: I was really fast because I already did it.
+2:10: All right, this might take a little while.
+2:14: Anybody building yet?
+2:15: Who's with me?
+2:17: Good, good, you're like just sit here and look at the wall.
+2:25: You need an apple.
+2:28: All right, so what you're doing here is you're building your project.
+2:35: So what I'm gonna do is I'm gonna look to pull that building we're gonna look at the Dockerfile.
+2:38: We're gonna look at the Dockerfile while building so we know what's happening.
+2:56: I don't know what you're waiting for.
+2:57: Who, who else is anybody building you?
+3:00: No, you guys were building over there?
+3:03: Are you guys on vacation?
+3:08: While you're building, yes, we, we are all present by the way, you're all present, me and him are.
+3:17: OK, so we got 2 2.
+3:19: All you guys are still over there, I don't remember, none of you guys are, none of you guys pay attention and you don't do what we're supposed to do.
+3:27: I remember that, right?
+3:29: I'm trying to help you right now.
+3:30: You're not.
+3:33: What are you doing?
+3:36: Where are you at?
+3:41: You're doing `docker-compose up` command.
+3:48: Docker-compose based still, right?
+3:58: OK, so I'm gonna talk about this file a little bit.
+4:00: So what happens with Docker?
+4:05: You guys should pay attention.
+4:06: Try to, try to learn something.
+4:09: What happens with Docker here?
+4:11: Each of these commands here is building an environment.
+4:14: You guys remember when we built our machines from scratch at the beginning of the year and we had to add all these things.
+4:20: It's doing this.
+4:21: It's doing the whole thing for us.
+4:23: It's building our whole environment, but this is a little, a little altered or more like a production deployment versus like a development thing, but it's building all the deployment and 10.
+4:35: So let's look at this.
+4:37: It's doing an update of the machine and then it's getting Python on the machine, right?
+4:43: And then it's installing our requirements.txt and what's in our requirements.txt right here?
+4:50: All the packages we've been using, you guys remember this SQLAlchemy.
+4:54: You guys probably seen requests and your APIs.
+4:58: You know you're using Flask.
+
+--- 
+# Rayhaan 33 minute video of Tuesday's tech talk here: (PLACEHOLDER)
