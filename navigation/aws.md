@@ -23,9 +23,9 @@ Ensure that we have a working frontend-to-backend test server. If it does not wo
 Setup DNS endpoint through AWS Route 53.
 
 ```yml
-Server: https://prism2025.nighthawkcodingsociety.com/
-Domain: nighthawkcodingsociety.com
-Subdomain: prism2025
+Server: https://prism.stu.nighthawkcodingsociety.com/
+Domain: stu.nighthawkcodingsociety.com
+Subdomain: prism
 ```
 
 ### Port (Backend)
@@ -99,7 +99,7 @@ Prepare the frontend to access our domain and ports to match our localhost, port
   if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
       pythonURI = "http://localhost:8505";
   } else {
-      pythonURI = "https://prism2025.nighthawkcodingsociety.com";
+      pythonURI = "https://prism.stu.nighthawkcodingsociety.com";
   }
   ```
 
@@ -245,7 +245,7 @@ Go to AWS Route 53 and set up a DNS subdomain for the backend server.
     server {
         listen 80;
         listen [::]:80;
-        server_name prism2025.nighthawkcodingsociety.com;
+        server_name prism.stu.nighthawkcodingsociety.com;
         location / {
             proxy_pass http://localhost:8505;
             if ($request_method = OPTIONS) {
@@ -280,7 +280,7 @@ Go to AWS Route 53 and set up a DNS subdomain for the backend server.
     ```
     
 6.  **Test if Nginx is serving requests**:  
-    Open **[http://prism2025.nighthawkcodingsociety.com](http://prism2025.nighthawkcodingsociety.com/)** in our browser.
+    Open **[http://prism.stu.nighthawkcodingsociety.com](http://prism.stu.nighthawkcodingsociety.com/)** in our browser.
     
 
 ----------
@@ -302,7 +302,7 @@ Here are all the steps we will follow to install Certbot to deploy our site
     ```
     
 3.  **Follow the prompts**:
-    -   Select `prism2025.nighthawkcodingsociety.com` from the list.
+    -   Select `prism.stu.nighthawkcodingsociety.com` from the list.
     -   Choose option `2` because it will redirect us from HTTP to HTTPS, which is more secure.
 4.  **Restart Nginx**:
     
@@ -311,7 +311,7 @@ Here are all the steps we will follow to install Certbot to deploy our site
     ```
     
 5.  **Test HTTPS access**:  
-    Open **[https://prism2025.nighthawkcodingsociety.com](https://prism2025.nighthawkcodingsociety.com/)** in our browser.
+    Open **[https://prism.stu.nighthawkcodingsociety.com](https://prism.stu.nighthawkcodingsociety.com/)** in our browser.
 
 ----------
 
