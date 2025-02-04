@@ -4,7 +4,7 @@ if (location.hostname === "localhost") {
 } else if (location.hostname === "127.0.0.1") {
         pythonURI = "http://127.0.0.1:8505";
 } else {
-        pythonURI =  "https://prism2025.nighthawkcodingsociety.com";
+        pythonURI =  "https://prism.nighthawkcodingsociety.com";
 }
 export var javaURI;
 if (location.hostname === "localhost") {
