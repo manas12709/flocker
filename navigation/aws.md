@@ -79,7 +79,7 @@ Select a unique port for the application. Update all locations:
           proxy_pass http://localhost:8505; (MINE)
           if ($request_method = OPTIONS) {
               add_header "Access-Control-Allow-Credentials" "true" always;
-              add_header "Access-Control-Allow-Origin"  "https://nighthawkcoders.github.io" always;
+              add_header "Access-Control-Allow-Origin"  "https://illuminati1618.github.io" always;
               add_header "Access-Control-Allow-Methods" "GET, POST, PUT, DELETE, OPTIONS, HEAD" always;
               add_header "Access-Control-Allow-MaxAge" 600 always;
               add_header "Access-Control-Allow-Headers" "Authorization, Origin, X-Origin, X-Requested-With, Content-Type, Accept" always;
