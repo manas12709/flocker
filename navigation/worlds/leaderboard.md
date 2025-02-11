@@ -127,6 +127,43 @@ permalink: /prism/leaderboard
         background-color: #b30000;
     }
 
+    .search-bar {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .search-bar input {
+        width: 300px;
+        padding: 10px;
+        border-radius: 25px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+    }
+
+    .leaderboard-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .leaderboard-table th, .leaderboard-table td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .leaderboard-table th {
+        cursor: pointer;
+    }
+
+    .leaderboard-table th.sort-asc::after {
+        content: " ▲";
+    }
+
+    .leaderboard-table th.sort-desc::after {
+        content: " ▼";
+    }
+
     .copyright {
         background-color: #b30000;
         text-align: center;
@@ -150,13 +187,16 @@ permalink: /prism/leaderboard
 
     <section>
         <h2>Leaderboard of Top Interests</h2>
+        <div class="search-bar">
+            <input type="text" id="search-interests" placeholder="Search interests...">
+        </div>
         <p>Discover the most popular interests across the community based on collective engagement and participation.</p>
         <table class="leaderboard-table">
             <thead>
                 <tr>
-                    <th>Rank</th>
-                    <th>Interest</th>
-                    <th>Count</th>
+                    <th onclick="sortTable('leaderboard-interests', 0)">Rank</th>
+                    <th onclick="sortTable('leaderboard-interests', 1)">Interest</th>
+                    <th onclick="sortTable('leaderboard-interests', 2)">Count</th>
                 </tr>
             </thead>
             <tbody id="leaderboard-interests">
@@ -167,13 +207,16 @@ permalink: /prism/leaderboard
 
     <section>
         <h2>Affinity Leaderboard</h2>
+        <div class="search-bar">
+            <input type="text" id="search-users" placeholder="Search users...">
+        </div>
         <p>See which users share the most interests with others, fostering meaningful connections and collaboration.</p>
         <table class="leaderboard-table">
             <thead>
                 <tr>
-                    <th>Rank</th>
-                    <th>Username</th>
-                    <th>Shared Interests</th>
+                    <th onclick="sortTable('leaderboard-users', 0)">Rank</th>
+                    <th onclick="sortTable('leaderboard-users', 1)">Username</th>
+                    <th onclick="sortTable('leaderboard-users', 2)">Shared Interests</th>
                 </tr>
             </thead>
             <tbody id="leaderboard-users">
@@ -232,6 +275,46 @@ permalink: /prism/leaderboard
             console.error("Error fetching top interests:", error);
         }
     }
+
+    function sortTable(tableId, columnIndex) {
+        const table = document.getElementById(tableId);
+        const rows = Array.from(table.rows).slice(1);
+        const isAscending = table.rows[0].cells[columnIndex].classList.toggle('sort-asc');
+        table.rows[0].cells[columnIndex].classList.toggle('sort-desc', !isAscending);
+
+        rows.sort((rowA, rowB) => {
+            const cellA = rowA.cells[columnIndex].innerText.toLowerCase();
+            const cellB = rowB.cells[columnIndex].innerText.toLowerCase();
+
+            if (cellA < cellB) return isAscending ? -1 : 1;
+            if (cellA > cellB) return isAscending ? 1 : -1;
+            return 0;
+        });
+
+        rows.forEach(row => table.appendChild(row));
+    }
+
+    function filterTable(inputId, tableId) {
+        const input = document.getElementById(inputId);
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById(tableId);
+        const rows = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            let match = false;
+            for (let j = 0; j < cells.length; j++) {
+                if (cells[j].innerText.toLowerCase().includes(filter)) {
+                    match = true;
+                    break;
+                }
+            }
+            rows[i].style.display = match ? '' : 'none';
+        }
+    }
+
+    document.getElementById('search-interests').addEventListener('input', () => filterTable('search-interests', 'leaderboard-interests'));
+    document.getElementById('search-users').addEventListener('input', () => filterTable('search-users', 'leaderboard-users'));
 
     document.addEventListener("DOMContentLoaded", () => {
         fetchTopUsers();
