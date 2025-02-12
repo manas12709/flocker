@@ -90,7 +90,6 @@ permalink: /prism/polls
         border-radius: 10px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         margin-bottom: 40px;
-        /* Increased margin between containers */
     }
 
     .form-container label {
@@ -102,7 +101,6 @@ permalink: /prism/polls
     .form-container textarea,
     .form-container select {
         margin-bottom: 20px;
-        /* Increased margin for spacing */
         padding: 15px;
         border-radius: 5px;
         border: 1px rgb(95, 95, 95);
@@ -131,6 +129,17 @@ permalink: /prism/polls
 
     .form-container.submit-answer-container {
         background-color: rgb(95, 95, 95);
+    }
+
+    /* Table styles for clarity */
+    table {
+        width: 80%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+    }
+    th, td {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
     }
 </style>
 
@@ -163,6 +172,7 @@ permalink: /prism/polls
 </header>
 <p class="poll-subtitle">Your voice, your community</p>
 
+<!-- Submit new poll -->
 <center>
     <div class="form-container submit-answer-container">
         <h2 style="text-align: center;">Submit Your Answer Here</h2>
@@ -197,29 +207,16 @@ permalink: /prism/polls
                 throw new Error('Network response was not ok ' + response.statusText);
             }
             const data = await response.json();
-            console.log('Poll updated:', data);
+            console.log('Poll created:', data);
             location.reload();
         } catch (error) {
-            console.error('Error updating poll:', error);
+            console.error('Error creating poll:', error);
         }
     }
 </script>
 
-<center>
+<!-- <center>
     <div class="form-container submit-answer-container">
-        <form id="updatePollForm" onsubmit="event.preventDefault(); updatePoll();" style="margin-bottom: 20px;">
-            <label style="color: white;">Update Poll</label><br>
-            <input type="text" id="updatePollId" placeholder="Poll ID"><br>
-            <input type="text" id="updatePollName" placeholder="Name"><br>
-            <input type="text" id="updatePollInterests" placeholder="Interests"><br>
-            <button type="submit"
-                style="background-color: red; color: white; width: 100%; margin-top: 15px; border: none; font-size: 18px; padding: 15px;">
-                Update
-            </button>
-        </form>
-    </div>
-
-    <!-- <div class="form-container submit-answer-container">
         <form id="deletePollForm" onsubmit="event.preventDefault(); deletePollForm();" style="margin-bottom: 20px;">
             <label style="color: white;">Delete Poll</label><br>
             <input type="text" id="deletePollId" placeholder="Poll ID"><br>
@@ -228,14 +225,13 @@ permalink: /prism/polls
                 Delete
             </button>
         </form>
-    </div> -->
-</center>
+    </div>
+</center> -->
 
 <script type="module">
     import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
 
-    // Reuse the same function, but allow passing an ID directly
-    // (for the table-based delete button)
+    // 1) Inline delete function for a given poll ID
     window.deletePollById = async function(id) {
         const payload = { id };
         try {
@@ -256,18 +252,15 @@ permalink: /prism/polls
         }
     }
 
-    // This function is used by the form where the user enters the poll ID manually
+    // 2) For the separate form
     window.deletePollForm = function() {
         const id = document.getElementById('deletePollId').value;
         window.deletePollById(id);
     }
 
-    window.updatePoll = async function updatePoll() {
-        const id = document.getElementById('updatePollId').value;
-        const name = document.getElementById('updatePollName').value;
-        const interests = document.getElementById('updatePollInterests').value;
-        const payload = { id, name, interests };
-
+    // 3) Inline update function for a given poll ID
+    window.updatePollById = async function(id, newName, newInterests) {
+        const payload = { id, name: newName, interests: newInterests };
         try {
             const response = await fetch(`${pythonURI}/api/poll`, {
                 ...fetchOptions,
@@ -285,18 +278,6 @@ permalink: /prism/polls
             console.error('Error updating poll:', error);
         }
     }
-
-    // Make sure we can load existing poll data
-    try {
-        const response = await fetch(`${pythonURI}/api/poll`, fetchOptions);
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        const data = await response.json();
-        console.log(data);
-    } catch (error) {
-        console.error('There has been a problem with your fetch operation:', error);
-    }
 </script>
 
 <center>
@@ -305,17 +286,18 @@ permalink: /prism/polls
 <br>
 
 <center>
-    <!-- We add a third column for 'Actions' (the Delete button) -->
+    <!-- Table with inline editing and inline delete -->
     <table class="submit-answer-container">
         <thead>
             <tr>
                 <th>Name</th>
                 <th>Result</th>
+                <th>Update</th>
                 <th>Delete</th>
             </tr>
         </thead>
         <tbody id="poll-data">
-            <!-- Data will be dynamically inserted here -->
+            <!-- Rows dynamically added here -->
         </tbody>
     </table>
 </center>
@@ -327,8 +309,12 @@ permalink: /prism/polls
 
     // Fetch poll data and populate the table
     try {
-        var response = await fetch(`${pythonURI}/api/poll`, fetchOptions);
-        var data = await response.json();
+        const response = await fetch(`${pythonURI}/api/poll`, fetchOptions);
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        const data = await response.json();
+        console.log('Fetched polls:', data);
 
         const pollData = document.getElementById('poll-data');
         pollData.innerHTML = '';
@@ -336,13 +322,37 @@ permalink: /prism/polls
         data.forEach(item => {
             const row = document.createElement('tr');
 
+            // Name field (editable)
             const nameCell = document.createElement('td');
-            nameCell.textContent = item.name;
+            const nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.value = item.name;
+            nameCell.appendChild(nameInput);
 
+            // Interests field (editable)
             const interestsCell = document.createElement('td');
-            interestsCell.textContent = item.interests;
+            const interestsInput = document.createElement('input');
+            interestsInput.type = 'text';
+            interestsInput.value = item.interests;
+            interestsCell.appendChild(interestsInput);
 
-            // Create the Delete button in its own cell
+            // Update button
+            const updateCell = document.createElement('td');
+            const updateButton = document.createElement('button');
+            updateButton.textContent = 'Update';
+            updateButton.style.backgroundColor = 'green';
+            updateButton.style.color = 'white';
+            updateButton.style.border = 'none';
+            updateButton.style.padding = '8px 12px';
+            updateButton.style.cursor = 'pointer';
+
+            // Onclick -> calls updatePollById with the new values from these inputs
+            updateButton.onclick = function() {
+                window.updatePollById(item.id, nameInput.value, interestsInput.value);
+            };
+            updateCell.appendChild(updateButton);
+
+            // Delete button
             const deleteCell = document.createElement('td');
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Delete';
@@ -351,14 +361,17 @@ permalink: /prism/polls
             deleteButton.style.border = 'none';
             deleteButton.style.padding = '8px 12px';
             deleteButton.style.cursor = 'pointer';
+
+            // Onclick -> calls deletePollById for the current item
             deleteButton.onclick = function() {
-                // Call our delete function with the poll's ID
                 window.deletePollById(item.id);
             };
             deleteCell.appendChild(deleteButton);
 
+            // Append all cells to row
             row.appendChild(nameCell);
             row.appendChild(interestsCell);
+            row.appendChild(updateCell);
             row.appendChild(deleteCell);
             pollData.appendChild(row);
         });
