@@ -329,20 +329,15 @@ permalink: /prism/language
                     row.insertCell(3).innerText = language.popularity;
 
                     const actionsCell = row.insertCell(4);
-                    const updateButton = document.createElement('button');
-                    updateButton.innerText = 'Update';
-                    updateButton.onclick = () => {
+                    const selectButton = document.createElement('button');
+                    selectButton.innerText = 'Select';
+                    selectButton.onclick = () => {
                         document.getElementById('language-id').value = language.id;
                         document.getElementById('language-name').value = language.name;
                         document.getElementById('language-creator').value = language.creator;
                         document.getElementById('language-popularity').value = language.popularity;
                     };
-                    actionsCell.appendChild(updateButton);
-
-                    const deleteButton = document.createElement('button');
-                    deleteButton.innerText = 'Delete';
-                    deleteButton.onclick = () => deleteLanguage(language.id);
-                    actionsCell.appendChild(deleteButton);
+                    actionsCell.appendChild(selectButton);
                 });
             } else {
                 alert('Error fetching languages');
