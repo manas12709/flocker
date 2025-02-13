@@ -483,7 +483,7 @@ permalink: /prism/topicchatroom
     <div class="chat-container">
     <h2>
         <span class="ai-text">AI Generated Prompt</span><br>
-        <span id="aiQuestion">What are your opinions on the Engines of F1 Cars?</span>
+        <span id="aiQuestion">Generate a Random Question</span>
     </h2>
     <button 
     onclick="updateAIQuestionAndCreateChannel(
