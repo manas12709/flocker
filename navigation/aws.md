@@ -57,10 +57,10 @@ Select a unique port for the application. Update all locations:
 - **docker-compose.yml**: Prepare this file to serve as the “make” for Docker.
 
   ```yaml
-  version: '3'
+  version: '3.12.3'
   services:
       web:
-          image: flask2025
+          image: prism
           build: .
           env_file:
               - .env
