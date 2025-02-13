@@ -285,7 +285,7 @@ permalink: /prism/topicchatroom
     }
     window.sendMessage = sendMessage;
     async function sendToGeminiAPI(interest1, interest2) {
-        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyDys2Y58wdsK-P1hr3ayHoAjt7MjTrBtkw";
+        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyDNHLzvRAVXpdW7mf32lWdxjWoVwxvpD-c";
         try {
             const response = await fetch(apiUrl, {
                 method: 'POST',
