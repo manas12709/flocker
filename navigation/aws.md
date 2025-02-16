@@ -1,6 +1,6 @@
 ---
 layout: post 
-search_exclude: true
+search_exclude: false
 show_reading_time: false
 permalink: /prism/aws
 author: Mihir B, Manas G, Adi K, Yash P, Pranav S, Anvay V
@@ -246,35 +246,55 @@ Go to AWS Route 53 and set up a DNS subdomain for the backend server.
 
     ```bash
     cd /etc/nginx/sites-available
-    sudo nano prism
+    sudo nano prism.stu
     
     ```
 
 2. **Add the following config:**
 
     ```nginx
-    server {
-        listen 80;
-        listen [::]:80;
-        server_name prism.stu.nighthawkcodingsociety.com;
-        location / {
-            proxy_pass http://localhost:8505;
-            if ($request_method = OPTIONS) {
-                add_header "Access-Control-Allow-Credentials" "true" always;
-                add_header "Access-Control-Allow-Origin"  "https://nighthawkcoders.github.io" always;
-                add_header "Access-Control-Allow-Methods" "GET, POST, PUT, DELETE, OPTIONS, HEAD" always;
-                add_header "Access-Control-Allow-MaxAge" 600 always;
-                add_header "Access-Control-Allow-Headers" "Authorization, Origin, X-Origin, X-Requested-With, Content-Type, Accept" always;
-                return 204;
+        server {
+
+            server_name prism.stu.nighthawkcodingsociety.com;
+            location / {
+                proxy_pass http://localhost:8505;
+                if ($request_method = OPTIONS) {
+                    add_header "Access-Control-Allow-Credentials" "true" always;
+                    add_header "Access-Control-Allow-Origin"  "https://illuminati1618.github.io" always;
+                    add_header "Access-Control-Allow-Methods" "GET, POST, PUT, DELETE, OPTIONS, HEAD" always;
+                    add_header "Access-Control-Allow-MaxAge" 600 always;
+                    add_header "Access-Control-Allow-Headers" "Authorization, Origin, X-Origin, X-Requested-With, Content-Type, Accept" always;
+                    return 204;
+                }
             }
+
+
+            listen [::]:443 ssl; # managed by Certbot
+            listen 443 ssl; # managed by Certbot
+            ssl_certificate /etc/letsencrypt/live/prism.stu.nighthawkcodingsociety.com/fullchain.pem; # managed by Certbot
+            ssl_certificate_key /etc/letsencrypt/live/prism.stu.nighthawkcodingsociety.com/privkey.pem; # managed by Certbot
+            include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+            ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
         }
-    }
-    
+        server {
+            if ($host = prism.stu.nighthawkcodingsociety.com) {
+                return 301 https://$host$request_uri;
+            } # managed by Certbot
+
+
+            listen 80;
+            listen [::]:80;
+            server_name prism.stu.nighthawkcodingsociety.com;
+            return 404; # managed by Certbot
+
+        }    
     ```
 
 3. **Save the file** (`Ctrl + X`, then `Y`, then `Enter`).
 
-4. **Activate configuration**:
+4. **Link the configuration files**:
 
     ```bash
     cd /etc/nginx/sites-enabled
@@ -282,7 +302,7 @@ Go to AWS Route 53 and set up a DNS subdomain for the backend server.
     
     ```
 
-5. **Check for all proper configs and restart Nginx**:
+5. **Check for all proper config syntax and restart Nginx**:
 
     ```bash
     sudo nginx -t
@@ -449,3 +469,28 @@ The network layer of the TCP/IP protocol is responsible for accepting and delive
   - Run `crontab -e` to edit your user's crontab file
   - `0 1 * * * bash /home/ubuntu/prism_backend/scripts/prsim_backup_sequence.sh` - This command runs a script every day at 1 AM.
 - Using the `RUN` command in the Dockerfile in prism_backend to run db_init, restore, and backup
+
+
+Contents of `/home/ubuntu/prism_backend/scripts/prsim_backup_sequence`:
+
+```sh
+    #!/bin/bash
+
+    cd /home/ubuntu/prism_backend
+
+    # Verify the installation and check the Python version
+    python --version
+
+    # Create a virtual environment if it doesn't exist
+    if [ ! -d "venv" ]; then
+        python -m venv venv
+    fi
+
+    # Activate the virtual environment
+    source venv/bin/activate
+
+    # Install the required Python packages
+    pip install -r requirements.txt
+
+    cd /home/ubuntu/prism_backend
+```

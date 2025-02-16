@@ -177,8 +177,8 @@ permalink: /prism/polls
     <div class="form-container submit-answer-container">
         <h2 style="text-align: center;">Submit Your Answer Here</h2>
         <form id="pollForm" onsubmit="event.preventDefault(); addPoll();">
-            <label for="name">What is your name?</label>
-            <input type="text" id="addPollName" name="name" placeholder="Enter your name" required>
+            <!-- <label for="name">What is your name?</label> -->
+            <!-- <input type="text" id="addPollName" name="name" placeholder="Enter your name" required> -->
 
             <label for="interests">What are your interests?</label>
             <input type="text" id="addPollInterests" name="interests" placeholder="Enter your interests" required>
@@ -192,7 +192,15 @@ permalink: /prism/polls
     import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
 
     window.addPoll = async function addPoll() {
-        const name = document.getElementById('addPollName').value;
+
+        var user = await fetch(`${pythonURI}/api/user`, fetchOptions);
+
+        const userData = await user.json();
+        console.log("User data", userData);
+
+        const username = userData.name;
+        // console.log(username)
+        const name = `${username}`;
         const interests = document.getElementById('addPollInterests').value;
         const payload = { name, interests };
 
@@ -215,18 +223,6 @@ permalink: /prism/polls
     }
 </script>
 
-<!-- <center>
-    <div class="form-container submit-answer-container">
-        <form id="deletePollForm" onsubmit="event.preventDefault(); deletePollForm();" style="margin-bottom: 20px;">
-            <label style="color: white;">Delete Poll</label><br>
-            <input type="text" id="deletePollId" placeholder="Poll ID"><br>
-            <button type="submit"
-                style="background-color: red; color: white; width: 100%; margin-top: 15px; border: none; font-size: 18px; padding: 15px;">
-                Delete
-            </button>
-        </form>
-    </div>
-</center> -->
 
 <script type="module">
     import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
@@ -322,12 +318,9 @@ permalink: /prism/polls
         data.forEach(item => {
             const row = document.createElement('tr');
 
-            // Name field (editable)
+            // Name field (non-editable)
             const nameCell = document.createElement('td');
-            const nameInput = document.createElement('input');
-            nameInput.type = 'text';
-            nameInput.value = item.name;
-            nameCell.appendChild(nameInput);
+            nameCell.textContent = item.name;
 
             // Interests field (editable)
             const interestsCell = document.createElement('td');
@@ -348,7 +341,7 @@ permalink: /prism/polls
 
             // Onclick -> calls updatePollById with the new values from these inputs
             updateButton.onclick = function() {
-                window.updatePollById(item.id, nameInput.value, interestsInput.value);
+                window.updatePollById(item.id, item.name, interestsInput.value);
             };
             updateCell.appendChild(updateButton);
 
@@ -373,8 +366,7 @@ permalink: /prism/polls
             row.appendChild(interestsCell);
             row.appendChild(updateCell);
             row.appendChild(deleteCell);
-            pollData.appendChild(row);
-        });
+            pollData.appendChild(row);    });
     } catch (error) {
         console.error('There has been a problem with your fetch operation:', error);
     }
