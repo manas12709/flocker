@@ -172,17 +172,49 @@ permalink: /prism/polls
 </header>
 <p class="poll-subtitle">Your voice, your community</p>
 
-<!-- Submit new poll -->
+<!-- Original poll form (Form 1) -->
 <center>
-    <div class="form-container submit-answer-container">
+    <div class="form-container submit-answer-container" id="pollForm1">
         <h2 style="text-align: center;">Submit Your Answer Here</h2>
-        <form id="pollForm" onsubmit="event.preventDefault(); addPoll();">
-            <!-- <label for="name">What is your name?</label> -->
-            <!-- <input type="text" id="addPollName" name="name" placeholder="Enter your name" required> -->
+        <form onsubmit="submitPoll('pollForm1'); return false;">
+            <label for="addPollInterests1">What is your favorite genre of music?</label>
+            <input type="text" id="addPollInterests1" name="interests" placeholder="Enter your interests" required>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</center>
 
-            <label for="interests">What are your interests?</label>
-            <input type="text" id="addPollInterests" name="interests" placeholder="Enter your interests" required>
+<!-- Poll Form 2 -->
+<center>
+    <div class="form-container submit-answer-container" id="pollForm2" style="display:none;">
+        <h2 style="text-align: center;">Poll Question 2</h2>
+        <form onsubmit="submitPoll('pollForm2'); return false;">
+            <label for="addPollInterests2">What is your favorite movie genre?</label>
+            <input type="text" id="addPollInterests2" name="interests" placeholder="Enter your interests" required>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</center>
 
+<!-- Poll Form 3 -->
+<center>
+    <div class="form-container submit-answer-container" id="pollForm3" style="display:none;">
+        <h2 style="text-align: center;">Poll Question 3</h2>
+        <form onsubmit="submitPoll('pollForm3'); return false;">
+            <label for="addPollInterests3">What is your favorite book genre?</label>
+            <input type="text" id="addPollInterests3" name="interests" placeholder="Enter your interests" required>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</center>
+
+<!-- Poll Form 4 -->
+<center>
+    <div class="form-container submit-answer-container" id="pollForm4" style="display:none;">
+        <h2 style="text-align: center;">Poll Question 4</h2>
+        <form onsubmit="submitPoll('pollForm4'); return false;">
+            <label for="addPollInterests4">What is your favorite travel destination?</label>
+            <input type="text" id="addPollInterests4" name="interests" placeholder="Enter your interests" required>
             <button type="submit">Submit</button>
         </form>
     </div>
@@ -288,8 +320,6 @@ permalink: /prism/polls
             <tr>
                 <th>Name</th>
                 <th>Result</th>
-                <th>Update</th>
-                <th>Delete</th>
             </tr>
         </thead>
         <tbody id="poll-data">
@@ -309,9 +339,9 @@ permalink: /prism/polls
         throw new Error('Failed to fetch user info: ' + userResponse.statusText);
     }
     const userData = await userResponse.json();
-    const currentUserName = userData.name;  // The name used to compare with poll author
+    const currentUserName = userData.name;  // Used for comparison
 
-    // Fetch poll data and populate the table
+    // Fetch poll data and group by name
     try {
         const response = await fetch(`${pythonURI}/api/poll`, fetchOptions);
         if (!response.ok) {
@@ -320,69 +350,141 @@ permalink: /prism/polls
         const data = await response.json();
         console.log('Fetched polls:', data);
 
+        // Group polls by author name
+        const groupedPolls = {};
+        data.forEach(item => {
+            if (!groupedPolls[item.name]) {
+                groupedPolls[item.name] = [];
+            }
+            groupedPolls[item.name].push(item);
+        });
+
         const pollData = document.getElementById('poll-data');
         pollData.innerHTML = '';
 
-        data.forEach(item => {
+        // For each group, create one table row
+        Object.entries(groupedPolls).forEach(([name, polls]) => {
             const row = document.createElement('tr');
 
-            // Name field (non-editable)
+            // Name cell (author)
             const nameCell = document.createElement('td');
-            nameCell.textContent = item.name;
-
-            // Interests field (potentially editable)
-            const interestsCell = document.createElement('td');
-            const interestsInput = document.createElement('input');
-            interestsInput.type = 'text';
-            interestsInput.value = item.interests;
-            interestsCell.appendChild(interestsInput);
-
-            // Update button
-            const updateCell = document.createElement('td');
-            const updateButton = document.createElement('button');
-            updateButton.textContent = 'Update';
-            updateButton.style.backgroundColor = 'green';
-            updateButton.style.color = 'white';
-            updateButton.style.border = 'none';
-            updateButton.style.padding = '8px 12px';
-            updateButton.style.cursor = 'pointer';
-
-            updateButton.onclick = function() {
-                window.updatePollById(item.id, item.name, interestsInput.value);
-            };
-
-            // Delete button
-            const deleteCell = document.createElement('td');
-            const deleteButton = document.createElement('button');
-            deleteButton.textContent = 'Delete';
-            deleteButton.style.backgroundColor = 'red';
-            deleteButton.style.color = 'white';
-            deleteButton.style.border = 'none';
-            deleteButton.style.padding = '8px 12px';
-            deleteButton.style.cursor = 'pointer';
-
-            deleteButton.onclick = function() {
-                window.deletePollById(item.id);
-            };
-
-            // Only append update/delete buttons if poll belongs to the logged-in user
-            if (item.name === currentUserName) {
-                updateCell.appendChild(updateButton);
-                deleteCell.appendChild(deleteButton);
-            } else {
-                // Optionally show placeholders (like “—”) instead of buttons
-                updateCell.textContent = '—';
-                deleteCell.textContent = '—';
-            }
-
-            // Append all cells to row
+            nameCell.textContent = name;
             row.appendChild(nameCell);
-            row.appendChild(interestsCell);
-            row.appendChild(updateCell);
-            row.appendChild(deleteCell);
+
+            // Combined poll results cell
+            const resultsCell = document.createElement('td');
+            polls.forEach(pollItem => {
+                const pollContainer = document.createElement('div');
+                pollContainer.style.marginBottom = '10px';
+
+                // Input for interests
+                const interestsInput = document.createElement('input');
+                interestsInput.type = 'text';
+                interestsInput.value = pollItem.interests;
+                // Disable if not the owner
+                if (name !== currentUserName) {
+                    interestsInput.disabled = true;
+                }
+                pollContainer.appendChild(interestsInput);
+
+                // If current user is the owner, add inline update and delete buttons
+                if (name === currentUserName) {
+                    // Update button
+                    const updateButton = document.createElement('button');
+                    updateButton.textContent = 'Update';
+                    updateButton.style.backgroundColor = 'green';
+                    updateButton.style.color = 'white';
+                    updateButton.style.border = 'none';
+                    updateButton.style.padding = '4px 8px';
+                    updateButton.style.marginLeft = '5px';
+                    updateButton.style.cursor = 'pointer';
+                    updateButton.onclick = function() {
+                        window.updatePollById(pollItem.id, name, interestsInput.value);
+                    };
+                    pollContainer.appendChild(updateButton);
+
+                    // Delete button
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.style.backgroundColor = 'red';
+                    deleteButton.style.color = 'white';
+                    deleteButton.style.border = 'none';
+                    deleteButton.style.padding = '4px 8px';
+                    deleteButton.style.marginLeft = '5px';
+                    deleteButton.style.cursor = 'pointer';
+                    deleteButton.onclick = function() {
+                        window.deletePollById(pollItem.id);
+                    };
+                    pollContainer.appendChild(deleteButton);
+                }
+                resultsCell.appendChild(pollContainer);
+            });
+            row.appendChild(resultsCell);
             pollData.appendChild(row);
         });
     } catch (error) {
         console.error('There has been a problem with your fetch operation:', error);
+    }
+</script>
+
+<script type="module">
+    import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
+
+    // Array of form IDs in the desired cycling order
+    const formIds = ['pollForm1', 'pollForm2', 'pollForm3', 'pollForm4'];
+
+    // On page load, check if a form index was saved previously
+    const savedFormIndex = localStorage.getItem('currentFormIndex');
+    if (savedFormIndex !== null) {
+        const parsedIndex = parseInt(savedFormIndex);
+        // Hide all forms at first
+        formIds.forEach(id => document.getElementById(id).style.display = 'none');
+        // Show the saved form if valid
+        if (!isNaN(parsedIndex) && formIds[parsedIndex]) {
+            document.getElementById(formIds[parsedIndex]).style.display = 'block';
+        } else {
+            // Default to first form if index is invalid
+            document.getElementById(formIds[0]).style.display = 'block';
+        }
+    }
+
+    // Submits the poll answer from the given form ID and cycles to the next form
+    window.submitPoll = async function(formId) {
+        const formDiv = document.getElementById(formId);
+        const input = formDiv.querySelector('input[name="interests"]');
+        const interests = input.value;
+
+        // Get current user info
+        const userResponse = await fetch(`${pythonURI}/api/user`, fetchOptions);
+        if (!userResponse.ok) {
+            throw new Error('Failed to fetch user info: ' + userResponse.statusText);
+        }
+        const userData = await userResponse.json();
+        const username = userData.name;
+        const payload = { name: username, interests: interests };
+
+        try {
+            const response = await fetch(`${pythonURI}/api/poll`, {
+                ...fetchOptions,
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            // Once submission succeeds, figure out next form
+            const currentIndex = formIds.indexOf(formId);
+            const nextIndex = (currentIndex < formIds.length - 1) ? currentIndex + 1 : 0;
+
+            // Save that index in localStorage for the next load
+            localStorage.setItem('currentFormIndex', nextIndex);
+
+            // Reload the page (this will cause on-page-load logic to show the next form)
+            location.reload();
+        } catch (error) {
+            console.error('Error creating poll:', error);
+        }
     }
 </script>
