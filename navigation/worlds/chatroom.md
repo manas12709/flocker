@@ -285,7 +285,7 @@ permalink: /prism/topicchatroom
     }
     window.sendMessage = sendMessage;
     async function sendToGeminiAPI(interest1, interest2) {
-        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyDys2Y58wdsK-P1hr3ayHoAjt7MjTrBtkw";
+        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyDNHLzvRAVXpdW7mf32lWdxjWoVwxvpD-c";
         try {
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -483,7 +483,7 @@ permalink: /prism/topicchatroom
     <div class="chat-container">
     <h2>
         <span class="ai-text">AI Generated Prompt</span><br>
-        <span id="aiQuestion">What are your opinions on the Engines of F1 Cars?</span>
+        <span id="aiQuestion">Generate a Random Question</span>
     </h2>
     <button 
     onclick="updateAIQuestionAndCreateChannel(

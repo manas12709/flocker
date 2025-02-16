@@ -1,0 +1,221 @@
+// Import fonts
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap');
+
+// Color Variables (Universal Red/Black Theme)
+$primary-color: #e74c3c;   // Red
+$secondary-color: #c0392b; // Dark Red
+$background-dark: #000000; // Black background
+$container-bg: #1a1a1a;    // Dark Grey container
+$text-light: #ffffff;      // White text
+$text-muted: #ddd;         // Muted text
+$border-color: #b30000;    // Red border
+$button-bg: #ff4d4d;       // Light Red button
+$button-hover: #e60000;    // Darker Red on hover
+$input-bg: #333;           // Input background
+$poll-option: #666;        // Poll option background
+$poll-option-hover: #555;  // Poll option hover
+$poll-option-active: #333; // Poll option active
+$quiz-result: lightgreen;  // Quiz result text
+$box-shadow: rgba(0, 0, 0, 0.3);
+$box-shadow-light: rgba(0, 0, 0, 0.2);
+$card-bg: #2e2e2e;         // Login and signup card background
+
+// Global Styles (Applies Everywhere)
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: 'Roboto', sans-serif;
+  background-color: $background-dark;
+  color: $text-light;
+}
+
+// Header
+.heading {
+  background-color: $border-color;
+  padding: 20px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  border-radius: 15px;
+
+  p {
+    margin-top: -10px;
+    font-size: 16px;
+    color: $text-muted;
+  }
+}
+
+// Main Container
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+  padding: 20px;
+}
+
+// Chat Section
+.chat-container {
+  background-color: $container-bg;
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 10px $box-shadow;
+
+  h2 {
+    color: $primary-color;
+    margin-bottom: 20px;
+  }
+}
+
+// Chat Box
+#chatBox {
+  width: 100%;
+  height: 300px;
+  background-color: $background-dark;
+  color: $text-light;
+  border: 1px solid $border-color;
+  border-radius: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+// Message Input
+.message-input {
+  display: flex;
+  margin-top: 10px;
+  width: 100%;
+
+  textarea {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid $border-color;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    background-color: $input-bg;
+    color: $text-light;
+    resize: none;
+    height: 100px;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    background-color: $primary-color;
+    color: $text-light;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $button-hover;
+    }
+  }
+}
+
+// Dropdown Section
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-top: 20px;
+
+  button {
+    background-color: $input-bg;
+    color: $text-light;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid $border-color;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $button-hover;
+    }
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: $container-bg;
+    border: 1px solid $border-color;
+    border-radius: 5px;
+    z-index: 1;
+    min-width: 180px;
+    box-shadow: 0px 4px 8px $box-shadow-light;
+
+    a {
+      display: block;
+      color: $text-muted;
+      padding: 10px 15px;
+      text-decoration: none;
+      font-size: 16px;
+      border-bottom: 1px solid $border-color;
+
+      &:hover {
+        background-color: $button-hover;
+        color: $text-light;
+      }
+    }
+  }
+
+  &:hover .dropdown-content {
+    display: block;
+  }
+}
+
+// Login & Signup Containers
+.login-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+// Login & Signup Cards
+.login-card, .signup-card {
+  width: 45%;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+  background-color: $card-bg;
+  box-shadow: 2px 2px 5px $box-shadow;
+  margin-bottom: 20px;
+  overflow-x: auto;
+
+  h1 {
+    margin-bottom: 20px;
+  }
+}
+
+// Buttons
+button {
+  background-color: $button-bg;
+  color: $text-light;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px $box-shadow-light;
+
+  &:hover {
+    background-color: $button-hover;
+    box-shadow: 0 6px 12px $box-shadow;
+  }
+}
+
+// Footer
+.copyright {
+  margin-top: 20px;
+  font-size: 12px;
+  color: $text-muted;
+  text-align: center;
+}
