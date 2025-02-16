@@ -303,6 +303,14 @@ permalink: /prism/polls
 <script type="module">
     import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
 
+    // Fetch current user info
+    const userResponse = await fetch(`${pythonURI}/api/user`, fetchOptions);
+    if (!userResponse.ok) {
+        throw new Error('Failed to fetch user info: ' + userResponse.statusText);
+    }
+    const userData = await userResponse.json();
+    const currentUserName = userData.name;  // The name used to compare with poll author
+
     // Fetch poll data and populate the table
     try {
         const response = await fetch(`${pythonURI}/api/poll`, fetchOptions);
@@ -322,7 +330,7 @@ permalink: /prism/polls
             const nameCell = document.createElement('td');
             nameCell.textContent = item.name;
 
-            // Interests field (editable)
+            // Interests field (potentially editable)
             const interestsCell = document.createElement('td');
             const interestsInput = document.createElement('input');
             interestsInput.type = 'text';
@@ -339,11 +347,9 @@ permalink: /prism/polls
             updateButton.style.padding = '8px 12px';
             updateButton.style.cursor = 'pointer';
 
-            // Onclick -> calls updatePollById with the new values from these inputs
             updateButton.onclick = function() {
                 window.updatePollById(item.id, item.name, interestsInput.value);
             };
-            updateCell.appendChild(updateButton);
 
             // Delete button
             const deleteCell = document.createElement('td');
@@ -355,18 +361,27 @@ permalink: /prism/polls
             deleteButton.style.padding = '8px 12px';
             deleteButton.style.cursor = 'pointer';
 
-            // Onclick -> calls deletePollById for the current item
             deleteButton.onclick = function() {
                 window.deletePollById(item.id);
             };
-            deleteCell.appendChild(deleteButton);
+
+            // Only append update/delete buttons if poll belongs to the logged-in user
+            if (item.name === currentUserName) {
+                updateCell.appendChild(updateButton);
+                deleteCell.appendChild(deleteButton);
+            } else {
+                // Optionally show placeholders (like “—”) instead of buttons
+                updateCell.textContent = '—';
+                deleteCell.textContent = '—';
+            }
 
             // Append all cells to row
             row.appendChild(nameCell);
             row.appendChild(interestsCell);
             row.appendChild(updateCell);
             row.appendChild(deleteCell);
-            pollData.appendChild(row);    });
+            pollData.appendChild(row);
+        });
     } catch (error) {
         console.error('There has been a problem with your fetch operation:', error);
     }
