@@ -320,7 +320,13 @@ show_reading_time: false
         <p>Click on a person you are following to view more details</p>
         <section class="grid grid-cols-2" id="followersSection"></section>
     </section>
-    
+
+    <section class="card">
+        <h3>My Followers</h3>
+        <p>Click on a follower to view more details</p>
+        <section class="grid grid-cols-2" id="myFollowersSection"></section>
+    </section>
+
     <section class="card">
         <h3>Create New Post</h3>
         <form id="newPostForm">
@@ -418,6 +424,36 @@ function createFollowerCards(followers) {
     });
 }
 
+function createMyFollowerCards(followers) {
+    const myFollowersSection = document.getElementById('myFollowersSection');
+    myFollowersSection.innerHTML = '';
+    
+    if (!followers || followers.length === 0) {
+        const placeholderFollowers = ['No followers yet'];
+        placeholderFollowers.forEach((follower, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <h4>${follower}</h4>
+                <img src="https://placehold.co/300x200/26c2ff/a3adbf/png?text=${follower}" alt="${follower}">
+            `;
+            myFollowersSection.appendChild(card);
+        });
+        return;
+    }
+
+    followers.forEach(follower => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <h4>${follower}</h4>
+            <img src="https://placehold.co/300x200/26c2ff/a3adbf/png?text=${follower}"
+            alt="${follower}">
+        `;
+        myFollowersSection.appendChild(card);
+    });
+}
+
 async function updateUserInfo() {
     try {
         const response = await fetch(pythonURI + "/api/user", {
@@ -442,6 +478,14 @@ async function updateUserInfo() {
 
         const followers = data.followers ? data.followers.split(',').map(i => i.trim()).filter(i => i) : [];
         createFollowerCards(followers);
+
+        const myFollowersResponse = await fetch(pythonURI + "/api/following", {
+            ...fetchOptions,
+            method: 'GET'
+        });
+        const myFollowersData = await myFollowersResponse.json();
+        const myFollowers = myFollowersData ? myFollowersData : [];
+        createMyFollowerCards(myFollowers);
 
     } catch (error) {
         console.error('Error fetching user info:', error);
@@ -509,6 +553,21 @@ async function updateProfile(field, value) {
             const newFollowers = value.split(',').map(i => i.trim());
             const combinedFollowers = [...new Set([...currentFollowers, ...newFollowers])];
             value = combinedFollowers.join(', ');
+
+            const updateResponse = await fetch(pythonURI + "/api/user", {
+                ...fetchOptions,
+                method: 'PUT',
+                body: JSON.stringify({ followers: value })
+            });
+
+            if (!updateResponse.ok) {
+                const errorData = await updateResponse.json();
+                throw new Error(errorData.message || 'Failed to update followers');
+            }
+
+            showError('Followers updated successfully', 'green');
+            updateUserInfo();
+            return;
         }
 
         const response = await fetch(pythonURI + "/api/user", {
@@ -527,7 +586,7 @@ async function updateProfile(field, value) {
         updateUserInfo();
     } catch (error) {
         console.error('Error updating profile:', error);
-        showError('Error updating profile');
+        showError(error.message || 'Error updating profile');
     }
 }
 
