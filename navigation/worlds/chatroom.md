@@ -13,7 +13,16 @@ permalink: /prism/topicchatroom
 <script type="module">
     import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
     window.editMessage = async function (postId) {
-        const newComment = prompt("Edit your message:");
+        // Get the current message text from the DOM
+        const messageElement = document.querySelector(`#chat-${postId} .message-content p strong`);
+        if (!messageElement) {
+            alert("Message not found.");
+            return;
+        }
+        const currentMessage = messageElement.textContent;
+
+        // Open a prompt with the existing message pre-filled
+        const newComment = prompt("Edit your message:", currentMessage);
         if (newComment !== null && newComment.trim() !== "") {
             const postData = {
                 id: postId,
@@ -35,10 +44,7 @@ permalink: /prism/topicchatroom
                 const result = await response.json();
                 console.log("Post updated successfully:", result);
                 // Update the message content in the DOM
-                const messageElement = document.querySelector(`#post-${postId} .message-content p strong`);
-                if (messageElement) {
-                    messageElement.textContent = newComment;
-                }
+                messageElement.textContent = newComment;
             } catch (error) {
                 console.error("Error updating post:", error);
                 alert("Failed to edit the post.");
@@ -65,7 +71,7 @@ permalink: /prism/topicchatroom
                 }
                 console.log("Post deleted successfully");
                 // Remove the message element from the DOM
-                const messageElement = document.getElementById(`post-${postId}`);
+                const messageElement = document.getElementById(`chat-${postId}`);
                 if (messageElement) {
                     messageElement.remove();
                 }
@@ -127,6 +133,8 @@ permalink: /prism/topicchatroom
                 // Remove the temporary message element if the request fails
                 document.getElementById(tempId).remove();
             }
+            const channelId = document.getElementById('channel_id').value;
+            fetchData(channelId);
         }
     }
     window.sendMessage = sendMessage;
@@ -172,11 +180,17 @@ permalink: /prism/topicchatroom
                     attributes: attributes
                 })
             });
+
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
             }
+
             const data = await response.json();
             console.log('Channel created successfully:', data);
+
+            // Automatically fetch and update the channels after a new channel is created
+            await fetchChannels('Random Chatroom');
+
         } catch (error) {
             console.error('Error creating channel:', error);
             alert('An error occurred while creating the channel.');
@@ -203,17 +217,33 @@ permalink: /prism/topicchatroom
                 },
                 body: JSON.stringify({ section_name: "Prism" }) // Adjust the section name as needed
             });
+
             if (!response.ok) {
                 throw new Error('Failed to fetch groups: ' + response.statusText);
             }
+
             const groups = await response.json();
             const groupSelect = document.getElementById('group_id');
-            groups.forEach(group => {
+
+            // Clear previous options and add default selection
+            groupSelect.innerHTML = '';
+
+            groups.forEach((group, index) => {
                 const option = document.createElement('option');
                 option.value = group.name; // Use group name for payload
                 option.textContent = group.name;
+                if (index === 0) {
+                    option.selected = true; // Ensure the first option is selected
+                }
                 groupSelect.appendChild(option);
             });
+
+            // Automatically fetch channels for the first group
+            if (groups.length > 0) {
+                console.log("hi")
+                console.log(groups[0].name)
+                fetchChannels(groups[0].name);
+            }
         } catch (error) {
             console.error('Error fetching groups:', error);
         }
@@ -248,6 +278,7 @@ permalink: /prism/topicchatroom
         const groupName = this.value;
         if (groupName) {
             fetchChannels(groupName);
+            console.log(groupName)
         } else {
             document.getElementById('channel_id').innerHTML = '<option value="">Select a channel</option>'; // Reset channels
         }
