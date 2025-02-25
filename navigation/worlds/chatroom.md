@@ -180,11 +180,17 @@ permalink: /prism/topicchatroom
                     attributes: attributes
                 })
             });
+
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
             }
+
             const data = await response.json();
             console.log('Channel created successfully:', data);
+
+            // Automatically fetch and update the channels after a new channel is created
+            await fetchChannels('Random Chatroom');
+
         } catch (error) {
             console.error('Error creating channel:', error);
             alert('An error occurred while creating the channel.');
@@ -211,17 +217,33 @@ permalink: /prism/topicchatroom
                 },
                 body: JSON.stringify({ section_name: "Prism" }) // Adjust the section name as needed
             });
+
             if (!response.ok) {
                 throw new Error('Failed to fetch groups: ' + response.statusText);
             }
+
             const groups = await response.json();
             const groupSelect = document.getElementById('group_id');
-            groups.forEach(group => {
+
+            // Clear previous options and add default selection
+            groupSelect.innerHTML = '';
+
+            groups.forEach((group, index) => {
                 const option = document.createElement('option');
                 option.value = group.name; // Use group name for payload
                 option.textContent = group.name;
+                if (index === 0) {
+                    option.selected = true; // Ensure the first option is selected
+                }
                 groupSelect.appendChild(option);
             });
+
+            // Automatically fetch channels for the first group
+            if (groups.length > 0) {
+                console.log("hi")
+                console.log(groups[0].name)
+                fetchChannels(groups[0].name);
+            }
         } catch (error) {
             console.error('Error fetching groups:', error);
         }
@@ -256,6 +278,7 @@ permalink: /prism/topicchatroom
         const groupName = this.value;
         if (groupName) {
             fetchChannels(groupName);
+            console.log(groupName)
         } else {
             document.getElementById('channel_id').innerHTML = '<option value="">Select a channel</option>'; // Reset channels
         }
