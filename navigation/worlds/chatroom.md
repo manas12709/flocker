@@ -71,7 +71,7 @@ permalink: /prism/topicchatroom
                 }
                 console.log("Post deleted successfully");
                 // Remove the message element from the DOM
-                const messageElement = document.getElementById(`post-${postId}`);
+                const messageElement = document.getElementById(`chat-${postId}`);
                 if (messageElement) {
                     messageElement.remove();
                 }
