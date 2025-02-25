@@ -1,6 +1,5 @@
 ---
 layout: post
-title: Profile Settings
 permalink: /profile
 #menu: nav/home.html
 search_exclude: true
@@ -246,11 +245,49 @@ show_reading_time: false
     .post-comment {
         color: #ffffff;
     }
+
+    .theme-switch-wrapper {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+
+    .theme-switch {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #2d3748;
+        border: 2px solid #e53e3e;
+        border-radius: 20px;
+        color: #ffffff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .theme-switch:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .theme-icon {
+        font-size: 16px;
+    }
 </style>
 
-<div class="page-header">
+<header class="heading">
     <h1>Prism</h1>
-    <p>Connect with the Future</p>
+    <p>You can control your settings from here!</p>
+</header>
+
+<div class="theme-switch-wrapper">
+    <button class="theme-switch" id="themeToggle">
+        <span class="theme-icon">🌙</span>
+        <span class="theme-text">Switch Theme</span>
+    </button>
 </div>
 
 <div class="container">
@@ -732,6 +769,36 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    const themeToggle = document.querySelector('.theme-switch');
+    
+    // Check for saved theme preference
+    const savedTheme = localStorage.getItem('site-theme') || 'dark';
+    document.body.classList.add(savedTheme + '-theme');
+    
+    // Update initial button text
+    updateThemeButtonText(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+        const root = document.documentElement;
+        const currentTheme = root.classList.contains('light-theme') ? 'light' : 'dark';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        
+        // Remove old theme class and add new one
+        root.classList.remove(currentTheme + '-theme');
+        root.classList.add(newTheme + '-theme');
+        
+        // Save preference
+        localStorage.setItem('site-theme', newTheme);
+        
+        // Update button text
+        updateThemeButtonText(newTheme);
+    });
+
+    function updateThemeButtonText(theme) {
+        const themeText = themeToggle.querySelector('.theme-text');
+        themeText.textContent = `Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`;
+    }
 });
 
 window.onload = function() {
@@ -827,4 +894,32 @@ async function createPost() {
 }
 
 window.createPost = createPost;
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle.querySelector('.theme-icon');
+    const themeText = themeToggle.querySelector('.theme-text');
+    
+    // Check initial theme
+    const savedTheme = localStorage.getItem('site-theme') || 'dark';
+    document.body.setAttribute('data-theme', savedTheme);
+    updateThemeUI(savedTheme);
+    
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.body.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        
+        // Update theme
+        document.body.setAttribute('data-theme', newTheme);
+        localStorage.setItem('site-theme', newTheme);
+        updateThemeUI(newTheme);
+    });
+    
+    function updateThemeUI(theme) {
+        themeIcon.textContent = theme === 'light' ? '🌙' : '☀️';
+        themeText.textContent = `Switch to ${theme === 'light' ? 'Dark' : 'Light'} Theme`;
+    }
+});
 </script>
