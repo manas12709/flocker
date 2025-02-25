@@ -6,10 +6,6 @@
 // Import fonts
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap');
 
-// ==========================================================================
-// 1. VARIABLES & MIXINS
-// ==========================================================================
-
 // Color Theme
 $primary-color: #ff1900;     // Red
 $secondary-color: #cf1500;   // Dark Red
@@ -24,8 +20,107 @@ $button-bg: #690000;         // Light Red button
 $button-hover: #e60000;      // Darker Red on hover
 $success-color: #28a745;     // Success states
 $error-color: #dc3545;       // Error states
-$warning-color: #ffc107;     // Warning states
+$warning-color: #ffc107;     // Warning states (This was missing)
 $table-stripe: #6f0e0e;      // Table striping
+
+// Light theme colors
+$light-primary: #ff1900;
+$light-secondary: #cf1500;
+$light-background: #ffffff;
+$light-container: #f0f0f0;
+$light-card: #ffffff;
+$light-input: #f5f5f5;
+$light-text: #333333;
+$light-text-muted: #666666;
+$light-border: #ff1900;
+$light-warning: #ffc107;     // Light theme warning color
+
+// Base theme styles
+html, body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+    background-color: $background-dark;
+    color: $text-light;
+
+    &.light-theme {
+        background-color: $light-background;
+        color: $light-text;
+
+        // Navigation/Header styles
+        .site-header {
+            background-color: $light-container;
+            border-color: $light-border;
+        }
+
+        // Main content area
+        .site-content {
+            background-color: $light-background;
+        }
+
+        // All containers
+        .container, .chat-container, .form-container {
+            background-color: $light-container;
+        }
+
+        // All cards and sections
+        .card, .section, .heading {
+            background-color: $light-card;
+            color: $light-text;
+        }
+
+        // All inputs and form elements
+        input, textarea, select {
+            background-color: $light-input;
+            color: $light-text;
+            border-color: $light-border;
+        }
+
+        // Links
+        a {
+            color: $light-primary;
+            &:hover {
+                color: darken($light-primary, 10%);
+            }
+        }
+
+        // Buttons
+        button {
+            background-color: $light-primary;
+            color: $light-text;
+            &:hover {
+                background-color: darken($light-primary, 10%);
+            }
+        }
+
+        // Navigation links
+        .nav-link {
+            color: $light-text;
+        }
+
+        // Chat elements
+        #chatBox {
+            background-color: $light-card;
+            border-color: $light-border;
+        }
+
+        .chat-message {
+            background-color: $light-card;
+            color: $light-text;
+        }
+
+        // Headers
+        h1, h2, h3, h4, h5, h6 {
+            color: $light-text;
+        }
+
+        // Text elements
+        p, span {
+            color: $light-text;
+        }
+    }
+}
 
 // Shadows
 $shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -130,8 +225,6 @@ html {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
   line-height: 1.5;
-  background-color: $background-dark;
-  color: $text-light;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -432,8 +525,6 @@ html {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
     line-height: 1.5;
-    background-color: $background-dark;
-    color: $text-light;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
