@@ -12,6 +12,27 @@ permalink: /prism/topicchatroom
 
 <script type="module">
     import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+    window.fetchUserById = async function (userId) {
+        try {
+            const response = await fetch(`${pythonURI}/api/users?id=${userId}`, {
+                ...fetchOptions,
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch user data');
+            }
+
+            const userData = await response.json();
+            return userData.name; // Extract and return the username
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            return 'Unknown User'; // Fallback in case of errors
+        }
+    }
     window.editMessage = async function (postId) {
         // Get the current message text from the DOM
         const messageElement = document.querySelector(`#chat-${postId} .message-content p strong`);
@@ -316,46 +337,45 @@ permalink: /prism/topicchatroom
     }
     async function fetchData(channelId) {
         try {
-            // Fetch the current logged-in user
-            const userResponse = await fetch(`${pythonURI}/api/user`, fetchOptions);
-            if (!userResponse.ok) {
-                throw new Error('Failed to fetch user data');
-            }
-            const userData = await userResponse.json();
-            const currentUserId = userData.id; // Logged-in user's ID
-            // Fetch chat messages for the selected channel
             const response = await fetch(`${pythonURI}/api/chat?id=${channelId}`, {
                 ...fetchOptions,
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             });
+
             if (!response.ok) {
                 throw new Error('Failed to fetch chats: ' + response.statusText);
             }
+
             const chatData = await response.json();
-            console.log(chatData); // Debugging: See what data is returned
             const chatBox = document.getElementById('chatBox');
             chatBox.innerHTML = '';
-            chatData.forEach(chatItem => {
+
+            const userMap = {}; // Cache to avoid duplicate requests
+
+            for (const chatItem of chatData) {
+                const userId = chatItem.user_id;
+
+                if (!userMap[userId]) {
+                    userMap[userId] = await fetchUserById(userId); // Fetch username by ID
+                }
+
+                const userName = userMap[userId] || 'Unknown User';
+
                 const messageElement = document.createElement('div');
                 messageElement.className = 'chat-message';
                 messageElement.id = `chat-${chatItem.id}`;
-                let buttonsHTML = "";
-                if (chatItem.user_id === currentUserId || currentUserId === 1) { // Admin (ID 1) can edit/delete all
-                    buttonsHTML = `
-                        <button class="edit-button" onclick="editMessage(${chatItem.id})">Edit</button>
-                        <button class="delete-button" onclick="deleteMessage(${chatItem.id})">Delete</button>
-                    `;
-                }
+
                 messageElement.innerHTML = `
                     <div class="message-content">
-                        <p><strong>${chatItem.message}</strong></p>
-                        ${buttonsHTML}
+                        <p><strong>${userName}:</strong> ${chatItem.message}</p>
                     </div>
                 `;
+
                 chatBox.appendChild(messageElement);
-            });
-            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom of the chat box
+            }
+
+            chatBox.scrollTop = chatBox.scrollHeight;
         } catch (error) {
             console.error('Error fetching data:', error);
         }
