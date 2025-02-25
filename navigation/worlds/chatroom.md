@@ -13,7 +13,16 @@ permalink: /prism/topicchatroom
 <script type="module">
     import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
     window.editMessage = async function (postId) {
-        const newComment = prompt("Edit your message:");
+        // Get the current message text from the DOM
+        const messageElement = document.querySelector(`#chat-${postId} .message-content p strong`);
+        if (!messageElement) {
+            alert("Message not found.");
+            return;
+        }
+        const currentMessage = messageElement.textContent;
+
+        // Open a prompt with the existing message pre-filled
+        const newComment = prompt("Edit your message:", currentMessage);
         if (newComment !== null && newComment.trim() !== "") {
             const postData = {
                 id: postId,
@@ -35,10 +44,7 @@ permalink: /prism/topicchatroom
                 const result = await response.json();
                 console.log("Post updated successfully:", result);
                 // Update the message content in the DOM
-                const messageElement = document.querySelector(`#post-${postId} .message-content p strong`);
-                if (messageElement) {
-                    messageElement.textContent = newComment;
-                }
+                messageElement.textContent = newComment;
             } catch (error) {
                 console.error("Error updating post:", error);
                 alert("Failed to edit the post.");
