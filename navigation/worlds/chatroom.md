@@ -133,6 +133,8 @@ permalink: /prism/topicchatroom
                 // Remove the temporary message element if the request fails
                 document.getElementById(tempId).remove();
             }
+            const channelId = document.getElementById('channel_id').value;
+            fetchData(channelId);
         }
     }
     window.sendMessage = sendMessage;
