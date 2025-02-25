@@ -5,10 +5,6 @@ show_reading_time: false
 permalink: /prism/dailyquestion
 ---
 
-<!-- Link to Custom CSS and Script -->
-<link rel="stylesheet" href="{{site.baseurl}}/navigation/worlds/style.css">
-<script src="{{site.baseurl}}/navigation/worlds/script.js" defer></script>
-
 <header class="heading">
     <h1>Daily Question</h1>
     <p>Engage with today's topic!</p>

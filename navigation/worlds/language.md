@@ -1,144 +1,14 @@
 ---
 layout: post
-title: CodePalette
 show_reading_time: false
 search_exclude: true
 permalink: /prism/language
 ---
 
-<style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background-color: black;
-        color: white;
-    }
-
-    header.page {
-        background-color: red;
-        padding: 20px;
-        text-align: center;
-        font-size: 24px;
-        font-weight: bold;
-        border-radius: 15px;
-        margin-bottom: 30px;
-    }
-
-    .subtitle {
-        margin-top: -10px;
-        font-size: 16px;
-        color: #ddd;
-    }
-
-    .main {
-        display: flex;
-        justify-content: space-between;
-        margin: 20px auto;
-        padding: 20px;
-        max-width: 1200px;
-        gap: 30px;
-    }
-
-    .left-column {
-        width: 48%;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .right-column {
-        width: 48%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .container {
-        background-color: rgb(0, 0, 0);
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        padding: 20px;
-        color: white;
-    }
-
-    .container h2 {
-        font-size: 20px;
-        margin-bottom: 15px;
-        text-align: center;
-    }
-
-    .container label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-    }
-
-    .container input {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
-        border: 1px solid #555;
-        border-radius: 5px;
-        background-color: rgb(0, 0, 0);
-        color: white;
-    }
-
-    .container button {
-        width: 100%;
-        padding: 10px;
-        font-size: 16px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    .container button:hover {
-        background-color: #45a049;
-    }
-
-    .table-container {
-        background-color: rgb(0, 0, 0);
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(156, 21, 21, 0.2);
-        padding: 20px;
-    }
-
-    .table-container h2 {
-        font-size: 24px;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    .table-container table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .table-container th, .table-container td {
-        padding: 10px;
-        border: 1px solid #555;
-        text-align: left;
-    }
-
-    .table-container th {
-        background-color: #444;
-    }
-
-    .table-container tbody tr:nth-child(even) {
-        background-color: rgb(111, 14, 14);
-    }
-
-    .form-actions {
-        display: flex;
-        gap: 20px;
-    }
-
-    .form-actions button {
-        width: 100%;
-    }
-</style>
+<header class="heading">
+    <h1>Code Pallete</h1>
+    <p>Sharing and displaying different coding languages!</p>
+</header>
 
 <script type="module">
     import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
@@ -163,10 +33,6 @@ permalink: /prism/language
 
     checkAuthorization();
 </script>
-
-<header class="page">
-    <div class="subtitle">Manage Programming Languages</div>
-</header>
 
 <!-- Main content area with two columns -->
 <div class="main">

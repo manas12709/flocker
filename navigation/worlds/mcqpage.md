@@ -5,12 +5,9 @@ show_reading_time: false
 permalink: /prism/mcqpage
 ---
 
-<!-- Link to Custom CSS -->
-<link rel="stylesheet" href="{{site.baseurl}}/navigation/worlds/style.css">
-
 <header class="heading">
-    <h1>Daily Question</h1>
-    <p>MCQ Challenge</p>
+    <h1>Daily Multiple Choice Questions</h1>
+    <p>Enjoy! We have plenty of topics to choose from!</p>
 </header>
 
 <div class="container">
