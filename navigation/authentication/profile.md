@@ -276,6 +276,38 @@ show_reading_time: false
     .theme-icon {
         font-size: 16px;
     }
+
+    .web-container {
+        position: relative;
+        width: 100%;
+        height: 500px;
+        margin-bottom: 24px;
+    }
+
+    .web-node {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: #f6e05e; /* Default yellow shade */
+        color: #1a202c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .web-node:hover {
+        transform: scale(1.1);
+    }
+
+    .web-line {
+        position: absolute;
+        width: 2px;
+        background-color: #ffffff; /* White line */
+    }
 </style>
 
 <header class="heading">
@@ -361,7 +393,7 @@ show_reading_time: false
     <section class="card">
         <h3>My Followers</h3>
         <p>Click on a follower to view more details</p>
-        <section class="grid grid-cols-2" id="myFollowersSection"></section>
+        <div class="web-container" id="myFollowersWeb"></div>
     </section>
 
     <section class="card">
@@ -461,34 +493,110 @@ function createFollowerCards(followers) {
     });
 }
 
-function createMyFollowerCards(followers) {
-    const myFollowersSection = document.getElementById('myFollowersSection');
-    myFollowersSection.innerHTML = '';
-    
+async function createMyFollowerWeb(followers) {
+    const webContainer = document.getElementById('myFollowersWeb');
+    webContainer.innerHTML = '';
+
+    const centerX = webContainer.clientWidth / 2;
+    const centerY = webContainer.clientHeight / 2;
+    const radius = 150;
+
     if (!followers || followers.length === 0) {
         const placeholderFollowers = ['No followers yet'];
         placeholderFollowers.forEach((follower, index) => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
-                <h4>${follower}</h4>
-                <img src="https://placehold.co/300x200/26c2ff/a3adbf/png?text=${follower}" alt="${follower}">
-            `;
-            myFollowersSection.appendChild(card);
+            const angle = (index / placeholderFollowers.length) * 2 * Math.PI;
+            const x = centerX + radius * Math.cos(angle) - 50;
+            const y = centerY + radius * Math.sin(angle) - 50;
+            const node = createWebNode(follower, x, y);
+            webContainer.appendChild(node);
         });
         return;
     }
 
-    followers.forEach(follower => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-            <h4>${follower}</h4>
-            <img src="https://placehold.co/300x200/26c2ff/a3adbf/png?text=${follower}"
-            alt="${follower}">
-        `;
-        myFollowersSection.appendChild(card);
+    const followerPositions = {};
+
+    followers.forEach((follower, index) => {
+        const angle = (index / followers.length) * 2 * Math.PI;
+        const x = centerX + radius * Math.cos(angle) - 50;
+        const y = centerY + radius * Math.sin(angle) - 50;
+        const node = createWebNode(follower, x, y);
+        webContainer.appendChild(node);
+        followerPositions[follower] = { x: x + 50, y: y + 50 };
+
+        if (index > 0) {
+            const prevAngle = ((index - 1) / followers.length) * 2 * Math.PI;
+            const prevX = centerX + radius * Math.cos(prevAngle);
+            const prevY = centerY + radius * Math.sin(prevAngle);
+            const line = createWebLine(prevX, prevY, x + 50, y + 50);
+            webContainer.appendChild(line);
+        }
     });
+
+    if (followers.length > 1) {
+        const firstAngle = 0;
+        const firstX = centerX + radius * Math.cos(firstAngle);
+        const firstY = centerY + radius * Math.sin(firstAngle);
+        const lastAngle = ((followers.length - 1) / followers.length) * 2 * Math.PI;
+        const lastX = centerX + radius * Math.cos(lastAngle);
+        const lastY = centerY + radius * Math.sin(lastAngle);
+        const line = createWebLine(lastX, lastY, firstX, firstY);
+        webContainer.appendChild(line);
+    }
+
+    await fetchMutualConnections(followerPositions);
+}
+
+async function fetchMutualConnections(followerPositions) {
+    try {
+        const response = await fetch(pythonURI + "/api/mutual_connections", fetchOptions);
+        if (!response.ok) {
+            throw new Error('Failed to fetch mutual connections');
+        }
+        const mutualConnections = await response.json();
+        const webContainer = document.getElementById('myFollowersWeb');
+
+        for (const [follower, connections] of Object.entries(mutualConnections)) {
+            connections.forEach(connection => {
+                if (followerPositions[follower] && followerPositions[connection]) {
+                    const line = createWebLine(
+                        followerPositions[follower].x,
+                        followerPositions[follower].y,
+                        followerPositions[connection].x,
+                        followerPositions[connection].y
+                    );
+                    webContainer.appendChild(line);
+                }
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching mutual connections:', error);
+    }
+}
+
+const yellowShades = ['#f6e05e', '#ecc94b', '#d69e2e', '#b7791f', '#975a16'];
+
+function createWebNode(name, x, y) {
+    const node = document.createElement('div');
+    node.className = 'web-node';
+    node.style.left = `${x}px`;
+    node.style.top = `${y}px`;
+    node.style.backgroundColor = yellowShades[Math.floor(Math.random() * yellowShades.length)];
+    node.textContent = name;
+    return node;
+}
+
+function createWebLine(x1, y1, x2, y2) {
+    const line = document.createElement('div');
+    line.className = 'web-line';
+    line.style.left = `${x1}px`;
+    line.style.top = `${y1}px`;
+    line.style.width = `${Math.hypot(x2 - x1, y2 - y1)}px`;
+    line.style.transform = `rotate(${Math.atan2(y2 - y1, x2 - x1)}rad)`;
+    return line;
+}
+
+function createMyFollowerCards(followers) {
+    createMyFollowerWeb(followers);
 }
 
 async function updateUserInfo() {
