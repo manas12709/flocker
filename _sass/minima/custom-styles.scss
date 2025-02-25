@@ -5,11 +5,10 @@
 //@import "minima/hacker/jekyll-theme-hacker"; //Hacker theme 
 //@import "minima/dracula/_dracula";
 
-// Light themes
-//@import "minima/hamilton/main"; //Hamilton theme
-//@import "minima/monophase/main"; //Monophase theme 
+// Light theme
 //@import "minima/minimal-mistakes/__minimal-mistakes"; //Minimal Mistakes theme 
-// Mix Light themes with this if your eyes are bleeding 
+
+// Dark theme
 @import "minima/dracula/dark-mode";
 
 // Styles for nighthawk theme, do not remove
@@ -17,3 +16,54 @@
 
 // Styles for prism theme, do not remove
 @import "prism/prism";
+
+// Theme variables
+$dark-background: #1a1a1a;
+$dark-text: #ffffff;
+$dark-container: #2d3748;
+$dark-accent: #e53e3e;
+
+$light-background: #ffffff;
+$light-text: #333333;
+$light-container: #f5f5f5;
+$light-accent: #e53e3e;
+
+// Base theme styles
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+    
+    &.light-theme {
+        background-color: $light-background;
+        color: $light-text;
+
+        // Override theme styles
+        .site-header {
+            background-color: $light-container;
+        }
+
+        .site-title, .site-nav {
+            color: $light-text;
+        }
+
+        .page-content {
+            background-color: $light-background;
+        }
+
+        .post-content {
+            color: $light-text;
+        }
+
+        .post-list-heading, .post-link {
+            color: $light-text;
+        }
+
+        .card, .section, .container {
+            background-color: $light-container;
+            color: $light-text;
+        }
+
+        code {
+            background-color: darken($light-container, 5%);
+        }
+    }
+}
