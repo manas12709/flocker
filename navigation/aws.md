@@ -151,7 +151,7 @@ Go to AWS Route 53 and setup DNS subdomain for backend server.
 
 ### Pulling Changes into AWS EC2 deployment
 
-1. **Navigate to repo**: `cd ~/prism_2025`
+1. **Navigate to repo**: `cd ~/prism_backend`
 2. **docker-compose down**
 3. **git pull**
 4. **Rebuild docker container**: `docker-compose up -d --build`
