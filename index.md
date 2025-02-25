@@ -34,7 +34,6 @@ show_reading_time: false
 </script>
 
 <style>
-
     .content {
         display: none;
     }
@@ -153,6 +152,48 @@ show_reading_time: false
     #leaderboard-container div div {
         border-radius: 5px;
     }
+
+    .mini-card {
+        background-color: #2e2e2e;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        margin-bottom: 20px;
+    }
+
+    .mini-card h2 {
+        color: #ff6666;
+        border-bottom: 2px solid #b30000;
+        padding-bottom: 5px;
+        display: inline-block;
+        margin-bottom: 10px;
+    }
+
+    .mini-message, .mini-poll {
+        background-color: #b30000;
+        padding: 8px;
+        border-radius: 5px;
+        color: #fff;
+        margin-bottom: 5px;
+    }
+
+    .mini-button {
+        background-color: #ff4d4d;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        display: block;
+        width: 100%;
+        margin-top: 10px;
+        text-align: center;
+        transition: background-color 0.3s ease;
+    }
+
+    .mini-button:hover {
+        background-color: #b30000;
+    }
 </style>
 
 <div class="content">
@@ -191,13 +232,77 @@ show_reading_time: false
         <button class="purple-button" onclick="window.location.href='{{ site.baseurl }}/profile'">Access Your Profile</button>
     </section>
 
+    <section class="mini-card">
+        <h2>💬 Latest Messages</h2>
+        <div id="mini-chatroom-container"></div>
+        <button onclick="window.location.href='{{ site.baseurl }}/prism/topicchatroom'" class="mini-button">
+            Join Chatroom
+        </button>
+    </section>
+
+    <section class="mini-card">
+        <h2>📊 Latest Polls</h2>
+        <div id="mini-polls-container"></div>
+        <button onclick="window.location.href='{{ site.baseurl }}/prism/polls'" class="mini-button">
+            Vote in Polls
+        </button>
+    </section>
+
     <footer class="copyright">
-        <p>&copy; 2024 Prism. All rights reserved.</p>
+        <p>&copy; 2025 Prism. All rights reserved.</p>
     </footer>
 </div>
 
 
 <script type="module">
+
+        // Fetch and Display Mini Chatroom Messages
+    async function fetchMiniChatroom() {
+        try {
+            const response = await fetch(`${pythonURI}/api/chat?id=8`, fetchOptions);
+            if (!response.ok) throw new Error("Failed to fetch chat messages");
+            const messages = await response.json();
+
+            const chatContainer = document.getElementById("mini-chatroom-container");
+            chatContainer.innerHTML = ""; // Clear previous messages
+
+            messages.slice(0, 5).forEach(chat => { // Show only 3 latest messages
+                const messageElement = document.createElement("div");
+                messageElement.className = "mini-message";
+                messageElement.innerHTML = `<p><strong>${chat.message}</p>`;
+                chatContainer.appendChild(messageElement);
+            });
+        } catch (error) {
+            console.error("Error fetching chat messages:", error);
+        }
+    }
+
+    // Fetch and Display Mini Polls Results
+    async function fetchMiniPolls() {
+        try {
+            const response = await fetch(`${pythonURI}/api/poll`, fetchOptions);
+            if (!response.ok) throw new Error("Failed to fetch polls");
+            const polls = await response.json();
+
+            const pollsContainer = document.getElementById("mini-polls-container");
+            pollsContainer.innerHTML = ""; // Clear previous content
+
+            polls.slice(0, 2).forEach(poll => { // Show only 2 latest polls
+                const pollElement = document.createElement("div");
+                pollElement.className = "mini-poll";
+                pollElement.innerHTML = `<p><strong>${poll.name}:</strong> ${poll.interests}</p>`;
+                pollsContainer.appendChild(pollElement);
+            });
+        } catch (error) {
+            console.error("Error fetching polls:", error);
+        }
+    }
+
+    // Run both fetch functions on page load
+    document.addEventListener("DOMContentLoaded", () => {
+        fetchMiniChatroom();
+        fetchMiniPolls();
+    });
 
     import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
 

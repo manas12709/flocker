@@ -176,7 +176,7 @@ Before submitting, ensure the following components are finalized:
 - [ ] **Video Demonstration** (max 1 minute)
 - [ ] **Personalized Project Reference** (two code segments)
 - [ ] **Adherence to Plagiarism Policy**
-- [ ] **Submission to AP Digital Portfolio****
+- [ ] **Submission to AP Digital Portfolio**
 
 **Note**: Once submitted as final, revisions cannot be made.
 
