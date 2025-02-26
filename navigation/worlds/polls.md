@@ -240,19 +240,36 @@ permalink: /prism/polls
                 const pollContainer = document.createElement('div');
                 pollContainer.style.marginBottom = '10px';
 
-                // Input for interests
+                // Split the poll result into prefix (question) and suffix (answer)
+                const fullInterests = pollItem.interests || '';
+                const colonIndex = fullInterests.indexOf(':');
+                let prefix = fullInterests;
+                let suffix = '';
+                if (colonIndex !== -1) {
+                    prefix = fullInterests.slice(0, colonIndex);
+                    suffix = fullInterests.slice(colonIndex + 1).trim();
+                }
+
+                // Create a separate element to display the question prefix
+                const questionPrompt = document.createElement('label');
+                questionPrompt.style.fontWeight = 'bold';
+                questionPrompt.textContent = prefix;
+                pollContainer.appendChild(questionPrompt);
+
+                // Optionally add a line break:
+                pollContainer.appendChild(document.createElement('br'));
+
+                // Create an input field for the user’s answer only
                 const interestsInput = document.createElement('input');
                 interestsInput.type = 'text';
-                interestsInput.value = pollItem.interests;
-                // Disable if not the owner
+                interestsInput.value = suffix;
                 if (name !== currentUserName) {
                     interestsInput.disabled = true;
                 }
                 pollContainer.appendChild(interestsInput);
 
-                // If current user is the owner, add inline update and delete buttons
+                // If the current user owns the poll item, enable update/delete
                 if (name === currentUserName) {
-                    // Update button
                     const updateButton = document.createElement('button');
                     updateButton.textContent = 'Update';
                     updateButton.style.backgroundColor = 'green';
@@ -261,8 +278,11 @@ permalink: /prism/polls
                     updateButton.style.padding = '4px 8px';
                     updateButton.style.marginLeft = '5px';
                     updateButton.style.cursor = 'pointer';
-                    updateButton.onclick = function() {
-                        window.updatePollById(pollItem.id, name, interestsInput.value);
+                    updateButton.onclick = () => {
+                        // Only the suffix can be changed
+                        const updatedSuffix = interestsInput.value.trim();
+                        const updatedInterests = prefix + ':' + ' ' + updatedSuffix;
+                        window.updatePollById(pollItem.id, name, updatedInterests);
                     };
                     pollContainer.appendChild(updateButton);
 
@@ -314,17 +334,28 @@ permalink: /prism/polls
     // Submits the poll answer from the given form ID and cycles to the next form
     window.submitPoll = async function(formId) {
         const formDiv = document.getElementById(formId);
+        const labelElement = formDiv.querySelector('label');
+        const originalQuestion = labelElement ? labelElement.innerText : '';
         const input = formDiv.querySelector('input[name="interests"]');
-        const interests = input.value;
+        const userInput = input.value;
 
-        // Get current user info
+        // Transform the question as requested
+        function transformQuestion(q) {
+            // Example transformation removing "What is your" and "?"
+            let result = q.replace(/What is your favorite\s*/i, "Favorite ").replace(/\?$/, "");
+            return result.trim();
+        }
+
+        const finalQuestion = transformQuestion(originalQuestion);
+        const finalInterests = `${finalQuestion}: ${userInput}`;
+
         const userResponse = await fetch(`${pythonURI}/api/user`, fetchOptions);
         if (!userResponse.ok) {
             throw new Error('Failed to fetch user info: ' + userResponse.statusText);
         }
         const userData = await userResponse.json();
         const username = userData.name;
-        const payload = { name: username, interests: interests };
+        const payload = { name: username, question: finalQuestion, interests: finalInterests };
 
         try {
             const response = await fetch(`${pythonURI}/api/poll`, {
@@ -337,14 +368,9 @@ permalink: /prism/polls
                 throw new Error('Network response was not ok ' + response.statusText);
             }
 
-            // Once submission succeeds, figure out next form
             const currentIndex = formIds.indexOf(formId);
             const nextIndex = (currentIndex < formIds.length - 1) ? currentIndex + 1 : 0;
-
-            // Save that index in localStorage for the next load
             localStorage.setItem('currentFormIndex', nextIndex);
-
-            // Reload the page (this will cause on-page-load logic to show the next form)
             location.reload();
         } catch (error) {
             console.error('Error creating poll:', error);
