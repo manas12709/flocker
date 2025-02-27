@@ -3,7 +3,9 @@ layout: post
 search_exclude: false
 show_reading_time: false
 permalink: /prism/aws
+title: AWS Deployment Blog
 author: Mihir B, Manas G, Adi K, Yash P, Pranav S, Anvay V
+categories: [1Documentation]
 ---
 
 ## AWS Deployment Process for Backend/Database
