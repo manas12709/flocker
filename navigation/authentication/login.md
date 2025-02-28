@@ -71,7 +71,7 @@ show_reading_time: false
     window.pythonLogin = function() {
         const options = {
             URL: `${pythonURI}/api/authenticate`,
-            callback: pythonDatabase,
+            callback: handleLoginResponse,
             message: "message",
             method: "POST",
             cache: "no-cache",
@@ -85,54 +85,53 @@ show_reading_time: false
 
     // Function to handle signup
     window.signup = function() {
-    const signupButton = document.querySelector(".signup-card button");
+        const signupButton = document.querySelector(".signup-card button");
 
-    // Disable the button and change its color
-    signupButton.disabled = true;
-    signupButton.style.backgroundColor = '#d3d3d3'; // Light gray to indicate disabled state
+        // Disable the button and change its color
+        signupButton.disabled = true;
+        signupButton.style.backgroundColor = '#d3d3d3'; // Light gray to indicate disabled state
 
-    const signupOptions = {
-        URL: `${pythonURI}/api/user`,
-        method: "POST",
-        cache: "no-cache",
-        body: {
-            name: document.getElementById("name").value,
-            uid: document.getElementById("signupUid").value,
-            password: document.getElementById("signupPassword").value,
-            interests: document.getElementById("interests").value, // Include interests
-        }
+        const signupOptions = {
+            URL: `${pythonURI}/api/user`,
+            method: "POST",
+            cache: "no-cache",
+            body: {
+                name: document.getElementById("name").value,
+                uid: document.getElementById("signupUid").value,
+                password: document.getElementById("signupPassword").value,
+                interests: document.getElementById("interests").value, // Include interests
+            }
+        };
+
+        fetch(signupOptions.URL, {
+            method: signupOptions.method,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(signupOptions.body)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Signup failed: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById("signupMessage").textContent = "Signup successful!";
+            // Optionally redirect to login page or handle as needed
+            // window.location.href = '{{site.baseurl}}/profile';
+        })
+        .catch(error => {
+            console.error("Signup Error:", error);
+            document.getElementById("signupMessage").textContent = `Signup Error: ${error.message}`;
+            // Re-enable the button if there is an error
+            signupButton.disabled = false;
+            signupButton.style.backgroundColor = ''; // Reset to default color
+        });
     };
 
-    fetch(signupOptions.URL, {
-        method: signupOptions.method,
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(signupOptions.body)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Signup failed: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        document.getElementById("signupMessage").textContent = "Signup successful!";
-        // Optionally redirect to login page or handle as needed
-        // window.location.href = '{{site.baseurl}}/profile';
-    })
-    .catch(error => {
-        console.error("Signup Error:", error);
-        document.getElementById("signupMessage").textContent = `Signup Error: ${error.message}`;
-        // Re-enable the button if there is an error
-        signupButton.disabled = false;
-        signupButton.style.backgroundColor = ''; // Reset to default color
-    });
-};
-
-
-    // Function to fetch and display Python data
-    function pythonDatabase() {
+    // Function to handle login response
+    function handleLoginResponse() {
         const URL = `${pythonURI}/api/id`;
 
         fetch(URL, fetchOptions)
@@ -143,11 +142,16 @@ show_reading_time: false
                 return response.json();
             })
             .then(data => {
-                window.location.href = '{{site.baseurl}}/';
+                if (data.role === 'admin') {
+                    window.location.href = '{{site.baseurl}}/adminlog';
+                } else {
+                    window.location.href = '{{site.baseurl}}/userlog';
+                }
             })
             .catch(error => {
                 console.error("Python Database Error:", error);
                 const errorMsg = `Python Database Error: ${error.message}`;
+                document.getElementById("message").textContent = errorMsg;
             });
     }
 
