@@ -5,10 +5,92 @@ show_reading_time: false
 permalink: /prism/topicchatroom
 ---
 
+<style>
+    .popup {
+        display: none;
+        position: fixed;
+        z-index: 10000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .popup-button {
+        display: block;
+        width: 200px;
+        margin: 10px auto;
+        padding: 10px;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .popup-content {
+        background-color: #000;
+        color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid red;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 600px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 0.5s;
+    }
+
+    .popup .close {
+        color: #fff;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .popup .close:hover,
+    .popup .close:focus {
+        color: red;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+</style>
+
 <header class="heading">
     <h1>Random Chatroom</h1>
     <p>Chat Across The World!</p>
 </header>
+
+<script>
+    function showPopup() {
+        const popup = document.getElementById('popup');
+        const closeBtn = document.querySelector('.popup .close');
+
+        popup.style.display = 'block';
+
+        closeBtn.onclick = function() {
+            popup.style.display = 'none';
+        };
+
+        window.onclick = function(event) {
+            if (event.target == popup) {
+                popup.style.display = 'none';
+            }
+        };
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        showPopup();
+    });
+</script>
 
 <script type="module">
     import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
@@ -370,6 +452,7 @@ permalink: /prism/topicchatroom
         <div id="interest2"></div>
     </div>
     <div class="chat-container">
+    <button class="popup-button" onclick="showPopup()">Show Instructions</button>
     <h2>
         <span class="ai-text">AI Generated Prompt</span><br>
         <span id="aiQuestion">Generate a Random Question</span>
@@ -400,4 +483,18 @@ permalink: /prism/topicchatroom
         <button onclick="sendMessage()">Send</button>
     </div>
 </div>
+</div>
+
+<div id="popup" class="popup">
+    <div class="popup-content">
+        <span class="close">&times;</span>
+        <h2>How to Use the Chatroom</h2>
+        <p>Welcome to the Random Chatroom! Here's how it works:</p>
+        <ul>
+            <li><strong>AI-Powered Conversation Starters:</strong> Click "Generate New Question & Create Channel" to generate a new AI-driven topic and start a new conversation.</li>
+            <li><strong>Join a Group and Channel:</strong> Select a channel from the dropdown menus, then click "Select" to join the conversation.</li>
+            <li><strong>Send Messages:</strong> Type a message in the input box and click "Send" to chat with others.</li>
+            <li><strong>Edit or Delete Messages:</strong> Click "Edit" to modify your message or "Delete" to remove it.</li>
+        </ul>
+    </div>
 </div>
