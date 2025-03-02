@@ -92,9 +92,7 @@ This table provides detailed corrections with explanations to clarify the correc
 
 ## **Final Thoughts**
 
-This quiz has been a valuable learning experience. It reaffirmed my strengths while providing clear guidance on where to improve. I’m eager to refine my programming skills and tackle new challenges head-on.
-
-How do you approach difficult topics in programming? Let’s share strategies and grow together!
+This quiz has been a valuable learning experience. It reaffirmed my strengths while providing clear guidance on where to improve.
 
 ---
 
