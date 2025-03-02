@@ -5,7 +5,7 @@ show_reading_time: false
 permalink: /mihir/jinja-blog
 title: Transforming an API into a MVC API and Creating a Jinja Page
 author: Mihir B
-categories: [Mihir Final Retrospective]
+categories: [1Documentation]
 ---
 
 **Transforming an API into a MVC API and Creating a Jinja Page**
