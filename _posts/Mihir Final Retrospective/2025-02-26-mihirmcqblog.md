@@ -11,11 +11,20 @@ categories: [Mihir Final Retrospective]
 
 My score on this MCQ was a 62/67.
 
-![MCQ Score]({{site.baseurl}}/assets/images/mihir/mcqscore.png)
+
+![MCQ Score]({{site.baseurl}}/images/mihir/mcqscore.png)
 
 I tried to take this test like it was the actual AP test. That means not consulting any external sources, like my friends, when stuck.
 
 I ended up spending 1 hour 37 minutes on this test. Considering the MCQ section of the AP test is 2 hours, and the increased stress/pressure that comes with the AP test, I am extremely happy with my score and time.
 
-But, there's always room to improve. Below are a list of topics with respect to the number of questions on the test, and a percentage of my performance.
+But, there's always room to improve. Below are a list of topics with respect to the number of questions on the test, and a percentage of my performance. For space and time purposes, I will display the topics where I failed to get 100% on.
+
+| Topic | Number of Questions | Average Performance % |
+|-------|---------------------|-----------------------|
+| 2.1: Binary Numbers | 5 | 80% |
+| 3.4: Strings | 1 | 0% |
+| 3.6: Conditionals | 1 | 0% |
+| 3.9: Developing Algorithms | 4 | 75% |
+| 5.5: Legal and Ethical Concerns | 3 | 67% |
 
