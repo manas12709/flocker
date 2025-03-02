@@ -118,7 +118,7 @@ categories: [Pranav Final Retrospective]
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ | --------------------- |
 | **Learning & Skill Growth**    | Gained experience in Flask, Deployment, AWS, and Frontend to Backend integration.                                              | 0.20                  |
 | **Commit Analytics**           | Committed even while in India, showing dedication and consistency in project contributions.                                    | 0.22                  |
-| **Work Ethic & Collaboration** | Assisted classmates in multiple periods, added features for group members, stayed productive except for one off-task occasion. | 0.15                  |
+| **Work Ethic & Collaboration** | Assisted classmates in multiple periods, added features for group members, stayed productive.| 0.15                  |
 | **Areas for Improvement**      | Need to maintain focus consistently and work on improving efficiency in problem-solving and deployment strategies.             | 0.15                  |
 | **Total**                      | Comprehensive contribution and consistent effort throughout the trimester.                                                     | **0.92**              |
 
