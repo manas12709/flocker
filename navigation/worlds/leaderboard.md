@@ -88,6 +88,22 @@ permalink: /prism/leaderboard
     </section>
 </div>
 
+<!-- Popup for instructions -->
+<div id="popup" class="popup">
+    <div class="popup-content">
+        <span class="close">&times;</span>
+        <h2>How to Use the Leaderboard</h2>
+        <p>Welcome to the Prism Leaderboard! Here's how it works:</p>
+        <ul>
+            <li><strong>Leaderboard of Top Interests:</strong> Discover the most popular interests across the community based on collective engagement and participation. Use the search bar to filter interests.</li>
+            <li><strong>Affinity Leaderboard:</strong> See which users share the most interests with others, fostering meaningful connections and collaboration. Use the search bar to filter users.</li>
+            <li><strong>Followers:</strong> View your followers and their connections.</li>
+            <li><strong>My Follower Web:</strong> Visualize your follower network and mutual connections.</li>
+        </ul>
+        <p>Use the search bars to quickly find specific interests or users.</p>
+    </div>
+</div>
+
 <script type="module">
     import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
 
@@ -182,6 +198,7 @@ permalink: /prism/leaderboard
         const followers = await fetchFollowers();
         createFollowerCards(followers);
         createMyFollowerWeb(followers);
+        showPopup();
     });
 
     async function fetchFollowers() {
@@ -318,3 +335,67 @@ permalink: /prism/leaderboard
         line.style.top = `${y1}px`;
         return line;
     }
+
+    function showPopup() {
+        const popup = document.getElementById('popup');
+        const closeBtn = document.querySelector('.popup .close');
+
+        popup.style.display = 'block';
+
+        closeBtn.onclick = function() {
+            popup.style.display = 'none';
+        };
+
+        window.onclick = function(event) {
+            if (event.target == popup) {
+                popup.style.display = 'none';
+            }
+        };
+    }
+</script>
+
+<style>
+    .popup {
+        display: none;
+        position: fixed;
+        z-index: 10000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .popup-content {
+        background-color: #000;
+        color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid red;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 600px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 0.5s;
+    }
+
+    .popup .close {
+        color: #fff;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .popup .close:hover,
+    .popup .close:focus {
+        color: red;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+</style>
