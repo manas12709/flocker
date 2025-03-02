@@ -21,7 +21,7 @@ My commit analytics is also there to attest to my frequency of commits, and how 
 
 As of Sunday, March 2 at 2:20 AM, I am the leading contributor in the frontend, and 3rd highest in the backend with one of the most amount of lines added into our repository.
 
-In total, I have committed over 90 times this trimester. Averaging that out over 60 - 5 days of finals week, even including days I was sick/absent, this equates to about 1-2 commits per day. I think this is extremely steady and progressive work.
+In total, I have committed over 90 times this trimester. Removing some of the one liner fix commits and averaging that out over 60 - 5 days of finals week, even including days I was sick/absent, this equates to about 1-2 commits per day. I think this is extremely steady and progressive work.
 
 My work has been good this trimester, however, there are definitely things to improve on.
 
