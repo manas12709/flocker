@@ -234,4 +234,122 @@ permalink: /prism/frqpage
     document.addEventListener('DOMContentLoaded', fetchPosts);
 </script>
 
+<!-- Popup for instructions -->
+<div id="popup" class="popup">
+    <div class="popup-content">
+        <span class="close">&times;</span>
+        <h2>How to Use the Daily Question FRQ</h2>
+        <p>Welcome to the Daily Question FRQ! Here's a step-by-step guide to get you started:</p>
+        <ul>
+            <li><strong>Select a Topic:</strong> Begin by choosing a topic from the dropdown menu. This will help tailor the question to your area of interest.</li>
+            <li><strong>Generate a Question:</strong> Click the "Generate Question" button to receive a thought-provoking question based on your selected topic. The question will appear in the designated area below the button.</li>
+            <li><strong>Submit Your Answer:</strong> Use the form provided to submit your answer. Enter a title and your detailed response in the comment section, then click "Send Answer" to submit.</li>
+            <li><strong>View Responses:</strong> Navigate to the "All Posts" section to see responses from other users. This is a great way to gain different perspectives and insights.</li>
+            <li><strong>Edit or Delete Your Response:</strong> If you wish to make changes to your submission, use the "Edit" button to update your response or the "Delete" button to remove it entirely.</li>
+            <li><strong>Engage with the Community:</strong> Take the time to read through others' responses. Engaging with the community can enhance your understanding and provide new ideas.</li>
+        </ul>
+    </div>
+</div>
 
+<!-- Button to reopen the popup -->
+<button id="howToUseButton" class="how-to-use-button">How To Use!</button>
+
+<style>
+    .popup {
+        display: none;
+        position: fixed;
+        z-index: 10000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .popup-content {
+        background-color: #000;
+        color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid red;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 600px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 0.5s;
+    }
+
+    .popup .close {
+        color: #fff;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .popup .close:hover,
+    .popup .close:focus {
+        color: red;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .how-to-use-button {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 10001;
+        background-color: #000;
+        color: #fff;
+        border: 1px solid red;
+        border-radius: 5px;
+        padding: 10px 15px;
+        cursor: pointer;
+        display: none; /* Initially hidden */
+    }
+
+    .how-to-use-button:hover {
+        background-color: #333;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const popup = document.getElementById('popup');
+        const closeBtn = document.querySelector('.popup .close');
+        const howToUseButton = document.getElementById('howToUseButton');
+
+        // Function to open the popup
+        function openPopup() {
+            popup.style.display = 'block';
+            howToUseButton.style.display = 'none'; // Hide the button when popup is open
+        }
+
+        // Function to close the popup
+        function closePopup() {
+            popup.style.display = 'none';
+            howToUseButton.style.display = 'block'; // Show the button when popup is closed
+        }
+
+        // Open the popup when the page loads
+        openPopup();
+
+        // Close the popup when the close button is clicked
+        closeBtn.addEventListener('click', closePopup);
+
+        // Close the popup when clicking outside of the popup content
+        window.addEventListener('click', function(event) {
+            if (event.target === popup) {
+                closePopup();
+            }
+        });
+
+        // Reopen the popup when the "How To Use!" button is clicked
+        howToUseButton.addEventListener('click', openPopup);
+    });
+</script>
