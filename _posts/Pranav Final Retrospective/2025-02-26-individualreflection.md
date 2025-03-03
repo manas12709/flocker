@@ -36,6 +36,11 @@ Looking ahead, I want to deepen my knowledge in software development, AI, and cy
 ### **Future Goals:**
 
 - **Improve Collaboration:** Work on better integrating team feedback and finding ways to efficiently divide responsibilities in group projects.
+- **Engineering Major** I wish to hopefully become a software engineering or mechanical engineering major as I enjoy HPOE a class I took, a lot.
+
+### **Internship Website:**
+
+During this class, I also had the opportunity to apply my skills by creating a personal website to showcase my projects and experiences. You can visit my website [here](https://sanpranav.github.io/pranavsanthosh/). This project allowed me to practice web development, design, and content creation, further solidifying my understanding of front-end technologies and user experience principles. I also have a blogs page, which Is currently placeholders but I wil be updating regularly using the Blogs that YOU helped us make in this class!
 
 ## Taking AP CSA
 
