@@ -110,7 +110,7 @@ categories: [Manas Final Retrospective]
 | Frontend Contributions | Backend Contributions   |
 | ---------------------- | ----------------------- |
 | Major Contributer    | Good efforts |
-| ![Image](https://github.com/user-attachments/assets/ece4ce43-e7c6-466c-8ee9-adb206b618a4)                       | ![Image](https://github.com/user-attachments/assets/0e349688-3446-455b-9a46-44252063b50a)                        |
+| ![Image](https://github.com/user-attachments/assets/549bdb51-79b9-4f5d-b11e-421f63b246f1)                       | ![Image](https://github.com/user-attachments/assets/0e349688-3446-455b-9a46-44252063b50a)                        |
 
 ## Summary: Why I Deserve a 9.11/10
 
