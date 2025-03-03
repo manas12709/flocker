@@ -133,3 +133,13 @@ categories: [Pranav Final Retrospective]
 
 This trimester has been filled with ups and downs, but I have made significant progress. Before this trimester, I had little experience with Flask, AWS, or full-stack deployment, but I have since developed these skills and applied them to my work. My commit analytics show my steady contributions, even when I was in India, demonstrating dedication and consistency. While there is always room for improvement, I have been a strong team member, contributed meaningful features, and maintained a productive work ethic. For these reasons, I believe I deserve a **0.92/1** on this retrospective self-grade.
 
+## Full Review Self Grade
+
+| Category                          | Points | Description                                                                                                                                                       | Self Grade |
+| --------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| **Five tasks over 12 weeks**      | 5      | List five things completed, including issues addressed, burndown tracking, and presentation work.                                                                 | 4.6        |
+| **Full Stack Project Demo**       | 2      | Demonstrate the project, highlight CPT requirements, and incorporate N@tM feedback.                                                                              | 2          |
+| **Project Feature Blog Write-up** | 1      | Use CPT/FRQ language to write a structured blog post on project features.                                                                                        | 0.92       |
+| **MCQ Completion**                | 1      | Successfully complete and reflect on multiple-choice questions.                                                                                                   | 1          |
+| **Retrospective Reflection**      | 1      | - Reflect on strengths and weaknesses<br> - Create next steps plans for improvement<br> - Engage with peer projects and document interests<br> - Think about future steps in CompSci, classes, college, internships, or career<br> - Help a new peer with final exam prep or conduct a live review with Ms. Pataki<br> - Send a detailed summary of review points 24 hours in advance, including a self-grade assessment | 0.9        |
+| **Total**                         | 10     | Maximum possible score.                                                                                                                                           | 9.42       |
