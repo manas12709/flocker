@@ -21,6 +21,5 @@ permalink: /prism/dailyquestion
     </div>
 </div>
 
-<footer class="copyright">
-    <p>© 2023 Prism. All rights reserved.</p>
-</footer>
+
+
