@@ -30,3 +30,7 @@ categories: [Pranav Final Retrospective]
 - Highlighted CPT Requirements on take 2.
 - Incorporated stronger code blocks
 - Talked about my main strong details so I wouldn't go overtime on take 2.
+   
+
+
+   
