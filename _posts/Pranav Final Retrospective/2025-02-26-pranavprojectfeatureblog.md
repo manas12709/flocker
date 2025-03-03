@@ -218,5 +218,5 @@ The **Code Palette** project effectively demonstrates full-stack development pri
 
 | Category                          | Points | Description                                                                                                                                                       | Self Grade |
 | --------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| **Full Stack Project Demo**       | 2      | Demonstrate the project, highlight CPT requirements, and incorporate N@tM feedback. | 2          |
+| **Full Stack Project Demo**       | 2      | Demonstrate the project, highlight CPT requirements, and incorporate N@tM feedback. | 1.90          |
 | **Project Feature Blog Write-up** | 1      | Use CPT/FRQ language to write a structured blog post on project features.                                                                                        | 0.92       |
