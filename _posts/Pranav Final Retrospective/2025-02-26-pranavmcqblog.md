@@ -136,4 +136,8 @@ I aim to further strengthen these skills by practicing problem-solving technique
 
 ---
 
+| Category                          | Points | Description                                                                                                                                                       | Self Grade |
+| --------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| **MCQ Completion**                | 1      | Successfully complete and reflect on multiple-choice questions.                                                                                                   | 0.93       |
+
 

@@ -216,4 +216,7 @@ This project aligns with **CPT (Create Performance Task) requirements** by demon
 
 The **Code Palette** project effectively demonstrates full-stack development principles with a focus on **database management, RESTful APIs, and frontend integration**. It also adheres to **CPT guidelines**, making it a strong candidate for submission.
 
-
+| Category                          | Points | Description                                                                                                                                                       | Self Grade |
+| --------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| **Full Stack Project Demo**       | 2      | Demonstrate the project, highlight CPT requirements, and incorporate N@tM feedback. | 2          |
+| **Project Feature Blog Write-up** | 1      | Use CPT/FRQ language to write a structured blog post on project features.                                                                                        | 0.92       |
