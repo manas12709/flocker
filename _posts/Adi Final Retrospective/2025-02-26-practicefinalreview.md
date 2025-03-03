@@ -7,7 +7,7 @@ title: Adi's Practice Review Reflection
 categories: [Adi Final Retrospective]
 ---
 
-# Self Grade (Done with Kush Kharia)
+# Self Grade (Done with Aarush Gowda)
 
 | Category                          | Points | Description                                                                                                                                                       | Self Grade |
 | --------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |

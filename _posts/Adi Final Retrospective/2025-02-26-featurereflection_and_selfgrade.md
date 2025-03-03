@@ -58,7 +58,7 @@ categories: [Adi Final Retrospective]
 
  - Fix the API so that it uses the `htop -n 1` command to get data instead of using the builtin python functions that are likely not working due to AWS security settings.
 
- # Self-Grade Table
+# Self-Grade Table
 
 | Category                       | Details                                                                                                                        | Self-Grade (Out of 1) |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ | --------------------- |
