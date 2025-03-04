@@ -7,18 +7,16 @@ title: Adi's Practice Review Reflection
 categories: [Adi Final Retrospective]
 ---
 
-# Peer Grade (Done with Aarush Gowda)
+# Peer Grade (Done with Xavier Thompson)
 
 | Category                          | Points | Description                                                                                                                                                       | Self Grade |
 | --------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| **Five tasks over 12 weeks**      | 5      | List five things completed, including issues addressed, burndown tracking, and presentation work.                                                                 |            |
-| **Full Stack Project Demo**       | 2      | Demonstrate the project, highlight CPT requirements, and incorporate N@tM feedback.                                                                              |            |
-| **Project Feature Blog Write-up** | 1      | Use CPT/FRQ language to write a structured blog post on project features.                                                                                        |            |
-| **MCQ Completion**                | 1      | Successfully complete and reflect on multiple-choice questions.                                                                                                   |            |
-| **Retrospective Reflection**      | 1      | - Reflect on strengths and weaknesses<br> - Create next steps plans for improvement<br> - Engage with peer projects and document interests<br> - Think about future steps in CompSci, classes, college, internships, or career<br> - Help a new peer with final exam prep or conduct a live review with Ms. Pataki<br> - Send a detailed summary of review points 24 hours in advance, including a self-grade assessment |            |
-| **Total**                         | 10     | Maximum possible score.                                                                                                                                           |            |
+| **Five tasks over 12 weeks**      | 5      | List five things completed, including issues addressed, burndown tracking, and presentation work.                                                                 |    4.8        |
+| **Full Stack Project Demo**       | 2      | Demonstrate the project, highlight CPT requirements, and incorporate N@tM feedback.                                                                              |    1.85        |
+| **Project Feature Blog Write-up** | 1      | Use CPT/FRQ language to write a structured blog post on project features.                                                                                        |    1        |
+| **MCQ Completion**                | 1      | Successfully complete and reflect on multiple-choice questions.                                                                                                   |      0.8      |
+| **Retrospective Reflection**      | 1      | - Reflect on strengths and weaknesses<br> - Create next steps plans for improvement<br> - Engage with peer projects and document interests<br> - Think about future steps in CompSci, classes, college, internships, or career<br> - Help a new peer with final exam prep or conduct a live review with Ms. Pataki<br> - Send a detailed summary of review points 24 hours in advance, including a self-grade assessment |    0.8        |
+| **Total**                         | 10     | Maximum possible score.                                                                                                                                           |      9.35      |
 
 ## Feedback
-
-
-## Improvements:
+Tweak order of links and make sure they work. Show self grade at the very end.
