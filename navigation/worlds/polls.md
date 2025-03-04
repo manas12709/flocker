@@ -142,6 +142,8 @@ permalink: /prism/polls
     }
 </style>
 
+<button class="popup-button" onclick="showPopup()">Show Poll Instructions</button>
+
 <div id="popup" class="popup">
     <div class="popup-content">
         <span class="close">&times;</span>
