@@ -75,7 +75,7 @@ def post(self):
 
 <br>
 
-```javascript
+```html
 <button class="popup-button" onclick="showPopup()">Show Poll Instructions</button>
 <div id="popup" class="popup">
     <div class="popup-content">
@@ -83,7 +83,6 @@ def post(self):
     </div>
 </div>
 <script>
-// Keep the function, but remove auto-popup on page load
 function showPopup() {
     const popup = document.getElementById('popup');
     const closeBtn = popup.querySelector('.close');
