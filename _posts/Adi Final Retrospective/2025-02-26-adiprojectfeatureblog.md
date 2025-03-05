@@ -101,9 +101,47 @@ function showPopup() {
 </script>
 ```
 
-## Backend:
+## Frontend to Backend:
+Fetch poll data and group by name:
 
-The backend contains a REST API and it uses a Flask as a web framework. It secures requests using a JWT token, and it supports each of the CRUD operations.
+```javacript
+try {
+    const response = await fetch(`${pythonURI}/api/poll`, fetchOptions);
+    if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+    }
+    const data = await response.json();
+    console.log('Fetched polls:', data);
+
+    // Group polls by author name
+    const groupedPolls = {};
+    data.forEach(item => {
+        if (!groupedPolls[item.name]) {
+            groupedPolls[item.name] = [];
+        }
+        groupedPolls[item.name].push(item);
+    });
+```
+
+Edit Poll Response:
+
+```javascript
+try {
+    const response = await fetch(`${pythonURI}/api/poll`, {
+        ...fetchOptions,
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+    if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+    }
+    const data = await response.json();
+    console.log('Poll updated:', data);
+    location.reload();
+```
+
+The backend contains APIs and it uses a Flask as a web framework. It secures requests using a JWT token and a session token, and it supports each of the CRUD operations.
 
 ## Using postman to show raw API request and RESTful response
 
