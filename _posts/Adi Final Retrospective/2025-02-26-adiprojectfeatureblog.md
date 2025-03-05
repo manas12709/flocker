@@ -74,10 +74,33 @@ def post(self):
 ```
 
 <br>
-<br>
-<br>
-Code snippet of sending POST request from the frontend:
-![Image](https://github.com/user-attachments/assets/3f3e567d-2bf5-45da-8389-c4d13c8729ee)
+
+```javascript
+<button class="popup-button" onclick="showPopup()">Show Poll Instructions</button>
+<div id="popup" class="popup">
+    <div class="popup-content">
+<!-- Popup content goes here -->
+    </div>
+</div>
+<script>
+// Keep the function, but remove auto-popup on page load
+function showPopup() {
+    const popup = document.getElementById('popup');
+    const closeBtn = popup.querySelector('.close');
+    popup.style.display = 'block';
+
+    closeBtn.onclick = function() {
+        popup.style.display = 'none';
+    };
+
+    window.onclick = function(event) {
+        if (event.target === popup) {
+            popup.style.display = 'none';
+        }
+    };
+}
+</script>
+```
 
 ## Backend:
 
