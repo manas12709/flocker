@@ -142,6 +142,8 @@ permalink: /prism/polls
     }
 </style>
 
+<button class="popup-button" onclick="showPopup()">Show Poll Instructions</button>
+
 <div id="popup" class="popup">
     <div class="popup-content">
         <span class="close">&times;</span>
@@ -157,26 +159,27 @@ permalink: /prism/polls
 </div>
 
 <script>
-    function showPopup() {
-        const popup = document.getElementById('popup');
-        const closeBtn = popup.querySelector('.close');
-        popup.style.display = 'block';
+// Keep the function, but remove auto-popup on page load
+function showPopup() {
+    const popup = document.getElementById('popup');
+    const closeBtn = popup.querySelector('.close');
+    popup.style.display = 'block';
 
-        closeBtn.onclick = function() {
+    closeBtn.onclick = function() {
+        popup.style.display = 'none';
+    };
+
+    window.onclick = function(event) {
+        if (event.target === popup) {
             popup.style.display = 'none';
-        };
+        }
+    };
+}
 
-        window.onclick = function(event) {
-            if (event.target === popup) {
-                popup.style.display = 'none';
-            }
-        };
-    }
-
-    // Show popup on page load
-    document.addEventListener("DOMContentLoaded", () => {
-        showPopup();
-    });
+// Remove or comment out the automatic showPopup call
+// document.addEventListener("DOMContentLoaded", () => {
+//     showPopup();
+// });
 </script>
 
 <script type="module">

@@ -194,6 +194,51 @@ show_reading_time: false
     .mini-button:hover {
         background-color: #b30000;
     }
+    .vote-button {
+        font-size: 1rem;
+        font-weight: bold;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        text-transform: uppercase;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .upvote-button {
+        background: linear-gradient(90deg, #28a745, #218838);
+        color: white;
+        border: 2px solid #1e7e34;
+        box-shadow: 0 0 10px rgba(40, 167, 69, 0.7);
+    }
+
+    .upvote-button:hover {
+        background: linear-gradient(90deg, #218838, #1e7e34);
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(40, 167, 69, 1);
+    }
+
+    .downvote-button {
+        background: linear-gradient(90deg, #dc3545, #c82333);
+        color: white;
+        border: 2px solid #bd2130;
+        box-shadow: 0 0 10px rgba(220, 53, 69, 0.7);
+    }
+
+    .downvote-button:hover {
+        background: linear-gradient(90deg, #c82333, #bd2130);
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(220, 53, 69, 1);
+    }
+
+    /* Add Disabled State for Buttons */
+    .vote-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
 </style>
 
 <div class="content">
