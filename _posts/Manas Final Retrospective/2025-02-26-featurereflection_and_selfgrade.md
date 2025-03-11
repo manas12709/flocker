@@ -108,7 +108,7 @@ categories: [Manas Final Retrospective]
 | Frontend Contributions | Backend Contributions   |
 | ---------------------- | ----------------------- |
 | Major Contributer    | Good efforts |
-| ![Image](https://github.com/user-attachments/assets/55476717-0264-47ae-894a-544061c197cb)                       | ![Image](https://github.com/user-attachments/assets/0e349688-3446-455b-9a46-44252063b50a)                        |
+| ![Image](https://github.com/user-attachments/assets/ece4ce43-e7c6-466c-8ee9-adb206b618a4)                       | ![Image](https://github.com/user-attachments/assets/0e349688-3446-455b-9a46-44252063b50a)                        |
 
 ## Summary: Why I Deserve a 0.91/1
 

@@ -83,6 +83,105 @@ permalink: /prism/polls
     </div>
 </center>
 
+<style>
+    .popup {
+        display: none;
+        position: fixed;
+        z-index: 10000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .popup-button {
+        display: block;
+        width: 200px;
+        margin: 10px auto;
+        padding: 10px;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .popup-content {
+        background-color: #000;
+        color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid red;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 600px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 0.5s;
+    }
+
+    .popup .close {
+        color: #fff;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .popup .close:hover,
+    .popup .close:focus {
+        color: red;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+</style>
+
+<button class="popup-button" onclick="showPopup()">Show Poll Instructions</button>
+
+<div id="popup" class="popup">
+    <div class="popup-content">
+        <span class="close">&times;</span>
+        <h2>How to Use the Polls</h2>
+        <p>Welcome to the Polls Page! Here's how it works:</p>
+        <ul>
+            <li><strong>Submit Answers:</strong> Use each poll form to provide your favorite choices.</li>
+            <li><strong>Cycle Forms:</strong> After submitting one form, the next one appears automatically.</li>
+            <li><strong>Review Results:</strong> Check your submissions and everyone else’s in the results table.</li>
+            <li><strong>Edit or Delete:</strong> If you created a poll entry, you can update or remove it.</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+// Keep the function, but remove auto-popup on page load
+function showPopup() {
+    const popup = document.getElementById('popup');
+    const closeBtn = popup.querySelector('.close');
+    popup.style.display = 'block';
+
+    closeBtn.onclick = function() {
+        popup.style.display = 'none';
+    };
+
+    window.onclick = function(event) {
+        if (event.target === popup) {
+            popup.style.display = 'none';
+        }
+    };
+}
+
+// Remove or comment out the automatic showPopup call
+// document.addEventListener("DOMContentLoaded", () => {
+//     showPopup();
+// });
+</script>
+
 <script type="module">
     import { pythonURI, fetchOptions } from "{{site.baseurl}}/assets/js/api/config.js";
 
