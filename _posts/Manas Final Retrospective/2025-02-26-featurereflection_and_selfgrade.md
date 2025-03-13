@@ -95,21 +95,23 @@ categories: [Manas Final Retrospective]
 
 # Self-Grade Table
 
-| Category                       | Details                                                                                                                        | Self-Grade (Out of 1) |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ | --------------------- |
-| **Learning & Skill Growth**    | Developed skills in full-stack development, API integration, and dynamic UI updates.                                           | 0.20                  |
-| **Commit Analytics**           | Consistently contributed to the project, demonstrating dedication and steady progress.                                         | 0.22                  |
-| **Work Ethic & Collaboration** | Collaborated effectively with team members, contributing to group success and feature development.                             | 0.15                  |
-| **Areas for Improvement**      | Need to focus on enhancing UI/UX design and improving error handling strategies.                                               | 0.14                  |
-| **Total**                      | Demonstrated strong contributions and consistent effort throughout the project.                                                | **0.91**              |
+
+| Category                             | Points | Description                                                                                                                                               | Self Grade |
+|--------------------------------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|------------|
+| **Twelve-Week Milestone Log**        | 5      | Record five pivotal milestones that capture progress, challenge resolution, and the evolution of your presentation skills over the term.                  | 4.65       |
+| **Integrated Project Demo**          | 2      | Deliver a live demonstration that fully exhibits your project’s features, integrating core requirements and constructive feedback from the review.       | 1.75       |
+| **Technical Feature Write-Up**       | 1      | Compose a succinct blog post that outlines your project’s key features using clear, professional language aligned with industry standards.              | 0.82       |
+| **Conceptual Understanding Quiz**    | 1      | Successfully complete and reflect on the multiple-choice questions to demonstrate a robust grasp of the project’s fundamental concepts.                  | 0.91       |
+| **Comprehensive Reflective Analysis**| 1      | Undertake an in-depth self-assessment to identify both strengths and improvement areas, while mapping out actionable strategies for future growth.       | 0.87       |
+| **Total**                            | 10     | Maximum achievable score.                                                                                                                                   | 9.11       |
 
 ## Analytics Table
 
 | Frontend Contributions | Backend Contributions   |
 | ---------------------- | ----------------------- |
 | Major Contributer    | Good efforts |
-| ![Image](https://github.com/user-attachments/assets/ece4ce43-e7c6-466c-8ee9-adb206b618a4)                       | ![Image](https://github.com/user-attachments/assets/0e349688-3446-455b-9a46-44252063b50a)                        |
+| ![Image](https://github.com/user-attachments/assets/549bdb51-79b9-4f5d-b11e-421f63b246f1)                       | ![Image](https://github.com/user-attachments/assets/0e349688-3446-455b-9a46-44252063b50a)                        |
 
-## Summary: Why I Deserve a 0.91/1
+## Summary: Why I Deserve a 9.11/10
 
-This project has been a valuable learning experience, allowing me to develop skills in full-stack development, API integration, and dynamic UI updates. My consistent contributions demonstrate my dedication and steady progress. While there is room for improvement, particularly in error handling and my behavior in class with regarding to me being on task. I have been a strong team member and contributed meaningful features. Not just to my page but for our entire website by being the UI/UX designer and styling our entire website the same way. For these reasons, I believe I deserve a **0.91/1** on this retrospective self-grade.
+This project has been a valuable learning experience, allowing me to develop skills in full-stack development, API integration, and dynamic UI updates. My consistent contributions demonstrate my dedication and steady progress. While there is room for improvement, particularly in error handling and my behavior in class with regarding to me being on task. I have been a strong team member and contributed meaningful features. Not just to my page but for our entire website by being the UI/UX designer and styling our entire website the same way. For these reasons, I believe I deserve a **9.11/10** on this retrospective self-grade.
