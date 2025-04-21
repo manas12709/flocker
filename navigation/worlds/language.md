@@ -6,7 +6,7 @@ permalink: /prism/language
 ---
 
 <header class="heading">
-    <h1>Code Pallete</h1>
+    <h1>Code Palete</h1>
     <p>Sharing and displaying different coding languages!</p>
 </header>
 
