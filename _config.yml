@@ -1,9 +1,9 @@
-title: Prism
-description : "A platform that evolves around your connections and creativity."
-owner_name: Yash Parikh
-github_username: illuminati1618
-github_repo: "prism_frontend" 
-baseurl: "/prism_frontend"
+title: OCS Flocker
+description : "Redesign Flocker"
+owner_name: Manas Goel
+github_username: manas12709
+github_repo: "flocker" 
+baseurl: "/flocker"
 future: true
 remote_theme: jekyll/minima
 minima:
