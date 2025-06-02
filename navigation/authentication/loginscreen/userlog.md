@@ -22,9 +22,8 @@ show_reading_time: false
 
 <script>
     // Typing animation for the welcome message
-    const text = "Welcome to Prism";
+    const text = "Welcome to Open Coding Society Flocker";
     let index = 0;
-    const speed = 50; 
 
     function typeWriter() {
         if (index < text.length) {
