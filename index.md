@@ -146,27 +146,22 @@ show_reading_time: false
   const socket = io("http://localhost:8505");
   let username = "";
   let currentRoom = "";
-
   document.getElementById("usernameInput").addEventListener("change", function () {
     username = this.value;
   });
-
   function joinChannel(room) {
     if (!username) {
       alert("Please enter your name first.");
       return;
     }
-
     if (currentRoom) {
       socket.emit("leave", { username, room: currentRoom });
     }
-
     currentRoom = room;
     document.getElementById("messages").innerHTML = "";
     document.getElementById("onlineUsers").innerHTML = "";
     socket.emit("join", { username, room });
   }
-
   function sendMessage() {
     const msg = document.getElementById("msgInput").value;
     if (msg && currentRoom) {
@@ -178,7 +173,6 @@ show_reading_time: false
       document.getElementById("msgInput").value = "";
     }
   }
-
   // ENTER key sends message
   document.getElementById("msgInput").addEventListener("keypress", function (e) {
     if (e.key === "Enter") {
@@ -186,14 +180,12 @@ show_reading_time: false
       sendMessage();
     }
   });
-
   socket.on("message", (data) => {
     const div = document.createElement("div");
     div.innerHTML = `<strong>${data.username}</strong>: ${data.msg} <span style="color:#888; font-size: 12px;">(${data.timestamp})</span>`;
     document.getElementById("messages").appendChild(div);
     document.getElementById("messages").scrollTop = messages.scrollHeight;
   });
-
   socket.on("online_users", (users) => {
     const list = document.getElementById("onlineUsers");
     list.innerHTML = "";
