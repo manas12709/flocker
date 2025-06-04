@@ -73,20 +73,6 @@ author: Kush, Tarun, Vincent, and Nolan
         riddleText.textContent = currentRiddle.question;
     }
 
-    function requestUsername() {
-        while (true) {
-            const enteredUsername = prompt("Enter your username:");
-            if (enteredUsername && !users.has(enteredUsername)) {
-                username = enteredUsername;
-                addUser(username);
-                displayMessage(`You have joined as ${username}.`, true);
-                break;
-            } else {
-                alert("Username is taken or invalid. Please try again.");
-            }
-        }
-    }
-
     function displayMessage(message, isSystem = false) {
         const messageElement = document.createElement('div');
         messageElement.classList.add('message', isSystem ? 'system-message' : 'user-message');
