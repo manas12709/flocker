@@ -3,11 +3,8 @@ layout: post
 title: Create and Compete - Riddle Room
 search_exclude: true
 permalink: /riddle/
-menu: nav/create_and_compete.html
 author: Kush, Tarun, Vincent, and Nolan
 ---
-
-<link rel="stylesheet" href="{{site.baseurl}}/navigation/create_and_compete/riddle.css">
 
 <details>
   <br>
